@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yellamma Kunta — Boundary Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f172a;
+    color: #f1f5f9;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    padding: 12px 18px;
+    background: #0f172a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+
+  .header h1 {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .header h1 span {
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: #64748b;
+    margin-left: 8px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 20px;
+  }
+
+  .stat {
+    text-align: right;
+  }
+
+  .stat .v {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #38bdf8;
+  }
+
+  .stat .k {
+    font-size: 0.6rem;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  #map {
+    flex: 1;
+    width: 100%;
+  }
+
+  /* Leaflet popup tweaks */
+  .leaflet-popup-content-wrapper {
+    background: #1e293b;
+    color: #f1f5f9;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  .leaflet-popup-tip { background: #1e293b; }
+
+  .popup-inner h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 4px;
+  }
+
+  .popup-inner p {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  .popup-inner .dist {
+    margin-top: 4px;
+    font-size: 0.7rem;
+    color: #64748b;
+  }
+
+  .legend {
+    position: absolute;
+    bottom: 24px;
+    left: 12px;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.92);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.7rem;
+    color: #94a3b8;
+    backdrop-filter: blur(6px);
+  }
+
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+
+  .legend-row:last-child { margin-bottom: 0; }
+
+  .legend-line {
+    width: 22px;
+    height: 3px;
+    border-radius: 2px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Yellamma Kunta <span>Water Body Boundary · Hyderabad</span></h1>
+  <div class="stats">
+    <div class="stat">
+      <div class="v">28</div>
+      <div class="k">Points</div>
+    </div>
+    <div class="stat">
+      <div class="v" id="perim-val">—</div>
+      <div class="k">Perimeter</div>
+    </div>
+    <div class="stat">
+      <div class="v" id="area-val">—</div>
+      <div class="k">Area (est.)</div>
+    </div>
+  </div>
+</div>
+
+<div id="map"></div>
+
+<div class="legend">
+  <div class="legend-row">
+    <div class="legend-line" style="background:#38bdf8;"></div>
+    <span>Boundary polygon</span>
+  </div>
+  <div class="legend-row">
+    <div class="legend-dot" style="background:#38bdf8; border: 2px solid #0f172a;"></div>
+    <span>Survey point</span>
+  </div>
+  <div class="legend-row">
+    <div class="legend-dot" style="background:#f97316; border: 2px solid #0f172a;"></div>
+    <span>Start point (A1)</span>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const points = [
+  { code: 'A1',  lng: 78.408440, lat: 17.499990, dist: 0 },
+  { code: 'A2',  lng: 78.408261, lat: 17.499566, dist: 50.59 },
+  { code: 'A3',  lng: 78.408073, lat: 17.499794, dist: 32.24 },
+  { code: 'A4',  lng: 78.407681, lat: 17.499572, dist: 48.32 },
+  { code: 'A5',  lng: 78.407311, lat: 17.499723, dist: 42.68 },
+  { code: 'A6',  lng: 78.407190, lat: 17.499474, dist: 30.44 },
+  { code: 'A7',  lng: 78.407207, lat: 17.499349, dist: 13.95 },
+  { code: 'A8',  lng: 78.407561, lat: 17.499206, dist: 40.77 },
+  { code: 'A9',  lng: 78.407320, lat: 17.498965, dist: 36.96 },
+  { code: 'A10', lng: 78.407208, lat: 17.499082, dist: 17.60 },
+  { code: 'A11', lng: 78.406971, lat: 17.499035, dist: 25.72 },
+  { code: 'A12', lng: 78.406623, lat: 17.499018, dist: 37.12 },
+  { code: 'A13', lng: 78.406184, lat: 17.498913, dist: 48.02 },
+  { code: 'A14', lng: 78.405969, lat: 17.499069, dist: 28.66 },
+  { code: 'A15', lng: 78.406213, lat: 17.499415, dist: 46.24 },
+  { code: 'A16', lng: 78.406240, lat: 17.499960, dist: 60.40 },
+  { code: 'A17', lng: 78.406263, lat: 17.500293, dist: 37.03 },
+  { code: 'A18', lng: 78.406258, lat: 17.500679, dist: 42.76 },
+  { code: 'A19', lng: 78.405873, lat: 17.500709, dist: 41.06 },
+  { code: 'A20', lng: 78.405660, lat: 17.500746, dist: 22.97 },
+  { code: 'A21', lng: 78.405403, lat: 17.501034, dist: 41.92 },
+  { code: 'A22', lng: 78.405509, lat: 17.502535, dist: 166.68 },
+  { code: 'A23', lng: 78.405899, lat: 17.502630, dist: 42.74 },
+  { code: 'A24', lng: 78.406310, lat: 17.502860, dist: 50.52 },
+  { code: 'A25', lng: 78.406709, lat: 17.502839, dist: 42.44 },
+  { code: 'A26', lng: 78.406871, lat: 17.502838, dist: 17.28 },
+  { code: 'A27', lng: 78.407018, lat: 17.502816, dist: 15.79 },
+  { code: 'A28', lng: 78.407375, lat: 17.502791, dist: 36.06 },
+];
+
+// Centre of mass
+const centerLat = points.reduce((s, p) => s + p.lat, 0) / points.length;
+const centerLng = points.reduce((s, p) => s + p.lng, 0) / points.length;
+
+// Init map — satellite tiles from ESRI (no API key needed)
+const map = L.map('map', {
+  center: [centerLat, centerLng],
+  zoom: 18,
+  zoomControl: true,
+});
+
+// Satellite layer
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, GeoEye, Earthstar Geographics',
+  maxZoom: 21,
+}).addTo(map);
+
+// Light label overlay so street names still show
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 21,
+  opacity: 0.7,
+}).addTo(map);
+
+// Polygon — close it by repeating A1
+const latlngs = points.map(p => [p.lat, p.lng]);
+latlngs.push([points[0].lat, points[0].lng]); // close
+
+const poly = L.polygon(latlngs, {
+  color: '#38bdf8',
+  weight: 2.5,
+  opacity: 0.9,
+  fillColor: '#38bdf8',
+  fillOpacity: 0.18,
+}).addTo(map);
+
+// Perimeter from dist column (sum of all dist values)
+const perimeter = points.reduce((s, p) => s + p.dist, 0);
+document.getElementById('perim-val').textContent = (perimeter / 1000).toFixed(2) + ' km';
+
+// Rough area via Shoelace (m²)
+function shoelaceArea(pts) {
+  // Convert deg to metres (rough, flat Earth)
+  const R = 6371000;
+  const toRad = d => d * Math.PI / 180;
+  let area = 0;
+  const n = pts.length;
+  for (let i = 0; i < n; i++) {
+    const j = (i + 1) % n;
+    const xi = toRad(pts[i].lng) * R * Math.cos(toRad(pts[i].lat));
+    const yi = toRad(pts[i].lat) * R;
+    const xj = toRad(pts[j].lng) * R * Math.cos(toRad(pts[j].lat));
+    const yj = toRad(pts[j].lat) * R;
+    area += xi * yj - xj * yi;
+  }
+  return Math.abs(area) / 2;
+}
+
+const areaSqM = shoelaceArea(points);
+const areaHa = areaSqM / 10000;
+document.getElementById('area-val').textContent =
+  areaHa >= 1 ? areaHa.toFixed(2) + ' ha' : areaSqM.toFixed(0) + ' m²';
+
+// Marker icon factory
+function makeIcon(color) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      width:9px; height:9px;
+      background:${color};
+      border:2px solid #0f172a;
+      border-radius:50%;
+      box-shadow:0 1px 4px rgba(0,0,0,0.5);
+    "></div>`,
+    iconAnchor: [4.5, 4.5],
+  });
+}
+
+// Add markers with popups
+points.forEach((p, i) => {
+  const isStart = i === 0;
+  const marker = L.marker([p.lat, p.lng], {
+    icon: makeIcon(isStart ? '#f97316' : '#38bdf8'),
+    zIndexOffset: isStart ? 100 : 0,
+  }).addTo(map);
+
+  marker.bindPopup(`
+    <div class="popup-inner">
+      <h4>${p.code}${isStart ? ' · Start' : ''}</h4>
+      <p>
+        Lat: ${p.lat.toFixed(6)}°<br>
+        Lng: ${p.lng.toFixed(6)}°
+      </p>
+      ${p.dist > 0 ? `<div class="dist">↔ ${p.dist} m to previous point</div>` : ''}
+    </div>
+  `);
+});
+
+// Fit map to polygon
+map.fitBounds(poly.getBounds(), { padding: [30, 30] });
+</script>
+
+</body>
+</html>

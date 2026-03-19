@@ -1,0 +1,562 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+<div x-data="supFlow()" x-init="init()">
+
+  <!-- Fixed Header: Brand + Target Number -->
+  <header class="sup-header">
+    <span class="sup-brand">sup</span>
+    <span class="sup-target"
+          x-text="targetFormatted"
+          :class="{ pulse: targetPulsing }">
+    </span>
+  </header>
+
+  <!-- LANDING (unauthenticated) -->
+  {% if not user.is_authenticated %}
+  <div class="sup-landing">
+    <h1>sup</h1>
+    <p>Figure out when you can quit your job.<br>
+       No signup. Takes 2 minutes.</p>
+    <a href="{% url 'guest_login' %}" class="sup-btn sup-btn-start">
+      Let's go
+    </a>
+  </div>
+  {% else %}
+
+  <!-- CSRF token for AJAX calls -->
+  {% csrf_token %}
+
+  <!-- MAIN FLOW (authenticated) -->
+  <div class="sup-flow">
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- TIER 1: Quick Runway (~6 inputs)   -->
+    <!-- ═══════════════════════════════════ -->
+
+    <!-- Step 1: Purpose -->
+    <div class="sup-step" :class="{ answered: step > 1 }">
+      <div class="sup-step-question">What do you want to free up time for?</div>
+      <div class="sup-chips">
+        <template x-for="opt in ['My startup', 'Side project', 'Sabbatical', 'Something else']">
+          <button class="sup-chip"
+                  :class="{ active: purpose === opt }"
+                  @click="purpose = opt; nextStep(1)">
+            <span x-text="opt"></span>
+          </button>
+        </template>
+      </div>
+    </div>
+
+    <!-- Step 2: Venture details (conditional) -->
+    <div class="sup-step" :class="{ answered: step > 2 }"
+         x-show="step >= 2 && purpose === 'My startup'"
+         x-transition.duration.300ms>
+      <div class="sup-step-question">Tell us about your venture</div>
+      <div class="mb-3">
+        <input type="text" class="sup-currency-input" placeholder="Venture name"
+               x-model="ventureName">
+      </div>
+      <div class="sup-chips mb-3">
+        <template x-for="s in ['Idea', 'MVP', 'Growth']">
+          <button class="sup-chip"
+                  :class="{ active: ventureStage === s }"
+                  @click="ventureStage = s">
+            <span x-text="s"></span>
+          </button>
+        </template>
+      </div>
+      <button class="sup-btn sup-btn-outline" @click="nextStep(2)" :disabled="!ventureName">
+        Continue
+      </button>
+    </div>
+
+    <!-- Step 3: Family -->
+    <div class="sup-step" :class="{ answered: step > 3 }"
+         x-show="step >= 3"
+         x-transition.duration.300ms>
+      <div class="sup-step-question">Your family</div>
+      <div class="sup-chips">
+        <template x-for="f in ['Just me', 'With partner', 'Partner + kids', 'Joint family']">
+          <button class="sup-chip"
+                  :class="{ active: familyType === f }"
+                  @click="familyType = f; nextStep(3)">
+            <span x-text="f"></span>
+          </button>
+        </template>
+      </div>
+    </div>
+
+    <!-- Step 3b: Kids details (conditional) -->
+    <div class="sup-step" :class="{ answered: step > 3.5 }"
+         x-show="step >= 3.5 && hasKids"
+         x-transition.duration.300ms>
+      <div class="sup-step-question">How many children, and their ages?</div>
+      <div class="sup-input-row">
+        <label>Number of kids</label>
+        <input type="number" class="sup-currency-input" min="1" max="5"
+               x-model.number="numKids" style="max-width:80px">
+      </div>
+      <template x-for="(age, i) in kidAges" :key="i">
+        <div class="sup-input-row">
+          <label x-text="'Child ' + (i+1) + ' age'"></label>
+          <input type="number" class="sup-currency-input" min="0" max="25"
+                 x-model.number="kidAges[i]" style="max-width:80px">
+        </div>
+      </template>
+      <button class="sup-btn sup-btn-outline mt-2" @click="nextStep(3.5)">Continue</button>
+    </div>
+
+    <!-- Step 3c: Dependents (conditional) -->
+    <div class="sup-step" :class="{ answered: step > 3.7 }"
+         x-show="step >= 3.7 && hasDependents"
+         x-transition.duration.300ms>
+      <div class="sup-step-question">Dependent adults (parents, etc.)</div>
+      <div class="sup-input-row">
+        <label>How many</label>
+        <input type="number" class="sup-currency-input" min="1" max="4"
+               x-model.number="numDependents" style="max-width:80px">
+      </div>
+      <div class="sup-input-row">
+        <label>Monthly cost for their care</label>
+        <div class="sup-currency-wrap">
+          <span class="sup-currency-prefix">₹</span>
+          <input type="text" inputmode="numeric" class="sup-currency-input"
+                 :value="formatCommas(dependentCost)"
+                 @input="setCurrency('dependentCost', $event)"
+                 style="max-width:160px">
+          <span class="sup-currency-badge" x-show="dependentCost >= 1000"
+                x-text="shortINR(dependentCost)"></span>
+        </div>
+      </div>
+      <button class="sup-btn sup-btn-outline mt-2" @click="nextStep(3.7)">Continue</button>
+    </div>
+
+    <!-- Step 4: Monthly expenses -->
+    <div class="sup-step" :class="{ answered: step > 4 }"
+         x-show="step >= 4"
+         x-transition.duration.300ms>
+      <div class="sup-step-question">Monthly expenses (rough is fine)</div>
+      <div class="sup-step-hint">What your family absolutely needs to survive</div>
+      <div class="sup-input-row">
+        <label>Survival (rent, food, bills, EMIs)</label>
+        <div class="sup-currency-wrap">
+          <span class="sup-currency-prefix">₹</span>
+          <input type="text" inputmode="numeric" class="sup-currency-input"
+                 :value="formatCommas(monthlySurvival)"
+                 @input="setCurrency('monthlySurvival', $event)"
+                 style="max-width:160px">
+          <span class="sup-currency-badge" x-show="monthlySurvival >= 1000"
+                x-text="shortINR(monthlySurvival)"></span>
+        </div>
+      </div>
+      <div class="sup-step-hint mt-3">Lifestyle spending you could cut if needed</div>
+      <div class="sup-input-row">
+        <label>Lifestyle (dining, travel, shopping)</label>
+        <div class="sup-currency-wrap">
+          <span class="sup-currency-prefix">₹</span>
+          <input type="text" inputmode="numeric" class="sup-currency-input"
+                 :value="formatCommas(monthlyLifestyle)"
+                 @input="setCurrency('monthlyLifestyle', $event)"
+                 style="max-width:160px">
+          <span class="sup-currency-badge" x-show="monthlyLifestyle >= 1000"
+                x-text="shortINR(monthlyLifestyle)"></span>
+        </div>
+      </div>
+      <button class="sup-btn sup-btn-outline mt-3" @click="nextStep(4)"
+              :disabled="!monthlySurvival">Continue</button>
+    </div>
+
+    <!-- Step 5: Savings & passive income -->
+    <div class="sup-step" :class="{ answered: step > 5 }"
+         x-show="step >= 5"
+         x-transition.duration.300ms>
+      <div class="sup-step-question">Your financial cushion</div>
+      <div class="sup-input-row">
+        <label>Liquid savings (cash, FDs, liquid MFs)</label>
+        <div class="sup-currency-wrap">
+          <span class="sup-currency-prefix">₹</span>
+          <input type="text" inputmode="numeric" class="sup-currency-input"
+                 :value="formatCommas(liquidSavings)"
+                 @input="setCurrency('liquidSavings', $event)"
+                 style="max-width:180px">
+          <span class="sup-currency-badge" x-show="liquidSavings >= 1000"
+                x-text="shortINR(liquidSavings)"></span>
+        </div>
+      </div>
+      <div class="sup-input-row mt-3">
+        <label>Monthly passive income (rent, interest, dividends)</label>
+        <div class="sup-currency-wrap">
+          <span class="sup-currency-prefix">₹</span>
+          <input type="text" inputmode="numeric" class="sup-currency-input"
+                 :value="formatCommas(monthlyPassive)"
+                 @input="setCurrency('monthlyPassive', $event)"
+                 style="max-width:160px">
+          <span class="sup-currency-badge" x-show="monthlyPassive >= 1000"
+                x-text="shortINR(monthlyPassive)"></span>
+        </div>
+      </div>
+      <button class="sup-btn sup-btn-outline mt-3" @click="nextStep(5)"
+              :disabled="!liquidSavings">Continue</button>
+    </div>
+
+    <!-- Step 6: Emergency fund lock -->
+    <div class="sup-step" :class="{ answered: step > 6 }"
+         x-show="step >= 6"
+         x-transition.duration.300ms>
+      <div class="sup-step-question">Emergency fund lock</div>
+      <div class="sup-step-hint">
+        How many months of survival expenses to keep untouchable?
+      </div>
+      <div class="d-flex align-items-center gap-3 mb-2">
+        <input type="range" class="sup-slider" min="3" max="12" step="1"
+               x-model.number="emergencyMonths">
+        <span class="sup-target" style="min-width:90px" x-text="emergencyMonths + ' months'"></span>
+      </div>
+      <div class="sup-step-hint">
+        That's <span x-text="formatINR(emergencyMonths * monthlySurvival)"></span> locked away
+      </div>
+      <button class="sup-btn sup-btn-primary mt-3" @click="nextStep(6)">
+        Show my runway
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- TIER 1 RESULTS                 -->
+    <!-- ═══════════════════════════════ -->
+    <div x-show="step >= 7" x-transition.duration.500ms>
+      <div class="sup-result-card">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="sup-result-label">Austerity Runway</div>
+            <div class="sup-result-value"
+                 :class="{ warn: austerityRunway < 18, danger: austerityRunway < 6 }"
+                 x-text="austerityRunway === Infinity ? '∞' : Math.round(austerityRunway) + ' mo'">
+            </div>
+            <div class="sup-step-hint">Survival expenses only</div>
+          </div>
+          <div class="col-6">
+            <div class="sup-result-label">Comfort Runway</div>
+            <div class="sup-result-value"
+                 :class="{ warn: comfortRunway < 12, danger: comfortRunway < 6 }"
+                 x-text="comfortRunway === Infinity ? '∞' : Math.round(comfortRunway) + ' mo'">
+            </div>
+            <div class="sup-step-hint">Full lifestyle</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sup-result-card">
+        <div class="sup-result-label">Your Target Number (FI Corpus)</div>
+        <div class="sup-result-value" x-text="formatINR(targetNumber)"></div>
+        <div class="sup-step-hint">25× your annual survival expenses — the amount where you never need a salary again</div>
+      </div>
+
+      <!-- Collapsible explanation -->
+      <div class="sup-explain-toggle" @click="showExplain = !showExplain">
+        How is this calculated?
+        <span x-text="showExplain ? '−' : '+'"></span>
+      </div>
+      <div x-show="showExplain" x-collapse class="sup-explain">
+        <table>
+          <tbody>
+            <tr>
+              <td>Monthly survival expenses</td>
+              <td class="sup-explain-val" x-text="formatINR(monthlySurvival)"></td>
+            </tr>
+            <tr x-show="dependentCost > 0">
+              <td>+ Dependent care costs</td>
+              <td class="sup-explain-val" x-text="formatINR(dependentCost)"></td>
+            </tr>
+            <tr class="sup-explain-subtotal">
+              <td>Total survival burn</td>
+              <td class="sup-explain-val" x-text="formatINR(totalSurvivalBurn) + '/mo'"></td>
+            </tr>
+            <tr>
+              <td>+ Monthly lifestyle expenses</td>
+              <td class="sup-explain-val" x-text="formatINR(monthlyLifestyle)"></td>
+            </tr>
+            <tr class="sup-explain-subtotal">
+              <td>Total comfort burn</td>
+              <td class="sup-explain-val" x-text="formatINR(totalComfortBurn) + '/mo'"></td>
+            </tr>
+            <tr x-show="monthlyPassive > 0">
+              <td>- Monthly passive income</td>
+              <td class="sup-explain-val" x-text="formatINR(monthlyPassive)"></td>
+            </tr>
+            <tr class="sup-explain-subtotal">
+              <td>Net burn (austerity)</td>
+              <td class="sup-explain-val" x-text="formatINR(Math.max(0, totalSurvivalBurn - monthlyPassive)) + '/mo'"></td>
+            </tr>
+            <tr class="sup-explain-subtotal">
+              <td>Net burn (comfort)</td>
+              <td class="sup-explain-val" x-text="formatINR(Math.max(0, totalComfortBurn - monthlyPassive)) + '/mo'"></td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr><td colspan="2" class="sup-explain-divider"></td></tr>
+            <tr>
+              <td>Liquid savings</td>
+              <td class="sup-explain-val" x-text="formatINR(liquidSavings)"></td>
+            </tr>
+            <tr>
+              <td x-text="'- Emergency fund lock (' + emergencyMonths + ' mo)'"></td>
+              <td class="sup-explain-val sup-explain-neg" x-text="'- ' + formatINR(emergencyLock)"></td>
+            </tr>
+            <tr class="sup-explain-subtotal">
+              <td>Available cash for runway</td>
+              <td class="sup-explain-val" x-text="formatINR(availableCash)"></td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr><td colspan="2" class="sup-explain-divider"></td></tr>
+            <tr class="sup-explain-result">
+              <td>Austerity runway</td>
+              <td class="sup-explain-val">
+                <span x-text="formatINR(availableCash)"></span>
+                / <span x-text="formatINR(Math.max(0, totalSurvivalBurn - monthlyPassive))"></span>
+                = <strong x-text="austerityRunway === Infinity ? '∞' : Math.round(austerityRunway) + ' months'"></strong>
+              </td>
+            </tr>
+            <tr class="sup-explain-result">
+              <td>Comfort runway</td>
+              <td class="sup-explain-val">
+                <span x-text="formatINR(availableCash)"></span>
+                / <span x-text="formatINR(Math.max(0, totalComfortBurn - monthlyPassive))"></span>
+                = <strong x-text="comfortRunway === Infinity ? '∞' : Math.round(comfortRunway) + ' months'"></strong>
+              </td>
+            </tr>
+            <tr class="sup-explain-result">
+              <td>Target number</td>
+              <td class="sup-explain-val">
+                <span x-text="formatINR(totalSurvivalBurn)"></span>
+                x 12 x 25 = <strong x-text="formatINR(targetNumber)"></strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="sup-explain-note">
+          The runway assumes you draw down liquid savings at a fixed monthly rate.
+          The target number uses the 4% Safe Withdrawal Rate — your annual survival expenses multiplied by 25.
+          Once your investment corpus reaches this number, you can live off the returns indefinitely.
+        </div>
+      </div>
+
+      <!-- Gate to Tier 2 -->
+      <div class="sup-tier-gate">
+        <p>Want a detailed projection with year-by-year analysis?</p>
+        <button class="sup-btn sup-btn-primary" @click="enterTier2()">
+          Yes, go deeper
+        </button>
+        <button class="sup-btn sup-btn-outline ms-2" @click="null">
+          I'm done for now
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- TIER 2: Buckets (~12 more inputs)  -->
+    <!-- ═══════════════════════════════════ -->
+    <div x-show="tier >= 2" x-transition.duration.500ms>
+
+      <div class="sup-step" :class="{ answered: step > 8 }"
+           x-show="step >= 8">
+        <div class="sup-step-question">What best describes your situation?</div>
+        <div class="sup-step-hint">This helps us set realistic defaults</div>
+
+        <div class="mb-3">
+          <label class="sup-step-hint mb-1 d-block">Wealth level (total assets)</label>
+          <div class="sup-chips">
+            <template x-for="[label, val] in [['Modest (< 2 Cr)', 1], ['Comfortable (2-10 Cr)', 2], ['Affluent (10+ Cr)', 3]]">
+              <button class="sup-chip"
+                      :class="{ active: wealthLevel === val }"
+                      @click="wealthLevel = val">
+                <span x-text="label"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="sup-step-hint mb-1 d-block">Annual household income</label>
+          <div class="sup-chips">
+            <template x-for="[label, val] in [['< 20 L', 1], ['20-50 L', 2], ['50 L+', 3]]">
+              <button class="sup-chip"
+                      :class="{ active: incomeLevel === val }"
+                      @click="incomeLevel = val">
+                <span x-text="label"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="sup-step-hint mb-1 d-block">Annual household expenses</label>
+          <div class="sup-chips">
+            <template x-for="[label, val] in [['< 20 L', 1], ['20-50 L', 2], ['50 L+', 3]]">
+              <button class="sup-chip"
+                      :class="{ active: expenseLevel === val }"
+                      @click="expenseLevel = val">
+                <span x-text="label"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <button class="sup-btn sup-btn-outline mt-2" @click="nextStep(8)"
+                :disabled="!wealthLevel || !incomeLevel || !expenseLevel">Continue</button>
+      </div>
+
+      <!-- Step 9: Asset buckets -->
+      <div class="sup-step" :class="{ answered: step > 9 }"
+           x-show="step >= 9" x-transition.duration.300ms>
+        <div class="sup-step-question">Your assets in more detail</div>
+        <div class="sup-step-hint">We already know your liquid savings. What about the rest?</div>
+
+        <div class="sup-input-row">
+          <label>Semi-liquid (debt MFs, bonds, gold)</label>
+          <div class="sup-currency-wrap">
+            <span class="sup-currency-prefix">₹</span>
+            <input type="text" inputmode="numeric" class="sup-currency-input"
+                   :value="formatCommas(semiLiquidAssets)"
+                   @input="setCurrency('semiLiquidAssets', $event)"
+                   style="max-width:160px">
+            <span class="sup-currency-badge" x-show="semiLiquidAssets >= 1000"
+                  x-text="shortINR(semiLiquidAssets)"></span>
+          </div>
+        </div>
+        <div class="sup-input-row">
+          <label>Growth (equity MFs, PF/NPS, stocks)</label>
+          <div class="sup-currency-wrap">
+            <span class="sup-currency-prefix">₹</span>
+            <input type="text" inputmode="numeric" class="sup-currency-input"
+                   :value="formatCommas(growthAssets)"
+                   @input="setCurrency('growthAssets', $event)"
+                   style="max-width:160px">
+            <span class="sup-currency-badge" x-show="growthAssets >= 1000"
+                  x-text="shortINR(growthAssets)"></span>
+          </div>
+        </div>
+        <div class="sup-input-row">
+          <label>Property equity (non-primary home)</label>
+          <div class="sup-currency-wrap">
+            <span class="sup-currency-prefix">₹</span>
+            <input type="text" inputmode="numeric" class="sup-currency-input"
+                   :value="formatCommas(propertyAssets)"
+                   @input="setCurrency('propertyAssets', $event)"
+                   style="max-width:160px">
+            <span class="sup-currency-badge" x-show="propertyAssets >= 1000"
+                  x-text="shortINR(propertyAssets)"></span>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <label class="sup-step-hint mb-1 d-block">Expected returns outlook</label>
+          <div class="sup-chips">
+            <template x-for="[label, val] in [['Conservative (8%)', 8], ['Moderate (12%)', 12], ['Aggressive (15%)', 15]]">
+              <button class="sup-chip"
+                      :class="{ active: expectedReturn === val }"
+                      @click="expectedReturn = val">
+                <span x-text="label"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <button class="sup-btn sup-btn-outline mt-3" @click="nextStep(9)">Continue</button>
+      </div>
+
+      <!-- Step 10: Big expenses & side income -->
+      <div class="sup-step" :class="{ answered: step > 10 }"
+           x-show="step >= 10" x-transition.duration.300ms>
+        <div class="sup-step-question">Any big upcoming expenses?</div>
+        <div class="sup-step-hint">Child's graduation, house renovation, medical, etc.</div>
+
+        <template x-for="(exp, i) in bigExpenses" :key="i">
+          <div class="d-flex gap-2 mb-2 align-items-center">
+            <input type="text" class="sup-currency-input" placeholder="What"
+                   x-model="bigExpenses[i].name" style="flex:2">
+            <div class="sup-currency-wrap" style="flex:1">
+              <span class="sup-currency-prefix">₹</span>
+              <input type="text" inputmode="numeric" class="sup-currency-input" placeholder="Amount"
+                     :value="formatCommas(bigExpenses[i].amount)"
+                     @input="setCurrencyNested(bigExpenses[i], 'amount', $event)">
+              <span class="sup-currency-badge" x-show="bigExpenses[i].amount >= 100000"
+                    x-text="shortINR(bigExpenses[i].amount)"></span>
+            </div>
+            <input type="number" class="sup-currency-input" placeholder="Year"
+                   x-model.number="bigExpenses[i].year" style="flex:0.6">
+          </div>
+        </template>
+        <button class="sup-btn sup-btn-outline mb-3" @click="addBigExpense()"
+                x-show="bigExpenses.length < 3" style="font-size:0.85rem">+ Add expense</button>
+
+        <div class="sup-step-question mt-3">Plan to do consulting or side work?</div>
+        <div class="sup-chips mb-2">
+          <button class="sup-chip" :class="{ active: hasSideIncome }" @click="hasSideIncome = true">Yes</button>
+          <button class="sup-chip" :class="{ active: hasSideIncome === false }" @click="hasSideIncome = false">No</button>
+        </div>
+        <div x-show="hasSideIncome" class="ms-2">
+          <div class="sup-input-row">
+            <label>Monthly amount</label>
+            <div class="sup-currency-wrap">
+              <span class="sup-currency-prefix">₹</span>
+              <input type="text" inputmode="numeric" class="sup-currency-input"
+                     :value="formatCommas(sideIncomeAmount)"
+                     @input="setCurrency('sideIncomeAmount', $event)"
+                     style="max-width:140px">
+              <span class="sup-currency-badge" x-show="sideIncomeAmount >= 1000"
+                    x-text="shortINR(sideIncomeAmount)"></span>
+            </div>
+          </div>
+          <div class="sup-input-row">
+            <label>For how many months</label>
+            <input type="number" class="sup-currency-input"
+                   x-model.number="sideIncomeDuration" style="max-width:80px">
+          </div>
+        </div>
+
+        <button class="sup-btn sup-btn-primary mt-3" @click="runProjection()"
+                :disabled="projecting">
+          <span x-show="!projecting">Calculate my projection</span>
+          <span x-show="projecting">Calculating...</span>
+        </button>
+      </div>
+
+      <!-- ═══════════════════════════════════ -->
+      <!-- PROJECTION RESULTS                  -->
+      <!-- ═══════════════════════════════════ -->
+      <div x-show="projectionDone" x-transition.duration.500ms>
+        <div class="sup-result-card">
+          <div class="sup-result-label">Free Up Year</div>
+          <div class="sup-result-value" x-text="freeUpYear || 'Not within projection'"></div>
+          <div class="sup-step-hint" x-show="freeUpYear">
+            The year your passive income covers all expenses
+          </div>
+        </div>
+
+        <div class="sup-chart-container" id="cashflow-chart"></div>
+
+        <div class="d-flex gap-2 justify-content-center mt-3">
+          <button class="sup-btn sup-btn-outline" @click="showWhatIf = !showWhatIf">
+            What If...
+          </button>
+          <button class="sup-btn sup-btn-outline" @click="showDetails = !showDetails">
+            Edit Details
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /tier2 -->
+
+  </div><!-- /sup-flow -->
+  {% endif %}
+
+</div><!-- /x-data -->
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="{% static 'js/sup-flow.js' %}"></script>
+{% endblock %}

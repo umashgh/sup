@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>sup — You might be more free than you think</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/*
+  SUP v3 — "Quirky Optimist"
+  ===========================
+  Not a fintech template. More like a friend
+  who happens to be great with money, scribbled
+  this on a napkin for you over chai.
+
+  Design moves:
+  - Cream/warm base (not clinical white)
+  - Serif headlines (personal, editorial)
+  - Big emoji as section heroes
+  - Conversational, witty copy
+  - Ticker strip, not testimonial cards
+  - Gauge/meter, not bar charts
+  - Wavy dividers, not flat lines
+  - Warm palette: coral + mustard + deep charcoal
+*/
+
+:root {
+  --cream: #faf7f2;
+  --cream-dark: #f0ebe3;
+  --ink: #1a1a1a;
+  --ink-light: #3d3d3d;
+  --ink-muted: #7a7a7a;
+  --ink-faint: #b5b0a8;
+  --coral: #e8654a;
+  --coral-light: #fce8e4;
+  --mustard: #e0a530;
+  --mustard-light: #fef5dc;
+  --forest: #2d7a5f;
+  --forest-light: #dff0e8;
+  --ocean: #3667a6;
+  --ocean-light: #e0ecf7;
+  --plum: #7c4dac;
+  --plum-light: #f0e8f7;
+  --r: 12px;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'Space Grotesk', system-ui, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+  line-height: 1.55;
+  overflow-x: hidden;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* =====================
+   HERO — conversational
+   ===================== */
+.hero {
+  padding: 44px 24px 32px;
+  text-align: center;
+}
+
+.hero .wave {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 16px;
+  animation: wave-hand 2.5s ease-in-out infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes wave-hand {
+  0%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--coral);
+}
+
+.hero .sub {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  max-width: 280px;
+  margin: 0 auto 28px;
+  line-height: 1.5;
+}
+
+.hero .cta {
+  display: block;
+  padding: 16px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.15s;
+}
+
+.hero .cta:active { transform: scale(0.97); }
+
+.hero .aside {
+  margin-top: 12px;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}
+
+
+/* =====================
+   TICKER — scrolling social proof
+   ===================== */
+.ticker-wrap {
+  overflow: hidden;
+  border-top: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+  padding: 10px 0;
+  background: var(--mustard-light);
+}
+
+.ticker {
+  display: flex;
+  gap: 32px;
+  animation: scroll-ticker 18s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+
+@keyframes scroll-ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-light);
+  letter-spacing: 0.01em;
+}
+
+.ticker .sep { color: var(--mustard); }
+
+
+/* =====================
+   THE QUESTION — single bold ask
+   ===================== */
+.the-q {
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.the-q .big-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.the-q h2 {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.the-q p {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+
+/* =====================
+   SCENARIOS — stacked stories
+   ===================== */
+.stories {
+  padding: 0 24px 32px;
+}
+
+.story {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s;
+}
+
+.story:last-child { border-bottom: none; }
+
+.story:active { opacity: 0.7; }
+
+.story-color {
+  width: 4px;
+  min-width: 4px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.story-color.c1 { background: var(--coral); }
+.story-color.c2 { background: var(--forest); }
+.story-color.c3 { background: var(--mustard); }
+.story-color.c4 { background: var(--ocean); }
+.story-color.c5 { background: var(--plum); }
+
+.story-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.story-body h3 {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 400;
+  margin-bottom: 2px;
+}
+
+.story-body p {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+.story-emoji {
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+
+/* =====================
+   WAVY DIVIDER
+   ===================== */
+.wavy {
+  height: 24px;
+  background: var(--cream);
+  position: relative;
+}
+
+.wavy svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 24px;
+}
+
+
+/* =====================
+   HOW — napkin style
+   ===================== */
+.napkin {
+  background: var(--cream-dark);
+  padding: 32px 24px;
+}
+
+.napkin h2 {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.napkin-step {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.napkin-step:last-child { margin-bottom: 0; }
+
+.napkin-n {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.napkin-text h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.napkin-text p {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+  margin-top: 1px;
+}
+
+
+/* =====================
+   DEMO — looks like the real app
+   ===================== */
+.demo {
+  padding: 32px 24px;
+}
+
+.demo h2 {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.demo .sub {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  margin-bottom: 16px;
+}
+
+.demo-box {
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.demo-top {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.demo-progress-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.15);
+  margin-top: 6px;
+  border-radius: 2px;
+}
+
+.demo-progress-fill {
+  width: 38%;
+  height: 100%;
+  background: var(--coral);
+  border-radius: 2px;
+}
+
+.demo-content {
+  padding: 18px 14px;
+  background: var(--cream);
+}
+
+.demo-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* slider mock */
+.mock-val {
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  color: var(--coral);
+  margin-bottom: 8px;
+}
+
+.mock-val .unit {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+}
+
+.mock-track {
+  position: relative;
+  height: 6px;
+  background: var(--cream-dark);
+  border-radius: 3px;
+}
+
+.mock-fill {
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%;
+  width: 52%;
+  background: var(--ink);
+  border-radius: 3px;
+}
+
+.mock-thumb {
+  position: absolute;
+  top: 50%; left: 52%;
+  transform: translate(-50%, -50%);
+  width: 22px; height: 22px;
+  background: var(--cream);
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+}
+
+.mock-range {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--ink-faint);
+  margin-top: 5px;
+}
+
+.demo-sep {
+  height: 1px;
+  background: rgba(0,0,0,0.08);
+  margin: 16px 0;
+}
+
+/* card select */
+.choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.choice {
+  padding: 10px 8px;
+  border: 2px solid transparent;
+  background: var(--cream-dark);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  transition: all 0.12s;
+  cursor: pointer;
+}
+
+.choice .em { font-size: 1.15rem; display: block; margin-bottom: 2px; }
+
+.choice.on {
+  border-color: var(--ink);
+  background: var(--cream);
+}
+
+
+/* =====================
+   THE REVEAL — result preview as gauge
+   ===================== */
+.reveal {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 36px 24px;
+  text-align: center;
+}
+
+.reveal h2 {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin-bottom: 24px;
+  color: rgba(255,255,255,0.8);
+}
+
+.gauge-wrap {
+  position: relative;
+  width: 200px;
+  height: 110px;
+  margin: 0 auto 20px;
+  overflow: hidden;
+}
+
+.gauge-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  border-radius: 100px 100px 0 0;
+  background: conic-gradient(
+    from 0.75turn at 50% 100%,
+    var(--coral) 0deg,
+    var(--mustard) 90deg,
+    var(--forest) 180deg
+  );
+  opacity: 0.3;
+}
+
+.gauge-mask {
+  position: absolute;
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 88px;
+  border-radius: 88px 88px 0 0;
+  background: var(--ink);
+}
+
+.gauge-needle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  height: 70px;
+  background: var(--cream);
+  border-radius: 2px;
+  transform-origin: bottom center;
+  transform: rotate(35deg);
+  transition: transform 1s ease;
+}
+
+.gauge-dot {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: var(--cream);
+  border-radius: 50%;
+}
+
+.gauge-labels {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.reveal-number {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  color: var(--mustard);
+  margin-bottom: 2px;
+}
+
+.reveal-number .yr { font-size: 1rem; }
+
+.reveal-label {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 20px;
+}
+
+.reveal-stats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.reveal-stat .v {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--cream);
+}
+
+.reveal-stat .k {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+
+/* =====================
+   DEPTH — tiers as a fun progression
+   ===================== */
+.depth {
+  padding: 32px 24px;
+}
+
+.depth h2 {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.depth-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.depth-item:last-child { margin-bottom: 0; }
+
+.depth-badge {
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  margin-top: 3px;
+}
+
+.depth-badge.t1 { background: var(--forest-light); color: var(--forest); }
+.depth-badge.t2 { background: var(--ocean-light); color: var(--ocean); }
+.depth-badge.t3 { background: var(--plum-light); color: var(--plum); }
+
+.depth-text h4 { font-size: 0.85rem; font-weight: 600; }
+.depth-text p  { font-size: 0.75rem; color: var(--ink-muted); line-height: 1.4; margin-top: 1px; }
+
+.depth-text .soon-tag {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--plum);
+  background: var(--plum-light);
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 2px;
+}
+
+
+/* =====================
+   VOICES — marquee-style, raw quotes
+   ===================== */
+.voice-section {
+  padding: 28px 24px;
+  background: var(--cream-dark);
+}
+
+.voice-section h2 {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.voice {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.voice:last-child { border-bottom: none; }
+
+.voice .qt {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.voice .who {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+
+.voice .who em {
+  font-style: normal;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+
+/* =====================
+   BOTTOM — warm CTA
+   ===================== */
+.bottom {
+  padding: 40px 24px 28px;
+  text-align: center;
+}
+
+.bottom .big-emoji {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.bottom h2 {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.bottom h2 em {
+  font-style: italic;
+  color: var(--coral);
+}
+
+.bottom p {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin-bottom: 24px;
+}
+
+.bottom .cta {
+  display: block;
+  padding: 16px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.bottom .cta:active { transform: scale(0.97); }
+
+.bottom .fine {
+  margin-top: 14px;
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+}
+
+.bottom .trust {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+}
+
+
+/* =====================
+   FOOTER
+   ===================== */
+footer {
+  border-top: 1.5px solid var(--ink);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer .logo {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+footer .links {
+  display: flex;
+  gap: 14px;
+}
+
+footer .links a {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+footer .links a:hover { color: var(--ink); }
+
+
+/* =====================
+   ANIMATIONS
+   ===================== */
+.fi {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fi.v {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <span class="wave">&#128075;</span>
+
+  <h1>You might be<br>more <em>free</em> than<br>you think.</h1>
+
+  <p class="sub">sup figures out your financial runway — how long your money can sustain you if you leap. Takes 2 minutes. We don't even ask your name.</p>
+
+  <a href="#stories" class="cta">Find out &rarr;</a>
+
+  <p class="aside">No signup &middot; No data stored &middot; Free forever</p>
+</section>
+
+
+<!-- ===== TICKER ===== -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>&#128640; 14 months more runway than I thought</span>
+    <span class="sep">&bull;</span>
+    <span>&#127796; Finally have a retirement target: ₹3.2Cr</span>
+    <span class="sep">&bull;</span>
+    <span>&#9992;&#65039; Our NRI savings = 4.8 years in Pune</span>
+    <span class="sep">&bull;</span>
+    <span>&#9968;&#65039; Turns out I can coast at ₹60K/month</span>
+    <span class="sep">&bull;</span>
+    <span>&#128221; 11 months buffer after the layoff</span>
+    <span class="sep">&bull;</span>
+    <!-- duplicate for seamless loop -->
+    <span>&#128640; 14 months more runway than I thought</span>
+    <span class="sep">&bull;</span>
+    <span>&#127796; Finally have a retirement target: ₹3.2Cr</span>
+    <span class="sep">&bull;</span>
+    <span>&#9992;&#65039; Our NRI savings = 4.8 years in Pune</span>
+    <span class="sep">&bull;</span>
+    <span>&#9968;&#65039; Turns out I can coast at ₹60K/month</span>
+    <span class="sep">&bull;</span>
+    <span>&#128221; 11 months buffer after the layoff</span>
+    <span class="sep">&bull;</span>
+  </div>
+</div>
+
+
+<!-- ===== THE QUESTION ===== -->
+<section class="the-q fi">
+  <span class="big-emoji">&#129300;</span>
+  <h2>What if you could<br>just... stop?</h2>
+  <p>Stop the job. Start the thing. Take the break. Move back home. How long does your money last?</p>
+</section>
+
+
+<!-- ===== SCENARIOS AS STORIES ===== -->
+<section class="stories fi" id="stories">
+
+  <div class="story" onclick="this.style.opacity='0.6'; setTimeout(()=>this.style.opacity='1', 200)">
+    <div class="story-color c1"></div>
+    <div class="story-body">
+      <h3>The Founder Leap</h3>
+      <p>You're quitting your ₹25L job to build something. How many months before the savings run out?</p>
+    </div>
+    <div class="story-emoji">&#128640;</div>
+  </div>
+
+  <div class="story">
+    <div class="story-color c2"></div>
+    <div class="story-body">
+      <h3>The Retirement Question</h3>
+      <p>You want to retire at 50, or 55, or 60. Will the corpus last till 85? With inflation?</p>
+    </div>
+    <div class="story-emoji">&#127796;</div>
+  </div>
+
+  <div class="story">
+    <div class="story-color c3"></div>
+    <div class="story-body">
+      <h3>The R2I Move</h3>
+      <p>Coming back from the US, UK, or Gulf. Different currency, different costs. What does your NRI nest egg mean in India?</p>
+    </div>
+    <div class="story-emoji">&#9992;&#65039;</div>
+  </div>
+
+  <div class="story">
+    <div class="story-color c4"></div>
+    <div class="story-body">
+      <h3>The Half-FIRE Life</h3>
+      <p>You don't want to quit working entirely — just do less, earn less, stress less. What's the math?</p>
+    </div>
+    <div class="story-emoji">&#9968;&#65039;</div>
+  </div>
+
+  <div class="story">
+    <div class="story-color c5"></div>
+    <div class="story-body">
+      <h3>The Layoff Buffer</h3>
+      <p>It happened, or it's coming. Severance + savings + expenses = how many months to figure it out?</p>
+    </div>
+    <div class="story-emoji">&#128221;</div>
+  </div>
+
+</section>
+
+
+<!-- ===== HOW — napkin explanation ===== -->
+<section class="napkin fi">
+  <h2>Here's the deal</h2>
+
+  <div class="napkin-step">
+    <div class="napkin-n">1</div>
+    <div class="napkin-text">
+      <h4>Pick your story</h4>
+      <p>Founder? Retiring? Moving back? Each one asks different questions.</p>
+    </div>
+  </div>
+
+  <div class="napkin-step">
+    <div class="napkin-n">2</div>
+    <div class="napkin-text">
+      <h4>Slide, don't type</h4>
+      <p>No forms, no spreadsheets. Just drag sliders and tap cards. Under 2 minutes.</p>
+    </div>
+  </div>
+
+  <div class="napkin-step">
+    <div class="napkin-n">3</div>
+    <div class="napkin-text">
+      <h4>Get your number</h4>
+      <p>Your runway in months. Your burn rate. Your "oh wait, I'm actually okay" moment.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== DEMO ===== -->
+<section class="demo fi">
+  <h2>It feels like this</h2>
+  <div class="sub">Not a spreadsheet. Promise.</div>
+
+  <div class="demo-box">
+    <div class="demo-top">
+      <span>&#128640; Founder Leap</span>
+      <span style="font-size:0.7rem; opacity:0.6;">3 of 8</span>
+    </div>
+    <div style="padding: 0 14px;">
+      <div class="demo-progress-bar"><div class="demo-progress-fill"></div></div>
+    </div>
+
+    <div class="demo-content">
+      <div class="demo-label">How old are you?</div>
+      <div class="mock-val">32 <span class="unit">years</span></div>
+      <div class="mock-track">
+        <div class="mock-fill"></div>
+        <div class="mock-thumb"></div>
+      </div>
+      <div class="mock-range"><span>22</span><span>60</span></div>
+
+      <div class="demo-sep"></div>
+
+      <div class="demo-label">Your household?</div>
+      <div class="choice-grid">
+        <div class="choice"><span class="em">&#128100;</span>Just me</div>
+        <div class="choice on"><span class="em">&#128107;</span>Partner</div>
+        <div class="choice"><span class="em">&#128106;</span>Family</div>
+        <div class="choice"><span class="em">&#128104;&#8205;&#128105;&#8205;&#128103;</span>Joint</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== THE REVEAL — gauge result ===== -->
+<section class="reveal fi">
+  <h2>And then you see this</h2>
+
+  <div class="gauge-wrap">
+    <div class="gauge-bg"></div>
+    <div class="gauge-mask"></div>
+    <div class="gauge-needle"></div>
+    <div class="gauge-dot"></div>
+    <div class="gauge-labels">
+      <span>tight</span>
+      <span>comfy</span>
+      <span>free</span>
+    </div>
+  </div>
+
+  <div class="reveal-number">8.2 <span class="yr">years</span></div>
+  <div class="reveal-label">of runway at your current burn rate</div>
+
+  <div class="reveal-stats">
+    <div class="reveal-stat">
+      <div class="v">&#8377;2.4Cr</div>
+      <div class="k">Total assets</div>
+    </div>
+    <div class="reveal-stat">
+      <div class="v">&#8377;1.8L</div>
+      <div class="k">Monthly burn</div>
+    </div>
+    <div class="reveal-stat">
+      <div class="v">6%</div>
+      <div class="k">Inflation</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== DEPTH — tiers ===== -->
+<section class="depth fi">
+  <h2>Want more precision?<br>Go deeper.</h2>
+
+  <div class="depth-item">
+    <div class="depth-badge t1">Quick</div>
+    <div class="depth-text">
+      <h4>2-min ballpark</h4>
+      <p>4-6 questions. Good enough for a chai-break reality check.</p>
+    </div>
+  </div>
+
+  <div class="depth-item">
+    <div class="depth-badge t2">Full</div>
+    <div class="depth-text">
+      <h4>20-year projection</h4>
+      <p>Asset growth, inflation, year-by-year breakdown. The real picture.</p>
+    </div>
+  </div>
+
+  <div class="depth-item">
+    <div class="depth-badge t3">Deep</div>
+    <div class="depth-text">
+      <h4>Monte Carlo odds</h4>
+      <p>Probability analysis + tax optimization. <span class="soon-tag">Coming soon</span></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== VOICES ===== -->
+<section class="voice-section fi">
+  <h2>Overheard</h2>
+
+  <div class="voice">
+    <div class="qt">"I had 14 months of runway, not 6 like I feared. That changed everything."</div>
+    <div class="who"><em>First-time founder</em> &middot; SaaS, Bangalore</div>
+  </div>
+
+  <div class="voice">
+    <div class="qt">"₹3.2Cr to retire at 50. Now I know the number. Now I can plan."</div>
+    <div class="who"><em>IT lead, 42</em> &middot; Wants out by 50</div>
+  </div>
+
+  <div class="voice">
+    <div class="qt">"We ran the R2I scenario three times with different cities. Pune won."</div>
+    <div class="who"><em>NRI couple</em> &middot; Bay Area → India</div>
+  </div>
+</section>
+
+
+<!-- ===== BOTTOM CTA ===== -->
+<section class="bottom fi">
+  <span class="big-emoji">&#127793;</span>
+
+  <h2>Your money might<br>buy more <em>freedom</em><br>than you think.</h2>
+
+  <p>Find out in 2 minutes. No signup,<br>no data stored, no judgement.</p>
+
+  <a href="/scenarios/" class="cta">Check my runway &rarr;</a>
+
+  <div class="trust">
+    <span>&#128274; Anonymous</span>
+    <span>&#127470;&#127475; Indian context</span>
+    <span>&#128154; Open source</span>
+  </div>
+
+  <p class="fine">Built for people making life moves.</p>
+</section>
+
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="logo">sup</div>
+  <div class="links">
+    <a href="#">About</a>
+    <a href="#">GitHub</a>
+    <a href="#">Privacy</a>
+  </div>
+</footer>
+
+
+<script>
+// Scroll reveals
+const obs = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) e.target.classList.add('v'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Django
+*.sqlite3
+*.log
+local_settings.py
+media/
+staticfiles/
+.env
+.env.*
+!.env.example
+
+# Secrets / credentials
+*.pem
+*.key
+secrets.json
+
+# Node / frontend
+node_modules/
+sup_frontend/dist/
+sup_frontend/.env
+sup_frontend/.env.*
+!sup_frontend/.env.example
+sup_frontend/coverage/
+
+# Cypress
+sup_frontend/cypress/videos/
+sup_frontend/cypress/screenshots/
+
+# Vite
+sup_frontend/.vite/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Misc
+*.bak
+*.tmp
+server.log

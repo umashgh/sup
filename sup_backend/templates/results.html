@@ -1,0 +1,516 @@
+{% extends "base_mobile.html" %}
+
+{% block title %}Your Number — sup{% endblock %}
+
+{% block extra_head %}
+<!-- Chart.js for mobile-optimized charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block app_header %}{% endblock %}
+{% block app_footer %}{% endblock %}
+
+{% block body %}
+<div x-data="resultsView()">
+
+  <!-- ===== THE REVEAL (gauge + big number) ===== -->
+  <section class="reveal" x-show="!loading">
+
+    <!-- Scenario emoji + name -->
+    <div style="margin-bottom: 20px;">
+      <span style="font-size: 2rem; display: block; margin-bottom: 8px;" x-text="scenarioEmoji"></span>
+      <div style="font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.06em;"
+        x-text="scenarioName"></div>
+      <div x-show="results.tier === 'STANDARD'"
+        style="font-size: 0.68rem; color: rgba(255,255,255,0.45); margin-top: 6px; padding: 3px 10px; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; display: inline-block;">
+        Uses inflation and growth rates
+      </div>
+    </div>
+
+    <!-- Gauge (for scenarios with runway) -->
+    <template x-if="hasRunway">
+      <div>
+        <div class="gauge-wrap">
+          <div class="gauge-bg"></div>
+          <div class="gauge-mask"></div>
+          <div class="gauge-needle" :style="`transform: rotate(${gaugeAngle}deg)`"></div>
+          <div class="gauge-dot"></div>
+          <div class="gauge-labels">
+            <span>tight</span>
+            <span>comfy</span>
+            <span>free</span>
+          </div>
+        </div>
+
+        <div class="reveal-number">
+          <span x-text="primaryNumber"></span>
+          <span class="yr" x-text="primaryUnit"></span>
+        </div>
+        <div class="reveal-label" x-text="primaryLabel"></div>
+      </div>
+    </template>
+
+    <!-- For retirement: big number without gauge -->
+    <template x-if="!hasRunway">
+      <div>
+        <div class="reveal-number" style="margin-top: 12px;">
+          <span x-text="primaryNumber"></span>
+          <span class="yr" x-text="primaryUnit"></span>
+        </div>
+        <div class="reveal-label" x-text="primaryLabel"></div>
+      </div>
+    </template>
+
+    <!-- Quick stats row -->
+    <div class="reveal-stats">
+      <template x-for="stat in quickStats" :key="stat.label">
+        <div class="reveal-stat">
+          <div class="v" x-text="stat.value"></div>
+          <div class="k" x-text="stat.label"></div>
+        </div>
+      </template>
+    </div>
+
+  </section>
+
+
+  <!-- ===== DETAILED RESULTS (light cards) ===== -->
+  <section style="padding: 24px;" x-show="!loading">
+
+    <!-- Scenario-specific detail cards -->
+
+    <!-- ===== RUNWAY CARDS (FOUNDER, HALF_FIRE, TERMINATION, R2I) ===== -->
+    <template x-if="hasRunway">
+      <div x-data="{ showCalc: false }">
+        <!-- Comfort runway card (clickable for breakdown) -->
+        <div class="result-card" @click="showCalc = !showCalc" style="cursor: pointer;">
+          <div class="result-card-label">Comfort runway <span style="font-size: 0.65rem; opacity: 0.5;">tap for math</span></div>
+          <div class="result-card-value forest"
+            x-text="formatRunway(results.comfort_runway_months)"></div>
+          <div class="result-card-sub" x-text="scenarioType === 'HALF_FIRE' ? 'Normal lifestyle + part-time income' : 'Normal lifestyle, no active income'"></div>
+
+          <!-- Expandable calculation breakdown -->
+          <div x-show="showCalc" x-collapse
+               style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.08);">
+            <div style="font-size: 0.75rem; color: var(--ink-muted); line-height: 1.8; font-family: 'Space Grotesk', monospace;">
+              <div>Total assets: <strong x-text="formatCurrency(results.total_assets)"></strong></div>
+              <div>&minus; Emergency fund: <strong x-text="formatCurrency(results.emergency_fund_lock)"></strong></div>
+              <div x-show="results.one_time_expenses > 0">&minus; One-time expenses: <strong x-text="formatCurrency(results.one_time_expenses)"></strong></div>
+              <div style="font-weight: 600; color: var(--ink);">= Available: <strong x-text="formatCurrency(results.available_cash)"></strong></div>
+              <div style="margin-top: 6px;">Monthly spend: <strong x-text="formatCurrency(results.monthly_expenses || results.comfort_burn)"></strong></div>
+              <div x-show="results.monthly_passive > 0">&minus; Passive income: <strong x-text="formatCurrency(results.monthly_passive)"></strong></div>
+              <div x-show="results.parttime_monthly_income > 0">&minus; Part-time income: <strong x-text="formatCurrency(results.parttime_monthly_income)"></strong></div>
+              <div style="font-weight: 600; color: var(--ink);">= Net burn: <strong x-text="formatCurrency(Math.max(0, (results.monthly_expenses || results.comfort_burn) - (results.monthly_passive || 0) - (results.parttime_monthly_income || 0)))"></strong>/mo</div>
+              <div style="margin-top: 6px; color: var(--forest); font-weight: 600;">
+                Runway = <span x-text="formatCurrency(results.available_cash)"></span> &divide;
+                <span x-text="formatCurrency(Math.max(0, (results.monthly_expenses || results.comfort_burn) - (results.monthly_passive || 0) - (results.parttime_monthly_income || 0)))"></span>
+                = <span x-text="formatRunway(results.comfort_runway_months)"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Austerity runway card (clickable for breakdown) -->
+        <div class="result-card" x-data="{ showAustCalc: false }" @click="showAustCalc = !showAustCalc" style="cursor: pointer;">
+          <div class="result-card-label">Austerity runway <span style="font-size: 0.65rem; opacity: 0.5;">tap for math</span></div>
+          <div class="result-card-value coral"
+            x-text="formatRunway(results.austerity_runway_months)"></div>
+          <div class="result-card-sub">Bare minimum spend (needs only)</div>
+
+          <!-- Expandable austerity calculation breakdown -->
+          <div x-show="showAustCalc" x-collapse
+               style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.08);">
+            <div style="font-size: 0.75rem; color: var(--ink-muted); line-height: 1.8; font-family: 'Space Grotesk', monospace;">
+              <div>Total assets: <strong x-text="formatCurrency(results.total_assets)"></strong></div>
+              <div>&minus; Emergency fund: <strong x-text="formatCurrency(results.emergency_fund_lock)"></strong></div>
+              <div x-show="results.one_time_expenses > 0">&minus; One-time expenses: <strong x-text="formatCurrency(results.one_time_expenses)"></strong></div>
+              <div style="font-weight: 600; color: var(--ink);">= Available: <strong x-text="formatCurrency(results.available_cash)"></strong></div>
+              <div style="margin-top: 6px;">Needs only: <strong x-text="formatCurrency(results.austerity_burn || results.monthly_needs)"></strong>/mo</div>
+              <div x-show="results.monthly_passive > 0">&minus; Passive income: <strong x-text="formatCurrency(results.monthly_passive)"></strong></div>
+              <div x-show="results.parttime_monthly_income > 0">&minus; Part-time income: <strong x-text="formatCurrency(results.parttime_monthly_income)"></strong></div>
+              <div style="font-weight: 600; color: var(--ink);">= Net burn: <strong x-text="formatCurrency(Math.max(0, (results.austerity_burn || results.monthly_needs || 0) - (results.monthly_passive || 0) - (results.parttime_monthly_income || 0)))"></strong>/mo</div>
+              <div style="margin-top: 6px; color: var(--coral); font-weight: 600;">
+                Runway = <span x-text="formatCurrency(results.available_cash)"></span> &divide;
+                <span x-text="formatCurrency(Math.max(0, (results.austerity_burn || results.monthly_needs || 0) - (results.monthly_passive || 0) - (results.parttime_monthly_income || 0)))"></span>
+                = <span x-text="formatRunway(results.austerity_runway_months)"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Target / FIRE number -->
+        <div class="result-card">
+          <div class="result-card-label">Target number (FIRE)</div>
+          <div class="result-card-value ocean" x-text="formatCurrency(results.target_number)"></div>
+          <div class="result-card-sub">
+            Gap: <strong x-text="formatCurrency(results.target_gap)"></strong>
+          </div>
+        </div>
+
+        <!-- Severance (TERMINATION only) -->
+        <div class="result-card" x-show="results.severance_lumpsum > 0">
+          <div class="result-card-label">Severance included</div>
+          <div class="result-card-value ocean" x-text="formatCurrency(results.severance_lumpsum)"></div>
+          <div class="result-card-sub">One-time severance / notice pay</div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ===== RETIREMENT CARDS ===== -->
+    <template x-if="scenarioType === 'RETIREMENT'">
+      <div x-data="{ showCalc: false }">
+        <div class="result-card">
+          <div class="result-card-label">Required corpus (25x annual expenses)</div>
+          <div class="result-card-value coral" x-text="formatCurrency(results.required_corpus)"></div>
+          <div class="result-card-sub">
+            Current corpus: <strong x-text="formatCurrency(results.current_corpus)"></strong>
+            &middot; Gap: <strong x-text="formatCurrency(results.corpus_gap)"></strong>
+          </div>
+        </div>
+
+        <div class="result-card" @click="showCalc = !showCalc" style="cursor: pointer;">
+          <div class="result-card-label">If you retired today <span style="font-size: 0.65rem; opacity: 0.5;">tap for math</span></div>
+          <div class="result-card-value forest"
+            x-text="formatRunway(results.comfort_runway_months, 'runway')"></div>
+          <div class="result-card-sub">
+            Austerity: <strong x-text="formatRunway(results.austerity_runway_months)"></strong>
+          </div>
+
+          <!-- Expandable calculation breakdown -->
+          <div x-show="showCalc" x-collapse
+               style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.08);">
+            <div style="font-size: 0.75rem; color: var(--ink-muted); line-height: 1.8; font-family: 'Space Grotesk', monospace;">
+              <div>Total assets: <strong x-text="formatCurrency(results.total_assets)"></strong></div>
+              <div>&minus; Emergency fund: <strong x-text="formatCurrency(results.emergency_fund_lock)"></strong></div>
+              <div x-show="results.one_time_expenses > 0">&minus; One-time expenses: <strong x-text="formatCurrency(results.one_time_expenses)"></strong></div>
+              <div style="font-weight: 600; color: var(--ink);">= Available: <strong x-text="formatCurrency(results.available_cash)"></strong></div>
+              <div style="margin-top: 6px;">Monthly expenses: <strong x-text="formatCurrency(results.monthly_expenses || results.comfort_burn)"></strong></div>
+              <div x-show="results.monthly_passive > 0">&minus; Passive income: <strong x-text="formatCurrency(results.monthly_passive)"></strong></div>
+              <div style="font-weight: 600; color: var(--forest);">
+                Runway = Available &divide; Net burn = <span x-text="formatRunway(results.comfort_runway_months)"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="result-card-label">Monthly savings needed</div>
+          <div class="result-card-value ocean" x-text="formatCurrency(results.monthly_savings_needed)"></div>
+          <div class="result-card-sub">To bridge the corpus gap in <span x-text="results.years_to_retirement"></span> years</div>
+        </div>
+      </div>
+    </template>
+
+  </section>
+
+
+  <!-- ===== CHART SECTION ===== -->
+  <section style="padding: 0 24px 24px;" x-show="!loading && showChart">
+    <div class="chart-container">
+      <h3>20-year projection</h3>
+      <canvas id="projectionChart" style="height: 200px; max-height: 200px;"></canvas>
+    </div>
+  </section>
+
+
+  <!-- ===== DEPTH — go deeper ===== -->
+  <section style="padding: 24px;" x-show="!loading && canAdvance">
+    <h2 style="font-family: var(--serif); font-size: 1.2rem; font-weight: 400; margin-bottom: 8px;">Want the full
+      picture?</h2>
+    <p style="font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 16px;">
+      Answer 3-5 more questions. Your Quick estimate used flat numbers — the Full projection models growth rates, inflation, and year-by-year asset evolution.
+    </p>
+
+    <div class="depth-item" style="margin-bottom: 16px;">
+      <div class="depth-badge t2">Full</div>
+      <div class="depth-text">
+        <h4>20-year projection</h4>
+        <p>Each asset class grows at its own rate. Expenses inflate. See when your money runs out — or doesn't.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== ACTION BUTTONS ===== -->
+  <section style="padding: 0 24px 40px;" x-show="!loading">
+    <div class="vertical-stack" style="gap: 10px;">
+      <button class="btn-primary" @click="advanceTier()" x-show="canAdvance">
+        Go deeper — unlock 20yr projection →
+      </button>
+
+      <button class="btn-secondary" @click="restart()">
+        Start over
+      </button>
+    </div>
+  </section>
+
+
+  <!-- ===== FOOTER ===== -->
+  <footer x-show="!loading">
+    <div class="logo">runway</div>
+    <div class="links">
+      <a href="/">Start over</a>
+      <a href="#">About</a>
+      <a href="#">Privacy</a>
+    </div>
+  </footer>
+
+
+  <!-- ===== LOADING ===== -->
+  <div x-show="loading"
+    style="text-align: center; padding: 80px 24px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div class="spinner"></div>
+    <p style="margin-top: 16px; font-family: var(--serif); font-size: 1.1rem; color: var(--ink);">
+      Preparing your results...
+    </p>
+  </div>
+
+</div>
+
+<script>
+  function resultsView() {
+    return {
+      results: {},
+      scenarioType: null,
+      scenarioName: '',
+      scenarioEmoji: '',
+      canAdvance: false,
+      loading: true,
+      showChart: false,
+      chart: null,
+
+      // Computed: does this scenario show the gauge + runway number?
+      get hasRunway() {
+        return ['FOUNDER', 'HALF_FIRE', 'TERMINATION', 'R2I'].includes(this.scenarioType);
+      },
+
+      // Gauge angle: -90 (tight) to +90 (free)
+      get gaugeAngle() {
+        const months = this.results.comfort_runway_months || 0;
+        if (!months) return 90; // infinite = free
+        // 0-6 months = tight (-90 to -30), 6-24 = comfy (-30 to 30), 24+ = free (30 to 90)
+        if (months <= 6) return -90 + (months / 6) * 60;
+        if (months <= 24) return -30 + ((months - 6) / 18) * 60;
+        return Math.min(90, 30 + ((months - 24) / 36) * 60);
+      },
+
+      // Primary big number
+      get primaryNumber() {
+        if (this.hasRunway) {
+          const m = this.results.comfort_runway_months;
+          if (!m) return '∞';
+          if (m >= 12) return (m / 12).toFixed(1);
+          return Math.round(m);
+        }
+        if (this.scenarioType === 'RETIREMENT') {
+          return this.formatCurrency(this.results.required_corpus);
+        }
+        return '—';
+      },
+
+      get primaryUnit() {
+        if (this.hasRunway) {
+          const m = this.results.comfort_runway_months;
+          if (!m) return '';
+          return m >= 12 ? 'years' : 'months';
+        }
+        if (this.scenarioType === 'RETIREMENT') {
+          return '';
+        }
+        return '';
+      },
+
+      get primaryLabel() {
+        const labels = {
+          'FOUNDER': 'of runway at your current lifestyle',
+          'HALF_FIRE': 'of runway with part-time income',
+          'TERMINATION': 'of buffer after layoff',
+          'R2I': 'of runway after moving back',
+          'RETIREMENT': 'required corpus to retire',
+        };
+        return labels[this.scenarioType] || 'your financial runway';
+      },
+
+      // Quick stats for the reveal section
+      get quickStats() {
+        const stats = [];
+        const r = this.results;
+
+        if (this.hasRunway) {
+          // All runway scenarios show austerity + FIRE target + gap
+          if (r.austerity_runway_months) {
+            stats.push({ value: this.formatRunway(r.austerity_runway_months), label: 'Austerity' });
+          }
+          if (r.target_number) {
+            stats.push({ value: this.formatCurrency(r.target_number), label: 'FIRE target' });
+          }
+          if (r.target_gap) {
+            stats.push({ value: this.formatCurrency(r.target_gap), label: 'Gap' });
+          }
+        } else if (this.scenarioType === 'RETIREMENT') {
+          if (r.years_to_retirement !== undefined) {
+            stats.push({ value: r.years_to_retirement + 'yr', label: 'To retire' });
+          }
+          if (r.comfort_runway_months) {
+            stats.push({ value: this.formatRunway(r.comfort_runway_months), label: 'If today' });
+          }
+          if (r.monthly_savings_needed) {
+            stats.push({ value: this.formatCurrency(r.monthly_savings_needed), label: 'Save/month' });
+          }
+        }
+        return stats;
+      },
+
+      init() {
+        this.loadResults();
+      },
+
+      loadResults() {
+        const stored = sessionStorage.getItem('calculation_results');
+        if (!stored) {
+          window.location.href = '/';
+          return;
+        }
+
+        const data = JSON.parse(stored);
+        this.results = data.results;
+        this.scenarioType = this.results.scenario_type;
+        this.canAdvance = data.can_advance;
+
+        // Set scenario name + emoji
+        const scenarios = {
+          'FOUNDER': { name: 'Founder Leap', emoji: '🚀' },
+          'RETIREMENT': { name: 'Retirement', emoji: '🌴' },
+          'R2I': { name: 'Return to India', emoji: '✈️' },
+          'HALF_FIRE': { name: 'Half-FIRE', emoji: '⛰️' },
+          'TERMINATION': { name: 'Layoff Buffer', emoji: '📝' }
+        };
+        const s = scenarios[this.scenarioType] || { name: this.scenarioType, emoji: '📊' };
+        this.scenarioName = s.name;
+        this.scenarioEmoji = s.emoji;
+
+        this.loading = false;
+
+        // Initialize chart if we have projection data
+        if (this.results.chart_data) {
+          this.showChart = true;
+          this.$nextTick(() => this.initChart());
+        }
+      },
+
+      initChart() {
+        const ctx = document.getElementById('projectionChart');
+        if (!ctx) return;
+
+        const chartData = this.results.chart_data;
+        if (!chartData) return;
+
+        // Calculators return 'years' array; fall back to 'labels' if present
+        const labels = chartData.years || chartData.labels || [];
+
+        // Build datasets from individual arrays (calculator output format).
+        // All Standard-tier scenarios return the same keys: assets, incomes, needs, wants.
+        let datasets = chartData.datasets || [];
+        if (!chartData.datasets) {
+          if (chartData.assets) datasets.push({ label: 'Assets', data: chartData.assets, borderColor: '#1a56db', backgroundColor: 'rgba(26,86,219,0.08)', fill: true, tension: 0.3 });
+          if (chartData.incomes) datasets.push({ label: 'Income', data: chartData.incomes, borderColor: '#2ea44f', backgroundColor: 'transparent', tension: 0.3 });
+          if (chartData.needs) datasets.push({ label: 'Needs', data: chartData.needs, borderColor: '#e8654a', backgroundColor: 'transparent', tension: 0.3 });
+          if (chartData.wants) datasets.push({ label: 'Wants', data: chartData.wants, borderColor: '#f59e0b', backgroundColor: 'transparent', tension: 0.3 });
+        }
+
+        this.chart = new Chart(ctx, {
+          type: 'line',
+          data: { labels, datasets },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  font: { family: "'Space Grotesk', system-ui", size: 11 },
+                  color: '#7a7a7a',
+                  usePointStyle: true,
+                  pointStyleWidth: 8,
+                  padding: 16,
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: {
+                  font: { family: "'Space Grotesk', system-ui", size: 10 },
+                  color: '#b5b0a8'
+                }
+              },
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(0,0,0,0.04)' },
+                ticks: {
+                  font: { family: "'Space Grotesk', system-ui", size: 10 },
+                  color: '#b5b0a8',
+                  callback: (val) => {
+                    if (val >= 10000000) return '₹' + (val / 10000000).toFixed(1) + 'Cr';
+                    if (val >= 100000) return '₹' + (val / 100000).toFixed(0) + 'L';
+                    if (val >= 1000) return '₹' + (val / 1000).toFixed(0) + 'K';
+                    return '₹' + val;
+                  }
+                }
+              }
+            }
+          }
+        });
+      },
+
+      async advanceTier() {
+        try {
+          const response = await fetch('/api/scenarios/advance-tier/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            }
+          });
+
+          if (!response.ok) throw new Error('Failed to advance tier');
+
+          // Signal that we're advancing to tier 2 (not a fresh start)
+          sessionStorage.setItem('advancing_to_tier_2', 'true');
+
+          // Redirect back to questions for next tier
+          window.location.href = '/questions/';
+
+        } catch (err) {
+          alert('Error: ' + err.message);
+        }
+      },
+
+      restart() {
+        sessionStorage.clear();
+        window.location.href = '/';
+      },
+
+      formatRunway(months, suffix = '') {
+        if (!months) return '∞';
+        const sfx = suffix ? ' ' + suffix : '';
+        if (months >= 24) return (months / 12).toFixed(1) + ' years' + sfx;
+        if (months >= 12) return (months / 12).toFixed(1) + ' years' + sfx;
+        return Math.round(months) + ' months' + sfx;
+      },
+
+      formatCurrency(amount) {
+        if (!amount) return '₹0';
+        if (amount >= 10000000) {
+          return `₹${(amount / 10000000).toFixed(1)}Cr`;
+        } else if (amount >= 100000) {
+          return `₹${(amount / 100000).toFixed(1)}L`;
+        } else if (amount >= 1000) {
+          return `₹${(amount / 1000).toFixed(0)}K`;
+        }
+        return `₹${amount}`;
+      }
+    }
+  }
+</script>
+{% endblock %}

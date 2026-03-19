@@ -1,0 +1,308 @@
+/* ============================================================
+   RUNWAY APP — THEME 05: BOLD EDITORIAL / BIG NUMBER
+   Fonts needed: Bricolage Grotesque, Space Mono, Bebas Neue
+   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+   ============================================================ */
+
+:root {
+  --color-bg:         #ffffff;
+  --color-black:      #000000;
+  --color-off-white:  #f7f7f7;
+  --color-rule:       #e5e5e5;
+  --color-muted:      #999999;
+  --color-dim:        #cccccc;
+  --color-red:        #ff3b3b;
+  --color-green:      #22c55e;
+  --color-text:       #000000;
+  --font-display:     'Bebas Neue', sans-serif;
+  --font-body:        'Bricolage Grotesque', sans-serif;
+  --font-mono:        'Space Mono', monospace;
+  --border-rule:      3px solid var(--color-black);
+  --border-thin:      1px solid var(--color-rule);
+}
+
+/* --- Base --- */
+body, .app-root {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+/* --- Top Bar --- */
+.app-header {
+  padding: 0 24px 20px;
+  border-bottom: var(--border-rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.app-header .brand {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-black);
+}
+.app-header .datestamp {
+  font-size: 10px;
+  color: var(--color-muted);
+  font-weight: 400;
+  font-family: var(--font-mono);
+}
+
+/* --- Hero Block --- */
+.runway-hero {
+  background: var(--color-black);
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+/* Ghost watermark text */
+.runway-hero::after {
+  content: 'RWY';
+  position: absolute;
+  right: -10px;
+  bottom: -20px;
+  font-family: var(--font-display);
+  font-size: 100px;
+  color: rgba(255, 255, 255, 0.04);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.runway-big-number {
+  font-family: var(--font-display);
+  font-size: clamp(80px, 25vw, 120px);
+  line-height: 0.9;
+  color: #fff;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+.runway-side {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Status pill */
+.status-pill {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: var(--color-red);
+  color: #fff;
+}
+.status-pill.good   { background: var(--color-green); }
+.status-pill.warn   { background: #f97316; }
+.status-pill.danger { background: var(--color-red); }
+
+.runway-unit {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+.runway-context {
+  font-size: 11px;
+  color: #888;
+  font-weight: 400;
+}
+
+/* --- Content Area --- */
+.content {
+  padding: 20px 24px;
+}
+
+/* --- Section Header --- */
+.section-header {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.section-header .total {
+  color: var(--color-black);
+  font-family: var(--font-mono);
+}
+
+/* --- Cost Item Row --- */
+.cost-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: var(--border-thin);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+.cost-item:last-child {
+  border-bottom: none;
+}
+.cost-item .item-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cost-item .amount {
+  font-size: 12px;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+}
+
+/* --- Toggle Switch --- */
+.toggle {
+  width: 40px;
+  height: 24px;
+  border-radius: 12px;
+  border: 2px solid var(--color-black);
+  background: var(--color-black);
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.toggle.off {
+  background: var(--color-bg);
+}
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: right 0.15s, left 0.15s;
+}
+.toggle.off::after {
+  right: auto;
+  left: 2px;
+  background: var(--color-black);
+}
+
+/* --- Checkbox --- */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-black);
+  background: var(--color-bg);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 0; /* editorial feel — square */
+  transition: background 0.15s;
+}
+input[type="checkbox"]:checked {
+  background: var(--color-black);
+}
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 0px;
+  left: 3px;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* --- Slider --- */
+.slider-block {
+  margin-top: 16px;
+}
+.slider-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+.slider-top .slider-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.slider-top .slider-value {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 3px;
+  border-radius: 0;
+  background: var(--color-rule);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    var(--color-black) 0%,
+    var(--color-black) var(--value, 65%),
+    var(--color-rule) var(--value, 65%)
+  );
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-black);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px var(--color-black);
+  cursor: pointer;
+  margin-top: -11px;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-black);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px var(--color-black);
+  cursor: pointer;
+}
+
+/* --- Primary Button --- */
+.btn-primary {
+  display: block;
+  width: 100%;
+  background: var(--color-black);
+  color: #fff;
+  border: none;
+  padding: 16px 24px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: background 0.15s;
+}
+.btn-primary:hover {
+  background: #222;
+}
+.btn-secondary {
+  background: var(--color-bg);
+  color: var(--color-black);
+  border: 2px solid var(--color-black);
+}
+.btn-secondary:hover {
+  background: var(--color-rule);
+}

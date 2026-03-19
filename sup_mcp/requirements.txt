@@ -1,0 +1,5 @@
+mcp
+pypdf
+ebooklib
+beautifulsoup4
+rank_bm25

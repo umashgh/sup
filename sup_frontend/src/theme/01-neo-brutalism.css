@@ -1,0 +1,258 @@
+/* ============================================================
+   RUNWAY APP — THEME 01: NEO-BRUTALISM
+   Fonts needed: Space Mono, Bebas Neue (Google Fonts)
+   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+   ============================================================ */
+
+:root {
+  --color-bg:         #f5f0e8;
+  --color-black:      #000000;
+  --color-yellow:     #ffe600;
+  --color-red:        #ff3b3b;
+  --color-white:      #ffffff;
+  --color-muted:      #444444;
+  --font-mono:        'Space Mono', monospace;
+  --font-display:     'Bebas Neue', sans-serif;
+  --shadow-card:      4px 4px 0 var(--color-black);
+  --shadow-btn:       4px 4px 0 #555;
+  --border-std:       2px solid var(--color-black);
+  --border-heavy:     3px solid var(--color-black);
+}
+
+/* --- Base --- */
+body, .app-root {
+  background: var(--color-bg);
+  color: var(--color-black);
+  font-family: var(--font-mono);
+}
+
+/* --- Top Header Bar --- */
+.app-header {
+  background: var(--color-black);
+  color: var(--color-yellow);
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.app-header .logo {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.app-header .live-badge {
+  background: var(--color-yellow);
+  color: var(--color-black);
+  font-size: 9px;
+  padding: 3px 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+/* --- Runway Hero Block --- */
+.runway-hero {
+  border: var(--border-heavy);
+  background: var(--color-yellow);
+  padding: 20px 18px 16px;
+  margin: 20px 16px 0;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+.runway-hero .critical-tag {
+  position: absolute;
+  top: -12px;
+  right: 14px;
+  background: var(--color-red);
+  color: var(--color-white);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border: var(--border-std);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.runway-hero .section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.runway-hero .big-number {
+  font-family: var(--font-display);
+  font-size: 84px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  margin-top: 4px;
+}
+.runway-hero .unit-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* --- Section Title --- */
+.section-title {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 10px;
+  padding: 0 16px;
+}
+
+/* --- Cost Row Item --- */
+.cost-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: var(--border-std);
+  padding: 10px 12px;
+  margin: 0 16px 6px;
+  background: var(--color-white);
+  box-shadow: 2px 2px 0 var(--color-black);
+  font-size: 11px;
+  font-weight: 700;
+}
+.cost-row .item-name {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.cost-row .item-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --- Toggle Switch --- */
+.toggle {
+  width: 36px;
+  height: 20px;
+  background: var(--color-black);
+  border: var(--border-std);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.toggle.on {
+  background: var(--color-yellow);
+}
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  background: var(--color-white);
+}
+.toggle.on::after {
+  left: auto;
+  right: 2px;
+  background: var(--color-black);
+}
+
+/* --- Slider --- */
+.slider-row {
+  margin: 14px 16px 0;
+}
+.slider-row .slider-labels {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.slider-track {
+  height: 14px;
+  background: var(--color-white);
+  border: var(--border-std);
+  position: relative;
+}
+/* Native range input override */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 14px;
+  background: var(--color-white);
+  border: var(--border-std);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 14px;
+  background: var(--color-white);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 22px;
+  background: var(--color-yellow);
+  border: var(--border-std);
+  border-radius: 0;
+  margin-top: -4px;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 22px;
+  background: var(--color-yellow);
+  border: var(--border-std);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+/* --- Checkbox --- */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: var(--border-std);
+  background: var(--color-white);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+input[type="checkbox"]:checked {
+  background: var(--color-black);
+}
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: -1px;
+  left: 2px;
+  font-size: 13px;
+  color: var(--color-yellow);
+  font-weight: 700;
+}
+
+/* --- Primary Button --- */
+.btn-primary {
+  display: block;
+  margin: 20px 16px 0;
+  background: var(--color-black);
+  color: var(--color-yellow);
+  border: var(--border-heavy);
+  padding: 14px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-btn);
+  cursor: pointer;
+  width: calc(100% - 32px);
+}
+.btn-primary:hover {
+  background: var(--color-yellow);
+  color: var(--color-black);
+}
+.btn-secondary {
+  background: var(--color-white);
+  color: var(--color-black);
+  border: var(--border-std);
+  box-shadow: 2px 2px 0 var(--color-black);
+}

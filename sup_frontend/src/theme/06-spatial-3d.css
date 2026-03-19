@@ -1,0 +1,357 @@
+/* ============================================================
+   RUNWAY APP — THEME 06: SPATIAL / 3D DEPTH
+   Fonts needed: DM Sans, Syne (Google Fonts)
+   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+   ============================================================ */
+
+:root {
+  --color-bg:           #111118;
+  --color-bg-2:         #0a0a14;
+  --color-surface:      rgba(255, 255, 255, 0.03);
+  --color-surface-2:    rgba(255, 255, 255, 0.05);
+  --color-border:       rgba(255, 255, 255, 0.06);
+  --color-border-2:     rgba(255, 255, 255, 0.08);
+  --color-accent:       #a78bfa;
+  --color-accent-deep:  #7c3aed;
+  --color-accent-glow:  rgba(167, 139, 250, 0.4);
+  --color-green:        #4ade80;
+  --color-red:          #f87171;
+  --color-text:         rgba(255, 255, 255, 0.9);
+  --color-text-mid:     rgba(255, 255, 255, 0.7);
+  --color-text-muted:   rgba(255, 255, 255, 0.5);
+  --color-text-dim:     rgba(255, 255, 255, 0.25);
+  --color-text-dimmer:  rgba(255, 255, 255, 0.3);
+  --font-body:          'DM Sans', sans-serif;
+  --font-display:       'Syne', sans-serif;
+  --font-mono:          'Space Mono', monospace;
+  --radius-lg:          22px;
+  --radius-md:          16px;
+  --radius-sm:          12px;
+  /* 3D depth effect */
+  --perspective:        400px;
+  --tilt-hero:          rotateX(2deg);
+  --tilt-mid:           rotateX(1deg);
+  --tilt-bottom:        rotateX(-2deg);
+  --shadow-hero:        0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(167, 139, 250, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --shadow-card:        0 10px 20px rgba(0, 0, 0, 0.3);
+  --shadow-bottom:      0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Base --- */
+body, .app-root {
+  background: linear-gradient(160deg, var(--color-bg) 0%, var(--color-bg-2) 100%);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Grid background — add a div.bg-grid to your layout root */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+/* --- Navigation --- */
+.app-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 18px 16px;
+  position: relative;
+  z-index: 1;
+}
+.app-nav .brand {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+.nav-dots {
+  display: flex;
+  gap: 10px;
+}
+.nav-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+}
+.nav-dot.active {
+  background: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent);
+}
+
+/* --- Cards (3D Depth layers) --- */
+/* Apply these to progressively deeper cards for the stacked depth effect */
+.spatial-card {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+.spatial-card.depth-1 {
+  background: rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.2);
+  transform: perspective(var(--perspective)) var(--tilt-hero);
+  box-shadow: var(--shadow-hero);
+}
+.spatial-card.depth-2 {
+  transform: perspective(var(--perspective)) var(--tilt-mid);
+  box-shadow: var(--shadow-card);
+}
+.spatial-card.depth-3 {
+  transform: perspective(var(--perspective)) var(--tilt-bottom);
+  box-shadow: var(--shadow-bottom);
+}
+
+/* --- Runway Hero --- */
+.spatial-card.depth-1 .card-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  margin-bottom: 8px;
+}
+.runway-number {
+  font-family: var(--font-display);
+  font-size: 76px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+.runway-number .unit {
+  font-size: 32px;
+  color: rgba(167, 139, 250, 0.8);
+  vertical-align: top;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+/* Hero card meta row */
+.hero-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.hero-meta-item .m-label {
+  font-size: 9px;
+  color: var(--color-text-dimmer);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.hero-meta-item .m-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-mid);
+  margin-top: 2px;
+}
+.hero-meta-item .m-value.positive { color: var(--color-green); }
+.hero-meta-item .m-value.negative { color: var(--color-red); }
+
+/* --- Mini Stat Cards Row --- */
+.mini-cards {
+  display: flex;
+  gap: 8px;
+}
+.mini-card {
+  flex: 1;
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-2);
+  transform: perspective(var(--perspective)) var(--tilt-mid);
+  box-shadow: var(--shadow-card);
+}
+.mini-card .mc-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-dim);
+  margin-bottom: 6px;
+}
+.mini-card .mc-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+.mini-card .mc-sub {
+  font-size: 10px;
+  color: var(--color-text-dim);
+  margin-top: 2px;
+}
+
+/* --- Cost Controls Card --- */
+.controls-card {
+  padding: 16px;
+}
+.controls-card .card-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-dimmer);
+  margin-bottom: 12px;
+}
+.cost-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 13px;
+  color: var(--color-text-mid);
+}
+.cost-item:last-child {
+  border-bottom: none;
+}
+.cost-item .item-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cost-item .amount {
+  font-size: 11px;
+  color: var(--color-text-dimmer);
+  font-family: var(--font-mono);
+}
+
+/* --- Toggle Switch --- */
+.toggle {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-deep));
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--color-accent-glow);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.toggle.off {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: right 0.2s, left 0.2s;
+}
+.toggle.off::after {
+  right: auto;
+  left: 2px;
+}
+
+/* --- Checkbox --- */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border-2);
+  background: var(--color-surface);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-deep));
+  border-color: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent-glow);
+}
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* --- Slider Card --- */
+.slider-card {
+  padding: 16px;
+}
+.slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+.slider-label strong {
+  color: rgba(167, 139, 250, 0.9);
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 4px var(--color-accent-glow), 0 4px 12px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  margin-top: -10px;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow: 0 0 0 4px var(--color-accent-glow);
+  cursor: pointer;
+}
+
+/* --- Button --- */
+.btn-primary {
+  width: 100%;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  background: linear-gradient(135deg, var(--color-accent-deep), var(--color-accent));
+  color: #fff;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 20px var(--color-accent-glow);
+  transform: perspective(var(--perspective)) var(--tilt-bottom);
+  transition: box-shadow 0.2s, transform 0.1s;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 30px rgba(167, 139, 250, 0.6);
+  transform: perspective(var(--perspective)) var(--tilt-bottom) translateY(-1px);
+}

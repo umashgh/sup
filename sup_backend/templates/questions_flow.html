@@ -1,0 +1,1398 @@
+{% extends "base_mobile.html" %}
+
+{% block title %}Your Journey — runway{% endblock %}
+
+{% block body %}
+<div x-data="questionsFlow()">
+
+  <!-- ===== QUESTION BOX (demo-box style from v3) ===== -->
+  <div x-show="!loading && !calculating && currentQuestion" class="fade-in"
+    style="min-height: 100vh; display: flex; flex-direction: column;">
+
+    <!-- Top bar (dark, app-like) -->
+    <div class="demo-top">
+      <span x-text="scenarioLabel"></span>
+      <span style="font-size: 0.7rem; opacity: 0.6;"
+        x-text="`${visibleIndex + 1} of ${visibleQuestions.length}`"></span>
+    </div>
+
+    <!-- Progress bar -->
+    <div style="padding: 0 14px; background: var(--ink);">
+      <div class="demo-progress-bar">
+        <div class="demo-progress-fill" :style="`width: ${progress}%`"></div>
+      </div>
+    </div>
+
+    <!-- Question content -->
+    <div :class="'question-bg-' + (currentQuestion?.widget_category || 'info')"
+         style="flex: 1; padding: 24px; overflow-y: auto;">
+
+      <!-- Question text -->
+      <div class="demo-label" style="font-size: 1.1rem; margin-bottom: 20px;" x-text="currentQuestion?.text"></div>
+
+      <!-- Help text (not shown for expense_estimate — it has its own layout) -->
+      <p x-show="currentQuestion?.help_text && currentQuestion?.input_type !== 'expense_estimate'"
+        x-text="currentQuestion?.help_text"
+        style="font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 20px; margin-top: -12px;"></p>
+
+      <!-- Dynamic Input Based on Type -->
+
+      <!-- Card Select (e.g., family type) -->
+      <template x-if="currentQuestion?.input_type === 'card_select'">
+        <div class="choice-grid">
+          <template x-for="option in currentQuestion.options" :key="option.value">
+            <div class="choice" :class="{'on': answers[currentQuestion.field_name] === option.value}"
+              @click="setAnswer(currentQuestion.field_name, option.value)">
+              <span class="em" x-text="option.emoji || ''"></span>
+              <span x-text="option.label"></span>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <!-- Slider (age, count, etc.) -->
+      <template x-if="currentQuestion?.input_type === 'slider'">
+        <div>
+          <div class="slider-value-display">
+            <span x-text="answers[currentQuestion.field_name] || currentQuestion.slider_config?.min"></span>
+            <span class="unit" x-text="currentQuestion.slider_config?.unit || ''"></span>
+          </div>
+          <input type="range" :min="currentQuestion.slider_config?.min || 0"
+            :max="currentQuestion.slider_config?.max || 100" :step="currentQuestion.slider_config?.step || 1"
+            x-model.number="answers[currentQuestion.field_name]" />
+          <div class="slider-range">
+            <span x-text="currentQuestion.slider_config?.min"></span>
+            <span x-text="currentQuestion.slider_config?.max"></span>
+          </div>
+        </div>
+      </template>
+
+      <!-- Amount Slider (with INR formatting and presets) -->
+      <template x-if="currentQuestion?.input_type === 'amount_slider'">
+        <div>
+          <div class="slider-value-display">
+            <span x-text="formatCurrency(answers[currentQuestion.field_name] || 0)"></span>
+          </div>
+
+          <!-- Preset Buttons -->
+          <div class="preset-group" x-show="(currentQuestion.slider_config?.presets || []).length > 0">
+            <template x-for="preset in currentQuestion.slider_config?.presets || []" :key="preset">
+              <button class="preset-btn" :class="{'on': answers[currentQuestion.field_name] === preset}"
+                @click="answers[currentQuestion.field_name] = preset" x-text="formatCurrency(preset, true)"></button>
+            </template>
+          </div>
+
+          <input type="range" :min="currentQuestion.slider_config?.min || 0"
+            :max="currentQuestion.slider_config?.max || 10000000" :step="currentQuestion.slider_config?.step || 10000"
+            x-model.number="answers[currentQuestion.field_name]" />
+          <div class="slider-range">
+            <span x-text="formatCurrency(currentQuestion.slider_config?.min || 0, true)"></span>
+            <span x-text="formatCurrency(currentQuestion.slider_config?.max || 10000000, true)"></span>
+          </div>
+        </div>
+      </template>
+
+      <!-- Age Group (multiple sliders on one screen — e.g., your age + partner's age) -->
+      <template x-if="currentQuestion?.input_type === 'age_group'">
+        <div>
+          <template
+            x-for="(option, idx) in currentQuestion.options.filter(o => !o.condition || evaluateCondition({_conditionType: o.condition}, answers))"
+            :key="option.field_name">
+            <div :style="idx > 0 ? 'margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.06);' : ''">
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--ink-muted); margin-bottom: 8px;"
+                x-text="option.label"></div>
+              <div class="slider-value-display">
+                <span x-text="answers[option.field_name] || option.default || option.min"></span>
+                <span class="unit">years</span>
+              </div>
+              <input type="range" :min="option.min || 18" :max="option.max || 75" :step="1"
+                x-model.number="answers[option.field_name]" />
+              <div class="slider-range">
+                <span x-text="option.min || 18"></span>
+                <span x-text="option.max || 75"></span>
+              </div>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <!-- Toggle Switch (yes/no) -->
+      <template x-if="currentQuestion?.input_type === 'toggle'">
+        <div class="toggle-container">
+          <span class="toggle-label" x-text="currentQuestion.text"></span>
+          <label class="toggle-switch">
+            <input type="checkbox" x-model="answers[currentQuestion.field_name]">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </template>
+
+      <!-- Checkbox Group (multiple toggles on one screen) -->
+      <template x-if="currentQuestion?.input_type === 'checkbox_group'">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <template x-for="option in currentQuestion.options" :key="option.field_name">
+            <div @click="answers[option.field_name] = !answers[option.field_name]"
+              style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: white; border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: all 0.15s;"
+              :style="answers[option.field_name] ? 'border-color: var(--ink); background: white;' : 'border-color: rgba(0,0,0,0.08); opacity: 0.6;'">
+              <span style="font-size: 1.4rem;" x-text="option.emoji || ''"></span>
+              <span style="flex: 1; font-size: 0.95rem; font-weight: 500;" x-text="option.label"></span>
+              <div
+                style="width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; transition: all 0.15s;"
+                :style="answers[option.field_name] ? 'background: var(--ink); color: white;' : 'background: rgba(0,0,0,0.06); color: transparent;'">
+                &#10003;
+              </div>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <!-- Toggle with Amount (e.g., bootstrapping + capital on same screen) -->
+      <template x-if="currentQuestion?.input_type === 'toggle_with_amount'">
+        <div>
+          <div class="toggle-container">
+            <span class="toggle-label" x-text="currentQuestion.text"></span>
+            <label class="toggle-switch">
+              <input type="checkbox" x-model="answers[currentQuestion.field_name]">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <!-- Conditional amount input (appears when toggle is on) -->
+          <template
+            x-if="answers[currentQuestion.field_name] && currentQuestion.options && currentQuestion.options.length > 0">
+            <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.06);">
+              <div class="demo-label" style="font-size: 0.9rem; margin-bottom: 12px;"
+                x-text="currentQuestion.options[0].amount_label"></div>
+              <div class="slider-value-display">
+                <span x-text="formatCurrency(answers[currentQuestion.options[0].amount_field] || 0)"></span>
+              </div>
+              <div class="preset-group" x-show="(currentQuestion.options[0].presets || []).length > 0">
+                <template x-for="preset in currentQuestion.options[0].presets || []" :key="preset">
+                  <button class="preset-btn"
+                    :class="{'on': answers[currentQuestion.options[0].amount_field] === preset}"
+                    @click="answers[currentQuestion.options[0].amount_field] = preset"
+                    x-text="formatCurrency(preset, true)"></button>
+                </template>
+              </div>
+              <input type="range" :min="currentQuestion.options[0].min || 0"
+                :max="currentQuestion.options[0].max || 10000000" :step="currentQuestion.options[0].step || 100000"
+                x-model.number="answers[currentQuestion.options[0].amount_field]" />
+              <div class="slider-range">
+                <span x-text="formatCurrency(currentQuestion.options[0].min || 0, true)"></span>
+                <span x-text="formatCurrency(currentQuestion.options[0].max || 10000000, true)"></span>
+              </div>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <!-- ===== Split Slider (e.g. Living Assets split, Security Assets split) ===== -->
+      <template x-if="currentQuestion?.input_type === 'split_slider'">
+        <!--
+          Create an isolated Alpine component for the split slider maths.
+          This makes it easy to react to the slider and update the main 'answers' object.
+        -->
+        <div x-data="{
+          editingTotal: false,
+          get total() {
+            // Read the total from answers using the field name defined in slider_config
+            return $data.answers[currentQuestion.slider_config.total_field] || 0;
+          },
+          get percent() {
+            // Internal slider state (0-100), stored in answers to persist if user goes back/forth
+            const val = $data.answers[currentQuestion.field_name];
+            return val !== undefined ? val : (currentQuestion.slider_config.default_percent || 50);
+          },
+          set percent(val) {
+            $data.answers[currentQuestion.field_name] = parseInt(val, 10);
+            this.updateSplits(parseInt(val, 10));
+          },
+          get amount1() {
+            return Math.round(this.total * (this.percent / 100));
+          },
+          get amount2() {
+            return this.total - this.amount1;
+          },
+          updateTotal(newVal) {
+            $data.answers[currentQuestion.slider_config.total_field] = parseInt(newVal, 10);
+            this.updateSplits(this.percent);
+          },
+          updateSplits(p) {
+            const a1 = Math.round(this.total * (p / 100));
+            const a2 = this.total - a1;
+            // Write to the actual answer fields so they get sent to the backend
+            $data.answers[currentQuestion.slider_config.field_1] = a1;
+            $data.answers[currentQuestion.slider_config.field_2] = a2;
+          },
+          initSplit() {
+            // Initialize if empty
+            if ($data.answers[currentQuestion.field_name] === undefined) {
+              this.percent = currentQuestion.slider_config.default_percent || 50;
+            } else {
+              // Ensure splits are strictly in sync with percentage on load
+              this.updateSplits(this.percent);
+            }
+          }
+        }" x-init="initSplit()">
+
+          <!-- Total display (tappable to edit) -->
+          <div style="text-align: center; margin-bottom: 24px;">
+            <div style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 4px;">
+              Total to split
+              <span @click="editingTotal = !editingTotal"
+                style="cursor: pointer; color: var(--ocean); font-size: 0.72rem; margin-left: 4px;"
+                x-text="editingTotal ? '(done)' : '(tap to edit)'"></span>
+            </div>
+            <div class="slider-value-display">
+              <span x-text="formatCurrency(total)"></span>
+            </div>
+            <!-- Editable total slider (collapsed) -->
+            <div x-show="editingTotal" x-collapse style="margin-top: 12px; text-align: left;">
+              <input type="range" min="0" :max="Math.max(total * 3, 50000000)" step="100000"
+                :value="total"
+                @input="updateTotal($event.target.value)" />
+              <div class="slider-range">
+                <span>₹0</span>
+                <span x-text="formatCurrency(Math.max(total * 3, 50000000), true)"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Split Visualizer Bar -->
+          <div
+            style="display: flex; gap: 3px; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 12px; transition: all 0.1s ease-out;">
+            <div
+              :style="`flex: ${percent}; background: ${currentQuestion.slider_config.field_1_color || 'var(--forest)'};`">
+            </div>
+            <div
+              :style="`flex: ${100 - percent}; background: ${currentQuestion.slider_config.field_2_color || 'var(--ocean)'};`">
+            </div>
+          </div>
+
+          <!-- Slider Input -->
+          <input type="range" min="0" max="100" step="1" x-model="percent" />
+
+          <!-- Split amounts breakdown -->
+          <div style="display: flex; justify-content: space-between; margin-top: 16px; align-items: flex-start;">
+            <!-- Left side (Field 1) -->
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <div
+                  :style="`width: 10px; height: 10px; border-radius: 2px; background: ${currentQuestion.slider_config.field_1_color || 'var(--forest)'};`">
+                </div>
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--ink);"
+                  x-text="currentQuestion.slider_config.field_1_label"></span>
+                <span x-show="currentQuestion.slider_config.field_1_growth"
+                  style="font-size: 0.72rem; color: var(--ink-muted); font-weight: 400;"
+                  x-text="'(' + (currentQuestion.slider_config.field_1_growth || '') + ')'"></span>
+              </div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--ink);"
+                x-text="formatCurrency(amount1, true)"></div>
+              <div style="font-size: 0.75rem; color: var(--ink-muted);" x-text="`${percent}%`"></div>
+            </div>
+
+            <!-- Right side (Field 2) -->
+            <div style="flex: 1; text-align: right;">
+              <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-bottom: 4px;">
+                <span x-show="currentQuestion.slider_config.field_2_growth"
+                  style="font-size: 0.72rem; color: var(--ink-muted); font-weight: 400;"
+                  x-text="'(' + (currentQuestion.slider_config.field_2_growth || '') + ')'"></span>
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--ink);"
+                  x-text="currentQuestion.slider_config.field_2_label"></span>
+                <div
+                  :style="`width: 10px; height: 10px; border-radius: 2px; background: ${currentQuestion.slider_config.field_2_color || 'var(--ocean)'};`">
+                </div>
+              </div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--ink);"
+                x-text="formatCurrency(amount2, true)"></div>
+              <div style="font-size: 0.75rem; color: var(--ink-muted);" x-text="`${100 - percent}%`"></div>
+            </div>
+          </div>
+
+        </div>
+      </template>
+
+      <!-- ===== Expense Estimate (computed from master data) ===== -->
+      <template x-if="currentQuestion?.input_type === 'expense_estimate'">
+        <div>
+          <!-- Loading state -->
+          <div x-show="expenseLoading" style="text-align: center; padding: 20px 0;">
+            <div class="spinner" style="width: 24px; height: 24px; margin: 0 auto;"></div>
+            <p style="font-size: 0.78rem; color: var(--ink-muted); margin-top: 8px;">Calculating your expenses...</p>
+          </div>
+
+          <!-- Computed total -->
+          <div x-show="!expenseLoading">
+            <div class="slider-value-display" style="margin-bottom: 4px;">
+              <span x-text="formatCurrency(expenseTotal)"></span>
+            </div>
+            <p style="text-align: center; font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 16px;">per month
+            </p>
+
+            <!-- Needs/Wants split bar -->
+            <div
+              style="display: flex; gap: 3px; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
+              <div :style="`flex: ${needsPercent}; background: var(--forest); border-radius: 3px 0 0 3px;`"></div>
+              <div :style="`flex: ${wantsPercent}; background: var(--mustard); border-radius: 0 3px 3px 0;`"></div>
+            </div>
+            <div
+              style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--ink-muted); margin-bottom: 20px;">
+              <span>Needs <span x-text="formatCurrency(expenseNeedsTotal, true)"></span>/mo</span>
+              <span>Wants <span x-text="formatCurrency(expenseWantsTotal, true)"></span>/mo</span>
+            </div>
+
+            <!-- Help text -->
+            <p style="font-size: 0.75rem; color: var(--ink-muted); margin-bottom: 12px; text-align: center;">
+              Based on your family and spending style
+            </p>
+
+            <!-- Fine-tune toggle -->
+            <div @click="showCustomise = !showCustomise"
+              style="display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; color: var(--ink-muted); font-size: 0.85rem; padding: 10px 0; transition: color 0.2s;"
+              :style="showCustomise ? 'color: var(--ink);' : ''">
+              Fine-tune your numbers
+              <span style="font-weight: 700; font-size: 1rem;" x-text="showCustomise ? '−' : '+'"></span>
+            </div>
+
+            <!-- Collapsed customise div -->
+            <div x-show="showCustomise" x-collapse x-data="{ showNeedsItems: false, showWantsItems: false }">
+              <div style="background: var(--cream-dark); border-radius: 12px; padding: 16px; margin-top: 4px;">
+
+                <!-- Needs header (clickable to expand items) -->
+                <div @click="showNeedsItems = !showNeedsItems"
+                  style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; cursor: pointer;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 10px; height: 10px; border-radius: 2px; background: var(--forest);"></div>
+                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Needs</span>
+                    <span style="font-size: 0.72rem; color: var(--ink-muted);"
+                      x-text="expenseItems.filter(i => i.budget_type === 'needs' && !i.is_one_time && i.monthly_amount > 0).length + ' items'"></span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 0.9rem; font-weight: 600; color: var(--forest);"
+                      x-text="formatCurrency(expenseNeedsTotal)"></span>
+                    <span style="font-size: 1.2rem; color: var(--ink-muted); line-height: 1;"
+                      x-text="showNeedsItems ? '▾' : '▸'"></span>
+                  </div>
+                </div>
+
+                <!-- Needs items (sub-collapsed) -->
+                <div x-show="showNeedsItems" x-collapse>
+                  <template x-for="item in expenseItems.filter(i => i.budget_type === 'needs' && !i.is_one_time)"
+                    :key="item.id + '-' + item.pertains_to">
+                    <div style="padding: 6px 0 6px 18px; border-bottom: 1px solid rgba(0,0,0,0.04);"
+                      :style="item.monthly_amount === 0 ? 'opacity: 0.35;' : ''">
+                      <div style="display: flex; align-items: center; flex-wrap: nowrap; min-width: 0;">
+                        <div style="flex: 1; min-width: 0; font-size: 0.8rem; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                          <span x-show="pertainsPrefix(item.pertains_to)"
+                            style="font-size: 0.65rem; color: var(--ink-muted);"
+                            x-text="pertainsPrefix(item.pertains_to) + ': '"></span>
+                          <span x-text="item.name"></span>
+                          <span x-show="item.quantity > 1" style="font-size: 0.68rem; color: var(--ink-muted);"
+                            x-text="' x' + item.quantity"></span>
+                        </div>
+                        <div style="min-width: 56px; text-align: right; font-size: 0.8rem; font-weight: 600; color: var(--ink);"
+                          x-text="formatCurrency(item.monthly_amount)"></div>
+                        <!-- Remove button (sets to 0) -->
+                        <span @click.stop="updateExpenseItem(item.id, item.pertains_to, 0)"
+                          x-show="item.monthly_amount > 0"
+                          style="margin-left: 4px; font-size: 0.65rem; color: var(--coral); cursor: pointer; padding: 2px 4px;">&#10005;</span>
+                      </div>
+                      <div x-show="item.monthly_amount > 0" style="padding-right: 24px; margin-top: 2px;">
+                        <input type="range" :min="0" max="50000" step="500"
+                          :value="Math.round(item.monthly_amount)"
+                          @input="updateExpenseItem(item.id, item.pertains_to, $event.target.value)"
+                          class="expense-slider" />
+                      </div>
+                    </div>
+                  </template>
+                  <!-- Others row for Needs -->
+                  <div style="padding: 8px 0 6px 18px; border-top: 1px dashed rgba(0,0,0,0.08);">
+                    <div style="display: flex; align-items: center; flex-wrap: nowrap; min-width: 0;">
+                      <div style="flex: 1; font-size: 0.8rem; color: var(--ink); font-style: italic;">Others</div>
+                      <div style="min-width: 56px; text-align: right; font-size: 0.8rem; font-weight: 600; color: var(--ink);"
+                        x-text="formatCurrency(answers['_custom_needs'] || 0)"></div>
+                    </div>
+                    <div style="padding-right: 24px; margin-top: 2px;">
+                      <input type="range" min="0" max="50000" step="1000"
+                        :value="answers['_custom_needs'] || 0"
+                        @input="answers['_custom_needs'] = parseFloat($event.target.value) || 0; recomputeExpenseTotals()"
+                        class="expense-slider" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Divider -->
+                <div style="height: 1px; background: rgba(0,0,0,0.06); margin: 4px 0;"></div>
+
+                <!-- Wants header (clickable to expand items) -->
+                <div @click="showWantsItems = !showWantsItems"
+                  style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; cursor: pointer;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 10px; height: 10px; border-radius: 2px; background: var(--mustard);"></div>
+                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--ink);">Wants</span>
+                    <span style="font-size: 0.72rem; color: var(--ink-muted);"
+                      x-text="expenseItems.filter(i => i.budget_type === 'wants' && !i.is_one_time && i.monthly_amount > 0).length + ' items'"></span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="font-size: 0.9rem; font-weight: 600; color: var(--mustard);"
+                      x-text="formatCurrency(expenseWantsTotal)"></span>
+                    <span style="font-size: 1.2rem; color: var(--ink-muted); line-height: 1;"
+                      x-text="showWantsItems ? '▾' : '▸'"></span>
+                  </div>
+                </div>
+
+                <!-- Wants items (sub-collapsed) -->
+                <div x-show="showWantsItems" x-collapse>
+                  <template x-for="item in expenseItems.filter(i => i.budget_type === 'wants' && !i.is_one_time)"
+                    :key="item.id + '-' + item.pertains_to">
+                    <div style="padding: 6px 0 6px 18px; border-bottom: 1px solid rgba(0,0,0,0.04);"
+                      :style="item.monthly_amount === 0 ? 'opacity: 0.35;' : ''">
+                      <div style="display: flex; align-items: center; flex-wrap: nowrap; min-width: 0;">
+                        <div style="flex: 1; min-width: 0; font-size: 0.8rem; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                          <span x-show="pertainsPrefix(item.pertains_to)"
+                            style="font-size: 0.65rem; color: var(--ink-muted);"
+                            x-text="pertainsPrefix(item.pertains_to) + ': '"></span>
+                          <span x-text="item.name"></span>
+                          <span x-show="item.quantity > 1" style="font-size: 0.68rem; color: var(--ink-muted);"
+                            x-text="' x' + item.quantity"></span>
+                        </div>
+                        <div style="min-width: 56px; text-align: right; font-size: 0.8rem; font-weight: 600; color: var(--ink);"
+                          x-text="formatCurrency(item.monthly_amount)"></div>
+                        <!-- Remove button (sets to 0) -->
+                        <span @click.stop="updateExpenseItem(item.id, item.pertains_to, 0)"
+                          x-show="item.monthly_amount > 0"
+                          style="margin-left: 4px; font-size: 0.65rem; color: var(--coral); cursor: pointer; padding: 2px 4px;">&#10005;</span>
+                      </div>
+                      <div x-show="item.monthly_amount > 0" style="padding-right: 24px; margin-top: 2px;">
+                        <input type="range" :min="0" max="50000" step="500"
+                          :value="Math.round(item.monthly_amount)"
+                          @input="updateExpenseItem(item.id, item.pertains_to, $event.target.value)"
+                          class="expense-slider" />
+                      </div>
+                    </div>
+                  </template>
+                  <!-- Others row for Wants -->
+                  <div style="padding: 8px 0 6px 18px; border-top: 1px dashed rgba(0,0,0,0.08);">
+                    <div style="display: flex; align-items: center; flex-wrap: nowrap; min-width: 0;">
+                      <div style="flex: 1; font-size: 0.8rem; color: var(--ink); font-style: italic;">Others</div>
+                      <div style="min-width: 56px; text-align: right; font-size: 0.8rem; font-weight: 600; color: var(--ink);"
+                        x-text="formatCurrency(answers['_custom_wants'] || 0)"></div>
+                    </div>
+                    <div style="padding-right: 24px; margin-top: 2px;">
+                      <input type="range" min="0" max="50000" step="1000"
+                        :value="answers['_custom_wants'] || 0"
+                        @input="answers['_custom_wants'] = parseFloat($event.target.value) || 0; recomputeExpenseTotals()"
+                        class="expense-slider" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Total bar -->
+                <div
+                  style="display: flex; justify-content: space-between; margin-top: 12px; padding-top: 10px; border-top: 2px solid var(--ink); font-weight: 700; font-size: 0.9rem;">
+                  <span>Monthly Total</span>
+                  <span x-text="formatCurrency(expenseTotal)"></span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- ===== One-time Expenses (selectable categories) ===== -->
+      <template x-if="currentQuestion?.input_type === 'one_time_itemized'">
+        <div>
+          <!-- Total display -->
+          <div class="slider-value-display" style="margin-bottom: 4px;">
+            <span x-text="formatCurrency(oneTimeTotal)"></span>
+          </div>
+          <p style="text-align: center; font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 20px; line-height: 1.5;"
+            x-text="oneTimeSummaryText"></p>
+
+          <!-- One-time expense items list -->
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <template x-for="(item, idx) in oneTimeItems" :key="idx">
+              <div
+                style="background: white; border-radius: 10px; padding: 12px 14px; border: 1px solid rgba(0,0,0,0.06);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <!-- Category select -->
+                  <select x-model="item.name" @change="recomputeOneTimeTotals()"
+                    style="flex: 1; padding: 6px 8px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-size: 0.82rem; background: var(--cream); color: var(--ink); -webkit-appearance: none; appearance: none;">
+                    <option value="Graduation">Child education</option>
+                    <option value="Settling down">Wedding / settling</option>
+                    <option value="Relocation">Relocation / moving</option>
+                    <option value="Hospitalization">Medical emergency</option>
+                    <option value="Donation">Donation / charity</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <!-- Year -->
+                  <select x-model.number="item.year" @change="recomputeOneTimeTotals()"
+                    style="width: 68px; padding: 6px 4px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-size: 0.78rem; background: var(--cream); color: var(--ink); text-align: center;">
+                    <template x-for="y in Array.from({length: 25}, (_, i) => new Date().getFullYear() + i)" :key="y">
+                      <option :value="y" x-text="y"></option>
+                    </template>
+                  </select>
+                  <!-- Remove button -->
+                  <span @click="oneTimeItems.splice(idx, 1); recomputeOneTimeTotals()" x-show="oneTimeItems.length > 0"
+                    style="font-size: 0.75rem; color: var(--coral); cursor: pointer; padding: 4px; line-height: 1;">&#10005;</span>
+                </div>
+                <!-- Amount row -->
+                <div style="margin-top: 10px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                    <div class="preset-group" style="flex: 1;">
+                      <template x-for="preset in [500000, 1000000, 2500000, 5000000, 10000000]" :key="preset">
+                        <button class="preset-btn" :class="{'on': item.amount === preset}"
+                          @click="item.amount = preset; recomputeOneTimeTotals()"
+                          x-text="preset >= 10000000 ? (preset/10000000) + 'Cr' : (preset/100000) + 'L'"></button>
+                      </template>
+                    </div>
+                    <div style="min-width: 56px; text-align: right; font-size: 0.82rem; font-weight: 600; color: var(--ink);"
+                      x-text="formatCurrency(item.amount)"></div>
+                  </div>
+                  <input type="range" min="0" max="20000000" step="100000"
+                    :value="item.amount"
+                    @input="item.amount = parseInt($event.target.value) || 0; recomputeOneTimeTotals()"
+                    class="expense-slider" />
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <!-- Add item button -->
+          <div
+            @click="oneTimeItems.push({id: 'custom_' + Date.now(), name: 'Other', pertains_to: 'others', quantity: 1, amount: 500000, year: new Date().getFullYear() + 5, enabled: true}); recomputeOneTimeTotals()"
+            style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 12px; padding: 10px; cursor: pointer; color: var(--ink-muted); font-size: 0.85rem; border: 1px dashed rgba(0,0,0,0.15); border-radius: 10px; transition: all 0.15s;">
+            <span style="font-size: 1.1rem; font-weight: 300;">+</span>
+            <span>Add an expense</span>
+          </div>
+
+          <!-- No items message -->
+          <div x-show="oneTimeItems.length === 0"
+            style="text-align: center; padding: 10px 0; font-size: 0.82rem; color: var(--ink-muted);">
+            No big upcoming expenses? You can skip this step.
+          </div>
+        </div>
+      </template>
+
+      <!-- ===== Future Asset Itemized ===== -->
+      <template x-if="currentQuestion?.input_type === 'future_asset_itemized'">
+        <div>
+          <!-- Future asset items list -->
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <template x-for="(item, idx) in futureAssetItems" :key="item.id">
+              <div
+                style="background: white; border-radius: 10px; padding: 12px 14px; border: 1px solid rgba(0,0,0,0.06);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <!-- Category select -->
+                  <select x-model="item.name" @change="recomputeFutureAssetTotals()"
+                    style="flex: 1; padding: 6px 8px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-size: 0.82rem; background: var(--cream); color: var(--ink); -webkit-appearance: none; appearance: none;">
+                    <option value="Inheritance">Inheritance</option>
+                    <option value="PF/EPF corpus">PF / EPF corpus</option>
+                    <option value="Property sale">Property sale</option>
+                    <option value="Maturing investment">Maturing investment</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <!-- Year -->
+                  <select x-model.number="item.year" @change="recomputeFutureAssetTotals()"
+                    style="width: 68px; padding: 6px 4px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-size: 0.78rem; background: var(--cream); color: var(--ink); text-align: center;">
+                    <template x-for="y in Array.from({length: 25}, (_, i) => new Date().getFullYear() + i)" :key="y">
+                      <option :value="y" x-text="y"></option>
+                    </template>
+                  </select>
+                  <!-- Remove button -->
+                  <span @click="futureAssetItems.splice(idx, 1); recomputeFutureAssetTotals()" x-show="futureAssetItems.length > 0"
+                    style="font-size: 0.75rem; color: var(--coral); cursor: pointer; padding: 4px; line-height: 1;">&#10005;</span>
+                </div>
+                <!-- Amount row -->
+                <div style="margin-top: 10px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                    <div class="preset-group" style="flex: 1;">
+                      <template x-for="preset in [500000, 1000000, 2500000, 5000000, 10000000]" :key="preset">
+                        <button class="preset-btn" :class="{'on': item.amount === preset}"
+                          @click="item.amount = preset; recomputeFutureAssetTotals()"
+                          x-text="preset >= 10000000 ? (preset/10000000) + 'Cr' : (preset/100000) + 'L'"></button>
+                      </template>
+                    </div>
+                    <div style="min-width: 56px; text-align: right; font-size: 0.82rem; font-weight: 600; color: var(--ink);"
+                      x-text="formatCurrency(item.amount)"></div>
+                  </div>
+                  <input type="range" min="0" max="50000000" step="100000"
+                    :value="item.amount"
+                    @input="item.amount = parseInt($event.target.value) || 0; recomputeFutureAssetTotals()"
+                    class="expense-slider" />
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <!-- Add item button -->
+          <div
+            @click="futureAssetItems.push({id: 'fa_' + Date.now(), name: 'Other', amount: 1000000, year: new Date().getFullYear() + 5}); recomputeFutureAssetTotals()"
+            style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 12px; padding: 10px; cursor: pointer; color: var(--ink-muted); font-size: 0.85rem; border: 1px dashed rgba(0,0,0,0.15); border-radius: 10px; transition: all 0.15s;">
+            <span style="font-size: 1.1rem; font-weight: 300;">+</span>
+            <span>Add expected asset</span>
+          </div>
+
+          <!-- Total -->
+          <div x-show="futureAssetItems.length > 0" style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; background: rgba(106,163,137,0.08); border-radius: 8px;">
+            <span style="font-size: 0.82rem; color: var(--ink-muted);">Total expected</span>
+            <span style="font-size: 1rem; font-weight: 700; color: var(--forest);"
+              x-text="formatCurrency(futureAssetTotal)"></span>
+          </div>
+
+          <!-- No items message -->
+          <div x-show="futureAssetItems.length === 0"
+            style="text-align: center; padding: 10px 0; font-size: 0.82rem; color: var(--ink-muted);">
+            No expected future assets? You can skip this step.
+          </div>
+        </div>
+      </template>
+
+      <!-- Validation error -->
+      <div x-show="validationError"
+        style="margin-top: 16px; padding: 10px 14px; background: var(--coral-light); border-radius: 8px;">
+        <p style="font-size: 0.8rem; color: var(--coral); font-weight: 600;" x-text="validationError"></p>
+      </div>
+
+    </div>
+
+    <!-- Navigation Buttons (sticky bottom) -->
+    <div :class="'question-bg-' + (currentQuestion?.widget_category || 'info')"
+         style="padding: 16px 24px 32px; display: flex; gap: 10px;">
+      <button x-show="visibleIndex === 0 && serverTier >= 2" class="btn-ghost"
+        @click="window.location.href = '/results/'" style="padding: 10px 20px;">
+        &larr; Results
+      </button>
+      <button x-show="visibleIndex > 0" class="btn-ghost" @click="previousQuestion()" style="padding: 10px 20px;">
+        &larr; Back
+      </button>
+
+      <button class="btn-primary" style="flex: 1;" @click="nextQuestion()"
+        x-text="isLastVisible ? 'Get my number →' : 'Continue →'"></button>
+    </div>
+  </div>
+
+  <!-- ===== LOADING STATE ===== -->
+  <div x-show="loading || calculating"
+    style="text-align: center; padding: 80px 24px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div class="spinner"></div>
+    <p x-show="loading" style="margin-top: 16px; font-size: 0.85rem; color: var(--ink-muted);">
+      Loading your questions...
+    </p>
+    <p x-show="calculating" style="margin-top: 16px; font-family: var(--serif); font-size: 1.1rem; color: var(--ink);">
+      Crunching your numbers...
+    </p>
+    <p x-show="calculating" style="margin-top: 4px; font-size: 0.78rem; color: var(--ink-muted);">
+      This takes a moment &#9749;
+    </p>
+  </div>
+
+  <!-- ===== ERROR ===== -->
+  <div x-show="error" class="error-card">
+    <p x-text="error"></p>
+  </div>
+
+</div>
+
+<script>
+  function questionsFlow() {
+    return {
+      // All questions from server (loaded ONCE, never reloaded)
+      allQuestions: [],
+      // Current position in the VISIBLE (filtered) question list
+      visibleIndex: 0,
+      answers: {},
+      loading: true,
+      calculating: false,
+      error: null,
+      validationError: null,
+      serverTier: 1,
+
+      // Expense estimate state
+      expenseItems: [],
+      expenseTotal: 0,
+      expenseNeedsTotal: 0,
+      expenseWantsTotal: 0,
+      needsPercent: 60,
+      wantsPercent: 40,
+      showCustomise: false,
+      expenseLoading: false,
+
+      // One-time expenses state
+      oneTimeItems: [],
+      oneTimeTotal: 0,
+
+      // Future assets state
+      futureAssetItems: [],
+      futureAssetTotal: 0,
+
+      get oneTimeSummaryText() {
+        if (this.oneTimeItems.length === 0) return 'No upcoming big expenses planned';
+        const currentYear = new Date().getFullYear();
+        const years = this.oneTimeItems.map(i => (i.year || currentYear) - currentYear);
+        const maxYears = Math.max(...years);
+        if (this.oneTimeItems.length === 1) {
+          const item = this.oneTimeItems[0];
+          const yr = (item.year || currentYear) - currentYear;
+          return `for ${item.name.toLowerCase()}${item.quantity > 1 ? ' x' + item.quantity : ''} in ${yr} year${yr !== 1 ? 's' : ''}`;
+        }
+        return `across ${this.oneTimeItems.length} items over the next ${maxYears} year${maxYears !== 1 ? 's' : ''}`;
+      },
+
+      get scenarioLabel() {
+        const scenario = JSON.parse(sessionStorage.getItem('scenario') || '{}');
+        const labels = {
+          'FOUNDER': '🚀 Founder Leap',
+          'RETIREMENT': '🌴 Retirement',
+          'R2I': '✈️ R2I Move',
+          'HALF_FIRE': '⛰️ Half-FIRE',
+          'TERMINATION': '📝 Layoff Buffer'
+        };
+        return labels[scenario.scenario_type] || 'Your Journey';
+      },
+
+      pertainsPrefix(pt) {
+        const labels = {
+          'child': 'Child',
+          'dependent_adult': 'Parent',
+          'vehicle': 'Vehicle',
+          'pet': 'Pet',
+          'house': 'Home',
+        };
+        return labels[pt] || '';
+      },
+
+      /**
+       * Compute visible questions client-side by evaluating conditions
+       * against current answers. Recalculated reactively when answers change.
+       */
+      get visibleQuestions() {
+        return this.allQuestions.filter(q => {
+          if (!q._hasCondition) return true;
+          return this.evaluateCondition(q, this.answers);
+        });
+      },
+
+      get currentQuestion() {
+        return this.visibleQuestions[this.visibleIndex] || null;
+      },
+
+      get progress() {
+        if (this.visibleQuestions.length === 0) return 0;
+        return Math.round(((this.visibleIndex + 1) / this.visibleQuestions.length) * 100);
+      },
+
+      get isLastVisible() {
+        return this.visibleIndex === this.visibleQuestions.length - 1;
+      },
+
+      /**
+       * Client-side condition evaluator.
+       * Mirrors the server-side lambda conditions from questions.py.
+       */
+      evaluateCondition(question, answers) {
+        switch (question._conditionType) {
+          case 'family_has_kids':
+            return ['partner_kids', 'joint'].includes(answers['family_type']);
+          case 'family_has_kids_nonzero':
+            return ['partner_kids', 'joint'].includes(answers['family_type'])
+              && parseInt(answers['kids_count'] || 0) > 0;
+          case 'family_has_partner':
+            return ['partner', 'partner_kids', 'joint'].includes(answers['family_type']);
+          case 'venture_bootstrapped':
+            return answers['scenario.venture_bootstrapped'] === true;
+          case 'pension_has_amount':
+            return parseFloat(answers['scenario.pension_monthly'] || 0) > 0;
+          case 'has_restart_timeline':
+            return parseInt(answers['scenario.income_restart_month'] || 0) > 0;
+          default:
+            return true;
+        }
+      },
+
+      async init() {
+        await this.loadQuestions();
+      },
+
+      async loadQuestions() {
+        this.loading = true;
+        this.error = null;
+
+        try {
+          // Check if we're advancing to tier 2 (flag from results page)
+          const advancingToTier2 = sessionStorage.getItem('advancing_to_tier_2');
+          const tier1Answers = sessionStorage.getItem('tier_1_answers');
+
+          if (advancingToTier2 === 'true') {
+            sessionStorage.removeItem('advancing_to_tier_2');
+          }
+
+          // Fetch questions from server FIRST — so we know what tier we're at
+          const response = await fetch('/api/scenarios/questions/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({
+              current_data: this.answers
+            })
+          });
+
+          if (!response.ok) throw new Error('Failed to load questions');
+
+          const data = await response.json();
+
+          this.serverTier = data.tier || 1;
+
+          // If at tier 2+, always load tier 1 answers (handles both normal flow and page refresh)
+          if (data.tier >= 2 && tier1Answers) {
+            const previousAnswers = JSON.parse(tier1Answers);
+            console.log('📥 Loading tier 1 answers for tier ' + data.tier + ':', previousAnswers);
+
+            Object.keys(previousAnswers).forEach(fieldPath => {
+              if (this.answers[fieldPath] === undefined) {
+                this.answers[fieldPath] = previousAnswers[fieldPath];
+              }
+            });
+
+            // Pre-populate asset splits from tier 1 totals
+            if (previousAnswers['assets.living_total'] !== undefined) {
+              const livingTotal = previousAnswers['assets.living_total'];
+              this.answers['assets.liquid'] = this.answers['assets.liquid'] ?? Math.round(livingTotal * 0.6);
+              this.answers['assets.semi_liquid'] = this.answers['assets.semi_liquid'] ?? Math.round(livingTotal * 0.4);
+            }
+            if (previousAnswers['assets.security_total'] !== undefined) {
+              const securityTotal = previousAnswers['assets.security_total'];
+              this.answers['assets.growth'] = this.answers['assets.growth'] ?? Math.round(securityTotal * 0.7);
+              this.answers['assets.property'] = this.answers['assets.property'] ?? Math.round(securityTotal * 0.3);
+            }
+          }
+
+          // Tag questions with client-side condition metadata.
+          this.allQuestions = data.questions.map(q => {
+            q._hasCondition = false;
+            q._conditionType = null;
+
+            if (q.id === 'kids_count') {
+              q._hasCondition = true;
+              q._conditionType = 'family_has_kids';
+            } else if (q.id === 'kids_average_age') {
+              q._hasCondition = true;
+              q._conditionType = 'family_has_kids_nonzero';
+            } else if (q.id === 'dependent_adults_count') {
+              q._hasCondition = true;
+              q._conditionType = 'family_has_partner';
+            } else if (q.id === 'pension_start_age') {
+              q._hasCondition = true;
+              q._conditionType = 'pension_has_amount';
+            } else if (q.id === 'termination_restart_income') {
+              q._hasCondition = true;
+              q._conditionType = 'has_restart_timeline';
+            }
+            // Note: 'ages' question handles partner age visibility internally via option.condition
+
+            return q;
+          });
+
+          // Initialize ALL answers with defaults (including conditional questions)
+          this.allQuestions.forEach(q => {
+            if (q.input_type === 'age_group' && q.options) {
+              // Initialize each age slider with its default
+              q.options.forEach(opt => {
+                if (this.answers[opt.field_name] === undefined) {
+                  this.answers[opt.field_name] = opt.default || opt.min || 30;
+                }
+              });
+            } else if (q.input_type === 'checkbox_group' && q.options) {
+              // Initialize each checkbox option with its default
+              q.options.forEach(opt => {
+                if (this.answers[opt.field_name] === undefined) {
+                  this.answers[opt.field_name] = opt.default !== undefined ? opt.default : false;
+                }
+              });
+            } else if (q.input_type === 'toggle_with_amount') {
+              // Initialize toggle
+              if (this.answers[q.field_name] === undefined) {
+                this.answers[q.field_name] = false;
+              }
+              // Initialize amount field
+              if (q.options && q.options.length > 0) {
+                const amountField = q.options[0].amount_field;
+                if (this.answers[amountField] === undefined) {
+                  this.answers[amountField] = 0;
+                }
+              }
+            } else if (q.input_type === 'split_slider') {
+              // The isolated alpine component for split_slider handles its own initialization on render,
+              // but we can ensure the percentage field is set to default early just in case.
+              if (this.answers[q.field_name] === undefined) {
+                this.answers[q.field_name] = parseInt(q.slider_config?.default_percent || 50, 10);
+              }
+            } else if (this.answers[q.field_name] === undefined) {
+              if (q.slider_config && q.slider_config.default !== undefined) {
+                this.answers[q.field_name] = parseInt(q.slider_config.default, 10);
+              } else if (q.input_type === 'slider' || q.input_type === 'amount_slider') {
+                this.answers[q.field_name] = parseInt(q.slider_config?.min || 0, 10);
+              } else if (q.input_type === 'toggle') {
+                this.answers[q.field_name] = false;
+              }
+              // card_select and expense_estimate: no default
+            }
+          });
+
+          // Scenario-specific emergency fund defaults
+          const scenario = JSON.parse(sessionStorage.getItem('scenario') || '{}');
+          const scenarioType = scenario.scenario_type;
+          const efKey = 'profile.emergency_fund_months';
+          // Only override if still at the generic default (6)
+          if (this.answers[efKey] === 6 || this.answers[efKey] === 3) {
+            const efDefaults = {
+              'FOUNDER': 12,
+              'HALF_FIRE': 6,
+              'TERMINATION': 3,
+              'RETIREMENT': 6,
+              'R2I': 6,
+            };
+            this.answers[efKey] = efDefaults[scenarioType] || 6;
+          }
+
+          this.visibleIndex = 0;
+          console.log(`✅ Loaded ${this.allQuestions.length} questions (${this.visibleQuestions.length} visible)`);
+
+        } catch (err) {
+          this.error = err.message;
+        } finally {
+          this.loading = false;
+        }
+      },
+
+      setAnswer(field, value) {
+        this.answers[field] = value;
+        this.validationError = null;
+
+        // When expense_level is selected, trigger expense computation
+        if (field === 'family.expense_level') {
+          this.fetchExpenseEstimate();
+        }
+      },
+
+      /**
+       * Fetch computed expense estimate from server based on family composition.
+       */
+      async fetchExpenseEstimate() {
+        const expenseLevel = this.answers['family.expense_level'];
+        if (!expenseLevel) return;
+
+        this.expenseLoading = true;
+
+        try {
+          const requestBody = {
+            expense_level: expenseLevel,
+            family_type: this.answers['family_type'],
+            kids_count: parseInt(this.answers['kids_count']) || 0,
+            dependent_adults_count: parseInt(this.answers['dependent_adults_count']) || 0,
+            has_vehicle: this.answers['family.has_vehicle'] === true,
+            has_pet: this.answers['family.has_pet'] === true,
+            rented_house: this.answers['family.rented_house'] === true,
+          };
+          console.log('📊 Expense request:', JSON.stringify(requestBody));
+
+          const response = await fetch('/api/scenarios/compute-expenses/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify(requestBody)
+          });
+
+          if (!response.ok) throw new Error('Failed to compute expenses');
+
+          const data = await response.json();
+          console.log(`📊 Expense result: ₹${data.monthly_total}/mo (needs: ₹${data.monthly_needs}, wants: ₹${data.monthly_wants}, items: ${data.items.length})`);
+          this.expenseItems = data.items;
+          this.expenseTotal = data.monthly_total;
+          this.expenseNeedsTotal = data.monthly_needs;
+          this.expenseWantsTotal = data.monthly_wants;
+          this.needsPercent = data.needs_percent;
+          this.wantsPercent = data.wants_percent;
+
+          // Store totals as answers for calculators
+          this.answers['family.monthly_expenses'] = data.monthly_total;
+          this.answers['family.monthly_needs'] = data.monthly_needs;
+          this.answers['family.monthly_wants'] = data.monthly_wants;
+
+        } catch (err) {
+          console.error('Expense computation failed:', err);
+        } finally {
+          this.expenseLoading = false;
+        }
+      },
+
+      /**
+       * Update a single expense item amount from the customise div.
+       */
+      updateExpenseItem(itemId, pertainsTo, newMonthlyValue) {
+        const item = this.expenseItems.find(i => i.id === itemId && i.pertains_to === pertainsTo);
+        if (!item) return;
+
+        const newVal = parseFloat(newMonthlyValue) || 0;
+        item.monthly_amount = newVal;
+        item.annual_amount = newVal * 12;
+        this.recomputeExpenseTotals();
+      },
+
+      /**
+       * Initialize one-time expense items from the already-fetched expenseItems.
+       */
+      initOneTimeItems() {
+        // Only init if not already populated (user may have customized)
+        if (this.oneTimeItems.length > 0) return;
+
+        const currentYear = new Date().getFullYear();
+        const kidsCount = parseInt(this.answers['kids_count']) || 0;
+        const kidAge = this.answers['family.kids_average_age'] || 10;
+
+        // Pre-populate based on family: child education/wedding if kids exist
+        if (kidsCount > 0) {
+          // Find the graduation master item for the amount
+          const gradItem = this.expenseItems.find(i => i.is_one_time && i.name === 'Graduation');
+          const settleItem = this.expenseItems.find(i => i.is_one_time && i.name === 'Settling down');
+
+          if (gradItem && gradItem.annual_amount > 0) {
+            this.oneTimeItems.push({
+              id: 'grad_' + Date.now(),
+              name: 'Graduation',
+              pertains_to: 'child',
+              quantity: kidsCount,
+              amount: gradItem.annual_amount,
+              year: currentYear + Math.max(1, 18 - kidAge),
+              enabled: true,
+            });
+          }
+          if (settleItem && settleItem.annual_amount > 0) {
+            this.oneTimeItems.push({
+              id: 'settle_' + Date.now(),
+              name: 'Settling down',
+              pertains_to: 'child',
+              quantity: kidsCount,
+              amount: settleItem.annual_amount,
+              year: currentYear + Math.max(1, 25 - kidAge),
+              enabled: true,
+            });
+          }
+        }
+        // Note: Hospitalization excluded from defaults per user request
+
+        // R2I: auto-add relocation item in current year
+        if (this.scenarioType === 'R2I') {
+          this.oneTimeItems.push({
+            id: 'reloc_' + Date.now(),
+            name: 'Relocation',
+            pertains_to: 'household',
+            quantity: 1,
+            amount: 500000,
+            year: currentYear,
+            enabled: true,
+          });
+        }
+
+        this.recomputeOneTimeTotals();
+      },
+
+      /**
+       * Recompute one-time expense totals after edits.
+       */
+      recomputeOneTimeTotals() {
+        const currentYear = new Date().getFullYear();
+        const byYear = {};
+        this.oneTimeItems.forEach(item => {
+          const yearOffset = Math.max(0, (item.year || currentYear) - currentYear);
+          byYear[yearOffset] = (byYear[yearOffset] || 0) + ((item.amount || 0) * (item.quantity || 1));
+        });
+        this.oneTimeTotal = Object.values(byYear).reduce((s, v) => s + v, 0);
+        // Store in answers for calculators
+        this.answers['family.one_time_expenses'] = this.oneTimeTotal;
+        this.answers['family.one_time_by_year'] = byYear;
+      },
+
+      /**
+       * Recompute future asset totals and by-year mapping.
+       */
+      recomputeFutureAssetTotals() {
+        const currentYear = new Date().getFullYear();
+        const byYear = {};
+        this.futureAssetItems.forEach(item => {
+          const yearOffset = Math.max(0, (item.year || currentYear) - currentYear);
+          byYear[yearOffset] = (byYear[yearOffset] || 0) + (item.amount || 0);
+        });
+        this.futureAssetTotal = Object.values(byYear).reduce((s, v) => s + v, 0);
+        this.answers['family.future_assets'] = this.futureAssetTotal;
+        this.answers['family.future_assets_by_year'] = byYear;
+      },
+
+      /**
+       * Recompute expense totals after user edits individual items.
+       */
+      recomputeExpenseTotals() {
+        const recurring = this.expenseItems.filter(i => !i.is_one_time);
+
+        let needsTotal = 0;
+        let wantsTotal = 0;
+
+        // Include custom "Others" amounts
+        needsTotal += parseFloat(this.answers['_custom_needs']) || 0;
+        wantsTotal += parseFloat(this.answers['_custom_wants']) || 0;
+
+        recurring.forEach(item => {
+          if (item.budget_type === 'needs') {
+            needsTotal += item.monthly_amount;
+          } else {
+            wantsTotal += item.monthly_amount;
+          }
+        });
+
+        this.expenseNeedsTotal = Math.round(needsTotal);
+        this.expenseWantsTotal = Math.round(wantsTotal);
+
+        const rawTotal = needsTotal + wantsTotal;
+        // Round to nearest 5K (match server-side rounding)
+        this.expenseTotal = Math.round(rawTotal / 5000) * 5000;
+        if (this.expenseTotal === 0 && rawTotal > 0) this.expenseTotal = 5000;
+
+        const total = this.expenseNeedsTotal + this.expenseWantsTotal;
+        this.needsPercent = total > 0 ? Math.round((needsTotal / total) * 100) : 60;
+        this.wantsPercent = total > 0 ? 100 - this.needsPercent : 40;
+
+        // Update answers for calculators
+        this.answers['family.monthly_expenses'] = this.expenseTotal;
+        this.answers['family.monthly_needs'] = this.expenseNeedsTotal;
+        this.answers['family.monthly_wants'] = this.expenseWantsTotal;
+      },
+
+      nextQuestion() {
+        if (!this.validateCurrentAnswer()) {
+          return;
+        }
+
+        this.validationError = null;
+
+        if (this.isLastVisible) {
+          this.calculate();
+        } else {
+          this.visibleIndex++;
+
+          const nextQ = this.visibleQuestions[this.visibleIndex];
+
+          // Dynamic kids_average_age: text + default based on kid count and user age
+          if (nextQ && nextQ.id === 'kids_average_age') {
+            const kidsCount = parseInt(this.answers['kids_count']) || 1;
+            const currentAge = this.answers['scenario.current_age'] || 30;
+            const defaultKidAge = Math.max(currentAge - 25, 10);
+            // Dynamic text: "How old is your kid?" vs "Average age of your kids?"
+            nextQ.text = kidsCount === 1 ? "How old is your kid?" : "Average age of your kids?";
+            // Set default if not yet changed
+            if (this.answers['family.kids_average_age'] === 10 || this.answers['family.kids_average_age'] === undefined) {
+              this.answers['family.kids_average_age'] = defaultKidAge;
+            }
+          }
+
+          // Dynamic retirement_age default: min(current_age + 2, 60)
+          if (nextQ && nextQ.id === 'retirement_age') {
+            const currentAge = this.answers['scenario.current_age'] || 30;
+            const defaultRetAge = Math.min(currentAge + 2, 60);
+            // Only set default if user hasn't explicitly changed it, or if it's below current age
+            if (!this.answers['scenario.retirement_age'] || this.answers['scenario.retirement_age'] < currentAge) {
+              this.answers['scenario.retirement_age'] = defaultRetAge;
+            }
+            // Also update the slider min to be current age (can't retire before now)
+            if (nextQ.slider_config) {
+              nextQ.slider_config.min = Math.max(nextQ.slider_config.min, currentAge);
+            }
+          }
+
+          // Always re-fetch expense estimate (family composition may have changed)
+          if (nextQ && nextQ.input_type === 'expense_estimate') {
+            this.fetchExpenseEstimate();
+          }
+
+          // Initialize one-time items from expenseItems (always re-init in case expenses changed)
+          if (nextQ && nextQ.input_type === 'one_time_itemized') {
+            this.initOneTimeItems();
+          }
+
+          // Pre-fill asset defaults based on expense level (only if user hasn't changed them)
+          if (nextQ && nextQ.id === 'assets_for_living') {
+            const level = this.answers['family.expense_level'];
+            const livingKey = 'assets.living_total';
+            const securityKey = 'assets.security_total';
+            if (level && this.answers[livingKey] === 0) {
+              const assetDefaults = {
+                1: { living: 1000000, security: 1500000 },    // ₹10L / ₹15L
+                2: { living: 2500000, security: 5000000 },    // ₹25L / ₹50L
+                3: { living: 5000000, security: 15000000 },   // ₹50L / ₹1.5Cr
+              };
+              const defaults = assetDefaults[level];
+              if (defaults) {
+                this.answers[livingKey] = defaults.living;
+                this.answers[securityKey] = defaults.security;
+              }
+            }
+          }
+        }
+      },
+
+      previousQuestion() {
+        if (this.visibleIndex > 0) {
+          this.visibleIndex--;
+          this.validationError = null;
+          this.showCustomise = false;
+        }
+      },
+
+      validateCurrentAnswer() {
+        const q = this.currentQuestion;
+        if (!q) return true;
+
+        const answer = this.answers[q.field_name];
+
+        // card_select MUST have a selection
+        if (q.input_type === 'card_select') {
+          if (answer === undefined || answer === null || answer === '') {
+            this.validationError = 'Please select an option to continue.';
+            return false;
+          }
+        }
+
+        // expense_estimate must have a computed total
+        if (q.input_type === 'expense_estimate') {
+          if (!this.expenseTotal || this.expenseTotal <= 0) {
+            this.validationError = 'Expense estimate not ready. Please go back and select a spending style.';
+            return false;
+          }
+        }
+
+        // Retirement age must be >= current age
+        if (q.id === 'retirement_age') {
+          const currentAge = this.answers['scenario.current_age'];
+          const retirementAge = answer;
+          if (currentAge && retirementAge && retirementAge < currentAge) {
+            this.validationError = `Retirement age must be at least your current age (${currentAge}).`;
+            return false;
+          }
+        }
+
+        // Life expectancy must be > retirement age
+        if (q.id === 'life_expectancy') {
+          const retirementAge = this.answers['scenario.retirement_age'];
+          if (retirementAge && answer && answer <= retirementAge) {
+            this.validationError = `Life expectancy must be greater than retirement age (${retirementAge}).`;
+            return false;
+          }
+        }
+
+        // split_slider must have a valid total (meaning Tier 1 was completed properly)
+        if (q.input_type === 'split_slider') {
+          const totalField = q.slider_config?.total_field;
+          if (totalField && (this.answers[totalField] === undefined || this.answers[totalField] === null)) {
+            this.validationError = `Missing total amount for this split. Please restart the flow.`;
+            return false;
+          }
+        }
+
+        return true;
+      },
+
+      async calculate() {
+        this.calculating = true;
+        this.error = null;
+
+        try {
+          // Build data object from answers
+          const data = {
+            scenario: {},
+            family: {},
+            assets: {},
+            income: {},
+            profile: {}
+          };
+
+          Object.keys(this.answers).forEach(fieldPath => {
+            const parts = fieldPath.split('.');
+            if (parts.length === 2) {
+              data[parts[0]][parts[1]] = this.answers[fieldPath];
+            } else if (parts.length === 1) {
+              data[fieldPath] = this.answers[fieldPath];
+            }
+          });
+
+          console.log('📤 Sending calculation data:', data);
+
+          const response = await fetch('/api/scenarios/calculate/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({ data })
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error('❌ Calculation error:', errorData);
+
+            let errorMsg = 'Calculation failed';
+            if (errorData.error) {
+              errorMsg = errorData.error;
+            } else if (errorData.missing_fields) {
+              errorMsg = `Missing required fields: ${errorData.missing_fields.join(', ')}`;
+            }
+            throw new Error(errorMsg);
+          }
+
+          const results = await response.json();
+          console.log('✅ Calculation results:', results);
+
+          // Save tier 1 answers for possible tier 2 advancement
+          if (sessionStorage.getItem('tier_1_answers')) {
+            if (results.tier >= 2) {
+              sessionStorage.removeItem('tier_1_answers');
+            }
+          } else {
+            sessionStorage.setItem('tier_1_answers', JSON.stringify(this.answers));
+          }
+
+          sessionStorage.setItem('calculation_results', JSON.stringify(results));
+          window.location.href = '/results/';
+
+        } catch (err) {
+          console.error('❌ Error:', err);
+          this.error = err.message;
+          this.calculating = false;
+        }
+      },
+
+      formatSliderValue(value, unit) {
+        if (unit === 'years') return `${value} years`;
+        if (unit === 'months') return `${value} months`;
+        if (unit === 'kids' || unit === 'adults') return value;
+        if (unit === '%') return `${value}%`;
+        if (unit === '₹' || unit === '₹/mo') return this.formatCurrency(value);
+        return value;
+      },
+
+      formatCurrency(amount, short = false) {
+        if (amount >= 10000000) {
+          return `₹${(amount / 10000000).toFixed(1)}Cr`;
+        } else if (amount >= 100000) {
+          return `₹${(amount / 100000).toFixed(1)}L`;
+        } else if (amount >= 1000) {
+          return `₹${(amount / 1000).toFixed(0)}K`;
+        }
+        return `₹${amount}`;
+      }
+    }
+  }
+</script>
+{% endblock %}

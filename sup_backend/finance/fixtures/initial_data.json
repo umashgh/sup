@@ -1,0 +1,7124 @@
+[
+{
+  "model": "finance.expensemaster",
+  "pk": 1,
+  "fields": {
+    "name": "Groceries etc.",
+    "category": "groceries",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "200000.00",
+    "frequency": "annual",
+    "inflation_pct": "6.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 2,
+  "fields": {
+    "name": "Dining Out",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "25000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 3,
+  "fields": {
+    "name": "Rent",
+    "category": "utilities",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "100000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 4,
+  "fields": {
+    "name": "Electricity/Fuel & Light",
+    "category": "utilities",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "6000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 5,
+  "fields": {
+    "name": "Vehicle Fuel",
+    "category": "transport",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "vehicle",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 6,
+  "fields": {
+    "name": "Vehicle Maintenance",
+    "category": "transport",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "vehicle",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 7,
+  "fields": {
+    "name": "Public Transport",
+    "category": "transport",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "2000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 8,
+  "fields": {
+    "name": "Flights (non-work)",
+    "category": "transport",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "25000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 9,
+  "fields": {
+    "name": "Mobile/Internet Bills",
+    "category": "utilities",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "25000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 10,
+  "fields": {
+    "name": "Tuition Fees",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "child",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 11,
+  "fields": {
+    "name": "Coaching/Exam Prep",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "child",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 12,
+  "fields": {
+    "name": "Books & Supplies",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "child",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 13,
+  "fields": {
+    "name": "Sports",
+    "category": "sports",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "child",
+    "typical_amount": "20000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 14,
+  "fields": {
+    "name": "Toys/games etc.",
+    "category": "sports",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "child",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 15,
+  "fields": {
+    "name": "Graduation",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "child",
+    "typical_amount": "2500000.00",
+    "frequency": "one_time",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 16,
+  "fields": {
+    "name": "Settling down",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "child",
+    "typical_amount": "0.00",
+    "frequency": "one_time",
+    "inflation_pct": "0.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 17,
+  "fields": {
+    "name": "Doctor Consultations",
+    "category": "healthcare",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "4.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 18,
+  "fields": {
+    "name": "Medicines",
+    "category": "healthcare",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "4.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "volatile"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 19,
+  "fields": {
+    "name": "Hospitalization",
+    "category": "healthcare",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "1000000.00",
+    "frequency": "one_time",
+    "inflation_pct": "4.00",
+    "insurance_indicator": true,
+    "copay_percent": "0.00",
+    "uncertainty_level": "volatile"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 20,
+  "fields": {
+    "name": "Clothing & Footwear",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.50",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 21,
+  "fields": {
+    "name": "Personal Care & Effects",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 22,
+  "fields": {
+    "name": "Entertainment/Recreation",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "25000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 23,
+  "fields": {
+    "name": "Household help",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "30000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 24,
+  "fields": {
+    "name": "Society maintenance",
+    "category": "housing",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "30000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 25,
+  "fields": {
+    "name": "Housing loan",
+    "category": "housing",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "5000000.00",
+    "frequency": "annual",
+    "inflation_pct": "0.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 26,
+  "fields": {
+    "name": "Property tax",
+    "category": "housing",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "house",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 27,
+  "fields": {
+    "name": "Insurance premium",
+    "category": "lifestyle",
+    "budget_type": "needs",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "30000.00",
+    "frequency": "annual",
+    "inflation_pct": "4.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 28,
+  "fields": {
+    "name": "Allowance",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "child",
+    "typical_amount": "1000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 29,
+  "fields": {
+    "name": "Allowance",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "dependent_adult",
+    "typical_amount": "5000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 30,
+  "fields": {
+    "name": "Pet expenses",
+    "category": "pets",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "pet",
+    "typical_amount": "20000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 31,
+  "fields": {
+    "name": "Charity",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "0.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 32,
+  "fields": {
+    "name": "Vacations",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 1,
+    "pertains_to": "household",
+    "typical_amount": "100000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 33,
+  "fields": {
+    "name": "Groceries etc.",
+    "category": "groceries",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "500000.00",
+    "frequency": "annual",
+    "inflation_pct": "6.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 34,
+  "fields": {
+    "name": "Dining Out",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "100000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 35,
+  "fields": {
+    "name": "Rent",
+    "category": "utilities",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "350000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 36,
+  "fields": {
+    "name": "Electricity/Fuel & Light",
+    "category": "utilities",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "12000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 37,
+  "fields": {
+    "name": "Vehicle Fuel",
+    "category": "transport",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "vehicle",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 38,
+  "fields": {
+    "name": "Vehicle Maintenance",
+    "category": "transport",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "vehicle",
+    "typical_amount": "15000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 39,
+  "fields": {
+    "name": "Public Transport",
+    "category": "transport",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "2000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 40,
+  "fields": {
+    "name": "Flights (non-work)",
+    "category": "transport",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "100000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 41,
+  "fields": {
+    "name": "Mobile/Internet Bills",
+    "category": "utilities",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 42,
+  "fields": {
+    "name": "Tuition Fees",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "child",
+    "typical_amount": "150000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 43,
+  "fields": {
+    "name": "Coaching/Exam Prep",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "child",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 44,
+  "fields": {
+    "name": "Books & Supplies",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "child",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 45,
+  "fields": {
+    "name": "Sports",
+    "category": "sports",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "child",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 46,
+  "fields": {
+    "name": "Toys/games etc.",
+    "category": "sports",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "child",
+    "typical_amount": "25000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 47,
+  "fields": {
+    "name": "Graduation",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "child",
+    "typical_amount": "5000000.00",
+    "frequency": "one_time",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 48,
+  "fields": {
+    "name": "Settling down",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "child",
+    "typical_amount": "10000000.00",
+    "frequency": "one_time",
+    "inflation_pct": "0.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 49,
+  "fields": {
+    "name": "Doctor Consultations",
+    "category": "healthcare",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "20000.00",
+    "frequency": "annual",
+    "inflation_pct": "4.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 50,
+  "fields": {
+    "name": "Medicines",
+    "category": "healthcare",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "4.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "volatile"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 51,
+  "fields": {
+    "name": "Hospitalization",
+    "category": "healthcare",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "2500000.00",
+    "frequency": "one_time",
+    "inflation_pct": "4.00",
+    "insurance_indicator": true,
+    "copay_percent": "0.00",
+    "uncertainty_level": "volatile"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 52,
+  "fields": {
+    "name": "Clothing & Footwear",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.50",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 53,
+  "fields": {
+    "name": "Personal Care & Effects",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "25000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 54,
+  "fields": {
+    "name": "Entertainment/Recreation",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "100000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 55,
+  "fields": {
+    "name": "Household help",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "300000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 56,
+  "fields": {
+    "name": "Society maintenance",
+    "category": "housing",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "100000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 57,
+  "fields": {
+    "name": "Housing loan",
+    "category": "housing",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "800000.00",
+    "frequency": "annual",
+    "inflation_pct": "0.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 58,
+  "fields": {
+    "name": "Property tax",
+    "category": "housing",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "house",
+    "typical_amount": "15000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 59,
+  "fields": {
+    "name": "Insurance premium",
+    "category": "lifestyle",
+    "budget_type": "needs",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "100000.00",
+    "frequency": "annual",
+    "inflation_pct": "4.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 60,
+  "fields": {
+    "name": "Allowance",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "child",
+    "typical_amount": "5000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 61,
+  "fields": {
+    "name": "Allowance",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "dependent_adult",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 62,
+  "fields": {
+    "name": "Pet expenses",
+    "category": "pets",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "pet",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 63,
+  "fields": {
+    "name": "Charity",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "200000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 64,
+  "fields": {
+    "name": "Vacations",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 2,
+    "pertains_to": "household",
+    "typical_amount": "300000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 65,
+  "fields": {
+    "name": "Groceries etc.",
+    "category": "groceries",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "500000.00",
+    "frequency": "annual",
+    "inflation_pct": "6.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 66,
+  "fields": {
+    "name": "Dining Out",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "150000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 67,
+  "fields": {
+    "name": "Rent",
+    "category": "utilities",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "350000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 68,
+  "fields": {
+    "name": "Electricity/Fuel & Light",
+    "category": "utilities",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "25000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 69,
+  "fields": {
+    "name": "Vehicle Fuel",
+    "category": "transport",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "vehicle",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 70,
+  "fields": {
+    "name": "Vehicle Maintenance",
+    "category": "transport",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "vehicle",
+    "typical_amount": "20000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 71,
+  "fields": {
+    "name": "Public Transport",
+    "category": "transport",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "2000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 72,
+  "fields": {
+    "name": "Flights (non-work)",
+    "category": "transport",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "150000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 73,
+  "fields": {
+    "name": "Mobile/Internet Bills",
+    "category": "utilities",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 74,
+  "fields": {
+    "name": "Tuition Fees",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "child",
+    "typical_amount": "200000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 75,
+  "fields": {
+    "name": "Coaching/Exam Prep",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "child",
+    "typical_amount": "75000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 76,
+  "fields": {
+    "name": "Books & Supplies",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "child",
+    "typical_amount": "20000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 77,
+  "fields": {
+    "name": "Sports",
+    "category": "sports",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "child",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 78,
+  "fields": {
+    "name": "Toys/games etc.",
+    "category": "sports",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "child",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 79,
+  "fields": {
+    "name": "Graduation",
+    "category": "education",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "child",
+    "typical_amount": "10000000.00",
+    "frequency": "one_time",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 80,
+  "fields": {
+    "name": "Settling down",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "child",
+    "typical_amount": "10000000.00",
+    "frequency": "one_time",
+    "inflation_pct": "0.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 81,
+  "fields": {
+    "name": "Doctor Consultations",
+    "category": "healthcare",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "30000.00",
+    "frequency": "annual",
+    "inflation_pct": "4.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "high"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 82,
+  "fields": {
+    "name": "Medicines",
+    "category": "healthcare",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "10000.00",
+    "frequency": "annual",
+    "inflation_pct": "4.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "volatile"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 83,
+  "fields": {
+    "name": "Hospitalization",
+    "category": "healthcare",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "5000000.00",
+    "frequency": "one_time",
+    "inflation_pct": "4.00",
+    "insurance_indicator": true,
+    "copay_percent": "0.00",
+    "uncertainty_level": "volatile"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 84,
+  "fields": {
+    "name": "Clothing & Footwear",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "100000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.50",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 85,
+  "fields": {
+    "name": "Personal Care & Effects",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 86,
+  "fields": {
+    "name": "Entertainment/Recreation",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "200000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 87,
+  "fields": {
+    "name": "Household help",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "300000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 88,
+  "fields": {
+    "name": "Society maintenance",
+    "category": "housing",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "100000.00",
+    "frequency": "annual",
+    "inflation_pct": "3.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 89,
+  "fields": {
+    "name": "Housing loan",
+    "category": "housing",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "1200000.00",
+    "frequency": "annual",
+    "inflation_pct": "0.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 90,
+  "fields": {
+    "name": "Property tax",
+    "category": "housing",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "house",
+    "typical_amount": "30000.00",
+    "frequency": "annual",
+    "inflation_pct": "2.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 91,
+  "fields": {
+    "name": "Insurance premium",
+    "category": "lifestyle",
+    "budget_type": "needs",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "150000.00",
+    "frequency": "annual",
+    "inflation_pct": "4.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 92,
+  "fields": {
+    "name": "Allowance",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "child",
+    "typical_amount": "5000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 93,
+  "fields": {
+    "name": "Allowance",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "dependent_adult",
+    "typical_amount": "15000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 94,
+  "fields": {
+    "name": "Pet expenses",
+    "category": "pets",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "pet",
+    "typical_amount": "50000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 95,
+  "fields": {
+    "name": "Charity",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "500000.00",
+    "frequency": "annual",
+    "inflation_pct": "5.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expensemaster",
+  "pk": 96,
+  "fields": {
+    "name": "Vacations",
+    "category": "lifestyle",
+    "budget_type": "wants",
+    "number_level": 3,
+    "pertains_to": "household",
+    "typical_amount": "800000.00",
+    "frequency": "annual",
+    "inflation_pct": "8.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "medium"
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "guest_5787171d77e2"
+    ],
+    "scenario": 1,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "guest_38b259302f4e"
+    ],
+    "scenario": 2,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "guest_654174a21a4c"
+    ],
+    "scenario": 3,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "guest_e3da01ae50de"
+    ],
+    "scenario": 4,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "guest_84ba4e200532"
+    ],
+    "scenario": 6,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "guest_837aeecc28d9"
+    ],
+    "scenario": 5,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "guest_8a2d47555ab0"
+    ],
+    "scenario": 8,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "guest_0917ec4f4c05"
+    ],
+    "scenario": 7,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "guest_e8c525c9fc0a"
+    ],
+    "scenario": 10,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "guest_37d3d6ea0579"
+    ],
+    "scenario": 9,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "guest_103955932bd8"
+    ],
+    "scenario": 11,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "guest_0431f9f33b00"
+    ],
+    "scenario": 12,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "guest_9ff56e9471f0"
+    ],
+    "scenario": 13,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "guest_469df962cbcc"
+    ],
+    "scenario": 14,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 15,
+  "fields": {
+    "user": [
+      "guest_1d210a570265"
+    ],
+    "scenario": 15,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 16,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "scenario": 16,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 2,
+    "income_level": 2,
+    "expense_level": 2,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 20,
+    "savings_percent": 30,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "guest_24dfc5294093"
+    ],
+    "scenario": 17,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 60,
+    "wants_percent": 20,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "scenario": 18,
+    "modelling_start_year": 2024,
+    "modelling_end_year": 2044,
+    "bank_rate": "6.00",
+    "wealth_level": 2,
+    "income_level": 2,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 2
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "guest_1000a7e3915c"
+    ],
+    "scenario": 19,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 20,
+  "fields": {
+    "user": [
+      "guest_0bdedb23926e"
+    ],
+    "scenario": 20,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 2
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 21,
+  "fields": {
+    "user": [
+      "guest_9b0e3c880719"
+    ],
+    "scenario": 21,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 22,
+  "fields": {
+    "user": [
+      "guest_f790f35054e6"
+    ],
+    "scenario": 22,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 2
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 23,
+  "fields": {
+    "user": [
+      "guest_c0e0569d8ef8"
+    ],
+    "scenario": null,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 24,
+  "fields": {
+    "user": [
+      "guest_c040a436c4cf"
+    ],
+    "scenario": null,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 25,
+  "fields": {
+    "user": [
+      "guest_2f130fb482fc"
+    ],
+    "scenario": 23,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 26,
+  "fields": {
+    "user": [
+      "guest_f62eace5097e"
+    ],
+    "scenario": 24,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 27,
+  "fields": {
+    "user": [
+      "guest_7cbeb500d5ad"
+    ],
+    "scenario": 25,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 28,
+  "fields": {
+    "user": [
+      "guest_77ea747078ba"
+    ],
+    "scenario": null,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 29,
+  "fields": {
+    "user": [
+      "guest_84a284478e50"
+    ],
+    "scenario": 26,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 2
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 30,
+  "fields": {
+    "user": [
+      "guest_af91a1f0ede2"
+    ],
+    "scenario": 27,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 2
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 32,
+  "fields": {
+    "user": [
+      "guest_6ce416e6d1cf"
+    ],
+    "scenario": null,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 33,
+  "fields": {
+    "user": [
+      "guest_2db3201cad00"
+    ],
+    "scenario": null,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 34,
+  "fields": {
+    "user": [
+      "guest_0d92a76e0845"
+    ],
+    "scenario": 28,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 35,
+  "fields": {
+    "user": [
+      "guest_125dcbd80765"
+    ],
+    "scenario": 29,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 36,
+  "fields": {
+    "user": [
+      "guest_6c8ef017cf96"
+    ],
+    "scenario": 30,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 37,
+  "fields": {
+    "user": [
+      "guest_63b83dc1e818"
+    ],
+    "scenario": 31,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 38,
+  "fields": {
+    "user": [
+      "guest_d25cc13750a2"
+    ],
+    "scenario": 32,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 39,
+  "fields": {
+    "user": [
+      "guest_42717f68b794"
+    ],
+    "scenario": 33,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 40,
+  "fields": {
+    "user": [
+      "guest_cf9a6ee02a2b"
+    ],
+    "scenario": 34,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 41,
+  "fields": {
+    "user": [
+      "guest_501effb06e92"
+    ],
+    "scenario": 35,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 42,
+  "fields": {
+    "user": [
+      "guest_d5a6013db485"
+    ],
+    "scenario": 36,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 43,
+  "fields": {
+    "user": [
+      "guest_01231ca2d083"
+    ],
+    "scenario": 37,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 44,
+  "fields": {
+    "user": [
+      "guest_5977426d0ce1"
+    ],
+    "scenario": 38,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 45,
+  "fields": {
+    "user": [
+      "guest_cbe6e1bbe0c5"
+    ],
+    "scenario": 39,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 46,
+  "fields": {
+    "user": [
+      "guest_0b241bac92ae"
+    ],
+    "scenario": 40,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 47,
+  "fields": {
+    "user": [
+      "guest_d754039f1b0a"
+    ],
+    "scenario": 41,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 48,
+  "fields": {
+    "user": [
+      "guest_9356e87b4122"
+    ],
+    "scenario": 42,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 49,
+  "fields": {
+    "user": [
+      "guest_13128d731d29"
+    ],
+    "scenario": null,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 50,
+  "fields": {
+    "user": [
+      "guest_46166f0ed045"
+    ],
+    "scenario": 43,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 2
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 51,
+  "fields": {
+    "user": [
+      "guest_d2974185bd59"
+    ],
+    "scenario": 44,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 52,
+  "fields": {
+    "user": [
+      "guest_9d7a1818bf4b"
+    ],
+    "scenario": 45,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 1
+  }
+},
+{
+  "model": "finance.familyprofile",
+  "pk": 53,
+  "fields": {
+    "user": [
+      "guest_832e0865afcf"
+    ],
+    "scenario": 46,
+    "modelling_start_year": 2026,
+    "modelling_end_year": 2046,
+    "bank_rate": "6.00",
+    "wealth_level": 1,
+    "income_level": 1,
+    "expense_level": 1,
+    "rented_house": false,
+    "financial_investment_areas": [],
+    "physical_investment_areas": [],
+    "num_houses": 1,
+    "num_vehicles": 1,
+    "has_pet": false,
+    "emergency_fund_months": 6,
+    "needs_percent": 50,
+    "wants_percent": 30,
+    "savings_percent": 20,
+    "has_private_health_insurance": false,
+    "pause_retirals": false,
+    "current_tier": 3
+  }
+},
+{
+  "model": "finance.familymember",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "member_type": "earning_adult",
+    "name": "dad",
+    "age": 50,
+    "retirement_age": 60,
+    "has_pf": false,
+    "health_insurance": false,
+    "allowance": "0.00",
+    "age_of_graduation_start": 18,
+    "age_of_expenses_end": 24
+  }
+},
+{
+  "model": "finance.familymember",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "member_type": "earning_adult",
+    "name": "mom",
+    "age": 45,
+    "retirement_age": 60,
+    "has_pf": false,
+    "health_insurance": false,
+    "allowance": "0.00",
+    "age_of_graduation_start": 18,
+    "age_of_expenses_end": 24
+  }
+},
+{
+  "model": "finance.familymember",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "member_type": "child",
+    "name": "ch1",
+    "age": 20,
+    "retirement_age": 60,
+    "has_pf": false,
+    "health_insurance": false,
+    "allowance": "0.00",
+    "age_of_graduation_start": 18,
+    "age_of_expenses_end": 24
+  }
+},
+{
+  "model": "finance.familymember",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "member_type": "child",
+    "name": "ch2",
+    "age": 15,
+    "retirement_age": 60,
+    "has_pf": false,
+    "health_insurance": false,
+    "allowance": "0.00",
+    "age_of_graduation_start": 18,
+    "age_of_expenses_end": 24
+  }
+},
+{
+  "model": "finance.familymember",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "member_type": "dependent_adult",
+    "name": "dep1",
+    "age": 75,
+    "retirement_age": 60,
+    "has_pf": false,
+    "health_insurance": false,
+    "allowance": "0.00",
+    "age_of_graduation_start": 18,
+    "age_of_expenses_end": 24
+  }
+},
+{
+  "model": "finance.familymember",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "member_type": "earning_adult",
+    "name": "Self",
+    "age": 30,
+    "retirement_age": 60,
+    "has_pf": false,
+    "health_insurance": false,
+    "allowance": "0.00",
+    "age_of_graduation_start": 18,
+    "age_of_expenses_end": 24
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2025,
+    "end_year": 2045,
+    "initial_value": "40000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "0.00",
+    "swp_possible": false,
+    "uncertainty_level": "none",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2025,
+    "end_year": 2045,
+    "initial_value": "20000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "0.00",
+    "swp_possible": false,
+    "uncertainty_level": "none",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2025,
+    "end_year": 2045,
+    "initial_value": "20000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "0.00",
+    "swp_possible": false,
+    "uncertainty_level": "none",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2025,
+    "end_year": 2045,
+    "initial_value": "2000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "0.00",
+    "swp_possible": false,
+    "uncertainty_level": "none",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2025,
+    "end_year": 2045,
+    "initial_value": "2000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "0.00",
+    "swp_possible": false,
+    "uncertainty_level": "none",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "Personal Liquid Savings",
+    "category": "financial",
+    "start_year": 2025,
+    "end_year": 2045,
+    "initial_value": "2000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "0.00",
+    "swp_possible": false,
+    "uncertainty_level": "none",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "Business Capital / Pledged",
+    "category": "financial",
+    "start_year": 2025,
+    "end_year": 2045,
+    "initial_value": "1000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "0.00",
+    "swp_possible": false,
+    "uncertainty_level": "none",
+    "liquid": true,
+    "is_business_pledged": true
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "Real Estate / Gold",
+    "category": "real_estate",
+    "start_year": 2025,
+    "end_year": 2045,
+    "initial_value": "3000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "0.00",
+    "swp_possible": false,
+    "uncertainty_level": "none",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "5000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "name": "Semi-Liquid (Debt MFs, Bonds, Gold)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "8000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 15,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "name": "Property Equity",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "5000000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 16,
+  "fields": {
+    "user": [
+      "guest_f790f35054e6"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "6000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "guest_f790f35054e6"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "4000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "guest_f790f35054e6"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "7000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "guest_f790f35054e6"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3000000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 20,
+  "fields": {
+    "user": [
+      "guest_2f130fb482fc"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 21,
+  "fields": {
+    "user": [
+      "guest_2f130fb482fc"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 22,
+  "fields": {
+    "user": [
+      "guest_2f130fb482fc"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 23,
+  "fields": {
+    "user": [
+      "guest_2f130fb482fc"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 24,
+  "fields": {
+    "user": [
+      "guest_f62eace5097e"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 25,
+  "fields": {
+    "user": [
+      "guest_f62eace5097e"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 26,
+  "fields": {
+    "user": [
+      "guest_f62eace5097e"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 27,
+  "fields": {
+    "user": [
+      "guest_f62eace5097e"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 32,
+  "fields": {
+    "user": [
+      "guest_0bdedb23926e"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "6000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 33,
+  "fields": {
+    "user": [
+      "guest_0bdedb23926e"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "4000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 34,
+  "fields": {
+    "user": [
+      "guest_0bdedb23926e"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "5000000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 35,
+  "fields": {
+    "user": [
+      "guest_0bdedb23926e"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "10000000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 76,
+  "fields": {
+    "user": [
+      "guest_0d92a76e0845"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 77,
+  "fields": {
+    "user": [
+      "guest_0d92a76e0845"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 78,
+  "fields": {
+    "user": [
+      "guest_0d92a76e0845"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "2100000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 79,
+  "fields": {
+    "user": [
+      "guest_0d92a76e0845"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "900000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 80,
+  "fields": {
+    "user": [
+      "guest_125dcbd80765"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "600000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 81,
+  "fields": {
+    "user": [
+      "guest_125dcbd80765"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "400000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 82,
+  "fields": {
+    "user": [
+      "guest_125dcbd80765"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1400000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 83,
+  "fields": {
+    "user": [
+      "guest_125dcbd80765"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "600000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 84,
+  "fields": {
+    "user": [
+      "guest_6c8ef017cf96"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 85,
+  "fields": {
+    "user": [
+      "guest_6c8ef017cf96"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 86,
+  "fields": {
+    "user": [
+      "guest_6c8ef017cf96"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "5600000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 87,
+  "fields": {
+    "user": [
+      "guest_6c8ef017cf96"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "2400000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 88,
+  "fields": {
+    "user": [
+      "guest_d25cc13750a2"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 89,
+  "fields": {
+    "user": [
+      "guest_d25cc13750a2"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 90,
+  "fields": {
+    "user": [
+      "guest_d25cc13750a2"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 91,
+  "fields": {
+    "user": [
+      "guest_d25cc13750a2"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 92,
+  "fields": {
+    "user": [
+      "guest_42717f68b794"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 93,
+  "fields": {
+    "user": [
+      "guest_42717f68b794"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 94,
+  "fields": {
+    "user": [
+      "guest_42717f68b794"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 95,
+  "fields": {
+    "user": [
+      "guest_42717f68b794"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 96,
+  "fields": {
+    "user": [
+      "guest_cf9a6ee02a2b"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 97,
+  "fields": {
+    "user": [
+      "guest_cf9a6ee02a2b"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 98,
+  "fields": {
+    "user": [
+      "guest_cf9a6ee02a2b"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 99,
+  "fields": {
+    "user": [
+      "guest_cf9a6ee02a2b"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 100,
+  "fields": {
+    "user": [
+      "guest_501effb06e92"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 101,
+  "fields": {
+    "user": [
+      "guest_501effb06e92"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 102,
+  "fields": {
+    "user": [
+      "guest_501effb06e92"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 103,
+  "fields": {
+    "user": [
+      "guest_501effb06e92"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 104,
+  "fields": {
+    "user": [
+      "guest_d5a6013db485"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 105,
+  "fields": {
+    "user": [
+      "guest_d5a6013db485"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 106,
+  "fields": {
+    "user": [
+      "guest_d5a6013db485"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 107,
+  "fields": {
+    "user": [
+      "guest_d5a6013db485"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 128,
+  "fields": {
+    "user": [
+      "guest_5977426d0ce1"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 129,
+  "fields": {
+    "user": [
+      "guest_5977426d0ce1"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 130,
+  "fields": {
+    "user": [
+      "guest_5977426d0ce1"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 131,
+  "fields": {
+    "user": [
+      "guest_5977426d0ce1"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 132,
+  "fields": {
+    "user": [
+      "guest_cbe6e1bbe0c5"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 133,
+  "fields": {
+    "user": [
+      "guest_cbe6e1bbe0c5"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 134,
+  "fields": {
+    "user": [
+      "guest_cbe6e1bbe0c5"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 135,
+  "fields": {
+    "user": [
+      "guest_cbe6e1bbe0c5"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 136,
+  "fields": {
+    "user": [
+      "guest_0b241bac92ae"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 137,
+  "fields": {
+    "user": [
+      "guest_0b241bac92ae"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 138,
+  "fields": {
+    "user": [
+      "guest_0b241bac92ae"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 139,
+  "fields": {
+    "user": [
+      "guest_0b241bac92ae"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 140,
+  "fields": {
+    "user": [
+      "guest_d754039f1b0a"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 141,
+  "fields": {
+    "user": [
+      "guest_d754039f1b0a"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 142,
+  "fields": {
+    "user": [
+      "guest_d754039f1b0a"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 143,
+  "fields": {
+    "user": [
+      "guest_d754039f1b0a"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 144,
+  "fields": {
+    "user": [
+      "guest_9356e87b4122"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1200000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 145,
+  "fields": {
+    "user": [
+      "guest_9356e87b4122"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 146,
+  "fields": {
+    "user": [
+      "guest_9356e87b4122"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 147,
+  "fields": {
+    "user": [
+      "guest_9356e87b4122"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 156,
+  "fields": {
+    "user": [
+      "guest_9b0e3c880719"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "11940000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 157,
+  "fields": {
+    "user": [
+      "guest_9b0e3c880719"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "7960000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 158,
+  "fields": {
+    "user": [
+      "guest_9b0e3c880719"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "34790000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 159,
+  "fields": {
+    "user": [
+      "guest_9b0e3c880719"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "14910000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 168,
+  "fields": {
+    "user": [
+      "guest_46166f0ed045"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "9060000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 169,
+  "fields": {
+    "user": [
+      "guest_46166f0ed045"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "18700000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 170,
+  "fields": {
+    "user": [
+      "guest_46166f0ed045"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "27700000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 171,
+  "fields": {
+    "user": [
+      "guest_46166f0ed045"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "10000000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 176,
+  "fields": {
+    "user": [
+      "guest_af91a1f0ede2"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "800000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 177,
+  "fields": {
+    "user": [
+      "guest_af91a1f0ede2"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1700000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 178,
+  "fields": {
+    "user": [
+      "guest_af91a1f0ede2"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "3500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 179,
+  "fields": {
+    "user": [
+      "guest_af91a1f0ede2"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "1500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 188,
+  "fields": {
+    "user": [
+      "guest_84a284478e50"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "8580000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 189,
+  "fields": {
+    "user": [
+      "guest_84a284478e50"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "5720000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 190,
+  "fields": {
+    "user": [
+      "guest_84a284478e50"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "26250000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 191,
+  "fields": {
+    "user": [
+      "guest_84a284478e50"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "11250000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 220,
+  "fields": {
+    "user": [
+      "guest_832e0865afcf"
+    ],
+    "name": "Liquid Savings",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "11940000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "6.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": true,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 221,
+  "fields": {
+    "user": [
+      "guest_832e0865afcf"
+    ],
+    "name": "Semi-Liquid (Bonds, Debt MFs)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "7960000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "8.00",
+    "swp_possible": false,
+    "uncertainty_level": "low",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 222,
+  "fields": {
+    "user": [
+      "guest_832e0865afcf"
+    ],
+    "name": "Growth (Equity, PF, NPS)",
+    "category": "financial",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "17500000.00",
+    "appreciation_pct": "0.00",
+    "return_pct": "12.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.asset",
+  "pk": 223,
+  "fields": {
+    "user": [
+      "guest_832e0865afcf"
+    ],
+    "name": "Property",
+    "category": "real_estate",
+    "start_year": 2026,
+    "end_year": 2046,
+    "initial_value": "7500000.00",
+    "appreciation_pct": "5.00",
+    "return_pct": "3.00",
+    "swp_possible": false,
+    "uncertainty_level": "medium",
+    "liquid": false,
+    "is_business_pledged": false
+  }
+},
+{
+  "model": "finance.income",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "name": "Passive Income",
+    "category": "others",
+    "start_year": 2026,
+    "end_year": 2046,
+    "typical_amount": "120000.00",
+    "frequency": "annual",
+    "growth_pct": "4.00",
+    "efficiency_pct": "100.00",
+    "uncertainty_level": "low",
+    "linked_asset": null,
+    "withdrawal_pct": "0.00"
+  }
+},
+{
+  "model": "finance.expense",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "name": "Survival Expenses",
+    "category": "Living",
+    "budget_type": "needs",
+    "pertains_to": "household",
+    "start_year": 2026,
+    "end_year": 2046,
+    "typical_amount": "600000.00",
+    "frequency": "annual",
+    "inflation_pct": "6.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.expense",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "name": "Lifestyle Expenses",
+    "category": "Discretionary",
+    "budget_type": "wants",
+    "pertains_to": "household",
+    "start_year": 2026,
+    "end_year": 2046,
+    "typical_amount": "240000.00",
+    "frequency": "annual",
+    "inflation_pct": "7.00",
+    "insurance_indicator": false,
+    "copay_percent": "0.00",
+    "uncertainty_level": "low"
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 22,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2026,
+    "total_income": "270000.00",
+    "income_splits": {},
+    "total_expense": "840000.00",
+    "expense_needs": "600000.00",
+    "expense_wants": "240000.00",
+    "net_cashflow": "-570000.00",
+    "total_assets": "21827800.00",
+    "excess_cashflow": "0.00",
+    "shortfall": "570000.00",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 23,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2027,
+    "total_income": "282300.00",
+    "income_splits": {},
+    "total_expense": "892800.00",
+    "expense_needs": "636000.00",
+    "expense_wants": "256800.00",
+    "net_cashflow": "-610500.00",
+    "total_assets": "23040238.00",
+    "excess_cashflow": "0.00",
+    "shortfall": "610500.00",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 24,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2028,
+    "total_income": "295167.00",
+    "income_splits": {},
+    "total_expense": "948936.00",
+    "expense_needs": "674160.00",
+    "expense_wants": "274776.00",
+    "net_cashflow": "-653769.00",
+    "total_assets": "24346628.14",
+    "excess_cashflow": "0.00",
+    "shortfall": "653769.00",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 25,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2029,
+    "total_income": "308627.43",
+    "income_splits": {},
+    "total_expense": "1008619.92",
+    "expense_needs": "714609.60",
+    "expense_wants": "294010.32",
+    "net_cashflow": "-699992.49",
+    "total_assets": "25757500.70",
+    "excess_cashflow": "0.00",
+    "shortfall": "699992.49",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 26,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2030,
+    "total_income": "322708.96",
+    "income_splits": {},
+    "total_expense": "1072077.22",
+    "expense_needs": "757486.18",
+    "expense_wants": "314591.04",
+    "net_cashflow": "-749368.25",
+    "total_assets": "27284763.71",
+    "excess_cashflow": "0.00",
+    "shortfall": "749368.25",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 27,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2031,
+    "total_income": "337440.58",
+    "income_splits": {},
+    "total_expense": "1139547.76",
+    "expense_needs": "802935.35",
+    "expense_wants": "336612.42",
+    "net_cashflow": "-802107.18",
+    "total_assets": "28941885.54",
+    "excess_cashflow": "0.00",
+    "shortfall": "802107.18",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 28,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2032,
+    "total_income": "352852.63",
+    "income_splits": {},
+    "total_expense": "1211286.75",
+    "expense_needs": "851111.47",
+    "expense_wants": "360175.28",
+    "net_cashflow": "-858434.12",
+    "total_assets": "30744101.06",
+    "excess_cashflow": "0.00",
+    "shortfall": "858434.12",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 29,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2033,
+    "total_income": "368976.88",
+    "income_splits": {},
+    "total_expense": "1287565.71",
+    "expense_needs": "902178.16",
+    "expense_wants": "385387.55",
+    "net_cashflow": "-918588.83",
+    "total_assets": "32710859.31",
+    "excess_cashflow": "0.00",
+    "shortfall": "918588.83",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 30,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2034,
+    "total_income": "385846.60",
+    "income_splits": {},
+    "total_expense": "1368673.53",
+    "expense_needs": "956308.84",
+    "expense_wants": "412364.68",
+    "net_cashflow": "-982826.93",
+    "total_assets": "34915591.03",
+    "excess_cashflow": "0.00",
+    "shortfall": "982826.93",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 31,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2035,
+    "total_income": "403496.65",
+    "income_splits": {},
+    "total_expense": "1454917.59",
+    "expense_needs": "1013687.38",
+    "expense_wants": "441230.21",
+    "net_cashflow": "-1051420.94",
+    "total_assets": "37312103.35",
+    "excess_cashflow": "0.00",
+    "shortfall": "1051420.94",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 32,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2036,
+    "total_income": "421963.51",
+    "income_splits": {},
+    "total_expense": "1546624.94",
+    "expense_needs": "1074508.62",
+    "expense_wants": "472116.33",
+    "net_cashflow": "-1124661.44",
+    "total_assets": "39921947.41",
+    "excess_cashflow": "0.00",
+    "shortfall": "1124661.44",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 33,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2037,
+    "total_income": "441285.39",
+    "income_splits": {},
+    "total_expense": "1644143.60",
+    "expense_needs": "1138979.14",
+    "expense_wants": "505164.47",
+    "net_cashflow": "-1202858.21",
+    "total_assets": "42769430.09",
+    "excess_cashflow": "0.00",
+    "shortfall": "1202858.21",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 34,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2038,
+    "total_income": "461502.32",
+    "income_splits": {},
+    "total_expense": "1747843.86",
+    "expense_needs": "1207317.88",
+    "expense_wants": "540525.98",
+    "net_cashflow": "-1286341.55",
+    "total_assets": "45881976.81",
+    "excess_cashflow": "0.00",
+    "shortfall": "1286341.55",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 35,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2039,
+    "total_income": "482656.19",
+    "income_splits": {},
+    "total_expense": "1858119.76",
+    "expense_needs": "1279756.96",
+    "expense_wants": "578362.80",
+    "net_cashflow": "-1375463.56",
+    "total_assets": "49290541.82",
+    "excess_cashflow": "0.00",
+    "shortfall": "1375463.56",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 36,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2040,
+    "total_income": "504790.91",
+    "income_splits": {},
+    "total_expense": "1975390.57",
+    "expense_needs": "1356542.37",
+    "expense_wants": "618848.20",
+    "net_cashflow": "-1470599.66",
+    "total_assets": "53030071.70",
+    "excess_cashflow": "0.00",
+    "shortfall": "1470599.66",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 37,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2041,
+    "total_income": "527952.45",
+    "income_splits": {},
+    "total_expense": "2100102.49",
+    "expense_needs": "1437934.92",
+    "expense_wants": "662167.57",
+    "net_cashflow": "-1572150.04",
+    "total_assets": "57092964.65",
+    "excess_cashflow": "0.00",
+    "shortfall": "1572150.04",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 38,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2042,
+    "total_income": "552188.94",
+    "income_splits": {},
+    "total_expense": "2232730.31",
+    "expense_needs": "1524211.01",
+    "expense_wants": "708519.30",
+    "net_cashflow": "-1680541.37",
+    "total_assets": "61499497.67",
+    "excess_cashflow": "0.00",
+    "shortfall": "1680541.37",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 39,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2043,
+    "total_income": "577550.81",
+    "income_splits": {},
+    "total_expense": "2373779.32",
+    "expense_needs": "1615663.67",
+    "expense_wants": "758115.65",
+    "net_cashflow": "-1796228.51",
+    "total_assets": "66280996.44",
+    "excess_cashflow": "0.00",
+    "shortfall": "1796228.51",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 40,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2044,
+    "total_income": "604090.87",
+    "income_splits": {},
+    "total_expense": "2523787.24",
+    "expense_needs": "1712603.49",
+    "expense_wants": "811183.75",
+    "net_cashflow": "-1919696.37",
+    "total_assets": "71472702.43",
+    "excess_cashflow": "0.00",
+    "shortfall": "1919696.37",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 41,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2045,
+    "total_income": "631864.43",
+    "income_splits": {},
+    "total_expense": "2683326.31",
+    "expense_needs": "1815359.70",
+    "expense_wants": "867966.61",
+    "net_cashflow": "-2051461.88",
+    "total_assets": "77113532.24",
+    "excess_cashflow": "0.00",
+    "shortfall": "2051461.88",
+    "observations": ""
+  }
+},
+{
+  "model": "finance.cashflowprojection",
+  "pk": 42,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "year": 2046,
+    "total_income": "660929.43",
+    "income_splits": {},
+    "total_expense": "2853005.55",
+    "expense_needs": "1924281.28",
+    "expense_wants": "928724.27",
+    "net_cashflow": "-2192076.12",
+    "total_assets": "83246425.78",
+    "excess_cashflow": "0.00",
+    "shortfall": "2192076.12",
+    "observations": ""
+  }
+},
+{
+  "model": "ventures.venture",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "guest_0431f9f33b00"
+    ],
+    "name": "Test Venture",
+    "stage": "idea",
+    "target_runway_months": 12,
+    "business_failure_probability": "0.50"
+  }
+},
+{
+  "model": "ventures.venture",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "mysup1",
+    "stage": "idea",
+    "target_runway_months": 12,
+    "business_failure_probability": "0.50"
+  }
+},
+{
+  "model": "ventures.venture",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "mysup1",
+    "stage": "idea",
+    "target_runway_months": 12,
+    "business_failure_probability": "0.50"
+  }
+},
+{
+  "model": "ventures.venture",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "mysup1",
+    "stage": "idea",
+    "target_runway_months": 12,
+    "business_failure_probability": "0.50"
+  }
+},
+{
+  "model": "ventures.venture",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "mysup1",
+    "stage": "idea",
+    "target_runway_months": 12,
+    "business_failure_probability": "0.50"
+  }
+},
+{
+  "model": "ventures.venture",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "mysup1",
+    "stage": "idea",
+    "target_runway_months": 12,
+    "business_failure_probability": "0.50"
+  }
+},
+{
+  "model": "ventures.venture",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "mysup1",
+    "stage": "idea",
+    "target_runway_months": 12,
+    "business_failure_probability": "0.50"
+  }
+},
+{
+  "model": "ventures.venture",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "name": "mysup1",
+    "stage": "idea",
+    "target_runway_months": 12,
+    "business_failure_probability": "0.50"
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "guest_5787171d77e2"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.916Z",
+    "updated_at": "2026-02-14T12:17:27.916Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "guest_38b259302f4e"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.917Z",
+    "updated_at": "2026-02-14T12:17:27.917Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "guest_654174a21a4c"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.918Z",
+    "updated_at": "2026-02-14T12:17:27.918Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "guest_e3da01ae50de"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.919Z",
+    "updated_at": "2026-02-14T12:17:27.919Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "guest_837aeecc28d9"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.919Z",
+    "updated_at": "2026-02-14T12:17:27.919Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "guest_84ba4e200532"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.920Z",
+    "updated_at": "2026-02-14T12:17:27.920Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "guest_0917ec4f4c05"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.920Z",
+    "updated_at": "2026-02-14T12:17:27.920Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "guest_8a2d47555ab0"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.921Z",
+    "updated_at": "2026-02-14T12:17:27.921Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "guest_37d3d6ea0579"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.921Z",
+    "updated_at": "2026-02-14T12:17:27.921Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "guest_e8c525c9fc0a"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.922Z",
+    "updated_at": "2026-02-14T12:17:27.922Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "guest_103955932bd8"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.922Z",
+    "updated_at": "2026-02-14T12:17:27.922Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "guest_0431f9f33b00"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.923Z",
+    "updated_at": "2026-02-14T12:17:27.923Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "guest_9ff56e9471f0"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.923Z",
+    "updated_at": "2026-02-14T12:17:27.923Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "guest_469df962cbcc"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.924Z",
+    "updated_at": "2026-02-14T12:17:27.924Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 15,
+  "fields": {
+    "user": [
+      "guest_1d210a570265"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.925Z",
+    "updated_at": "2026-02-14T12:17:27.925Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 16,
+  "fields": {
+    "user": [
+      "guest_5f90e247db0d"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.925Z",
+    "updated_at": "2026-02-14T12:17:27.925Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "guest_24dfc5294093"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.926Z",
+    "updated_at": "2026-02-14T12:17:27.926Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "guest_98072434f92c"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.926Z",
+    "updated_at": "2026-02-14T12:17:27.926Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "guest_1000a7e3915c"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-14T12:17:27.927Z",
+    "updated_at": "2026-02-14T12:17:27.927Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 20,
+  "fields": {
+    "user": [
+      "guest_0bdedb23926e"
+    ],
+    "scenario_type": "RETIREMENT",
+    "created_at": "2026-02-14T13:02:33.945Z",
+    "updated_at": "2026-02-18T15:43:48.044Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 21,
+  "fields": {
+    "user": [
+      "guest_9b0e3c880719"
+    ],
+    "scenario_type": "R2I",
+    "created_at": "2026-02-14T15:54:23.624Z",
+    "updated_at": "2026-02-28T13:26:01.634Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 22,
+  "fields": {
+    "user": [
+      "guest_f790f35054e6"
+    ],
+    "scenario_type": "RETIREMENT",
+    "created_at": "2026-02-14T23:46:21.354Z",
+    "updated_at": "2026-02-18T02:08:07.906Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 23,
+  "fields": {
+    "user": [
+      "guest_2f130fb482fc"
+    ],
+    "scenario_type": "RETIREMENT",
+    "created_at": "2026-02-18T07:12:44.331Z",
+    "updated_at": "2026-02-18T07:12:44.346Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 24,
+  "fields": {
+    "user": [
+      "guest_f62eace5097e"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-18T12:11:45.899Z",
+    "updated_at": "2026-02-18T12:11:45.899Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 25,
+  "fields": {
+    "user": [
+      "guest_7cbeb500d5ad"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-18T15:10:32.217Z",
+    "updated_at": "2026-03-03T06:57:42.150Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 26,
+  "fields": {
+    "user": [
+      "guest_84a284478e50"
+    ],
+    "scenario_type": "R2I",
+    "created_at": "2026-02-24T07:12:08.887Z",
+    "updated_at": "2026-03-05T10:51:30.645Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 27,
+  "fields": {
+    "user": [
+      "guest_af91a1f0ede2"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-24T16:38:54.002Z",
+    "updated_at": "2026-02-24T16:38:54.002Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 28,
+  "fields": {
+    "user": [
+      "guest_0d92a76e0845"
+    ],
+    "scenario_type": "HALF_FIRE",
+    "created_at": "2026-02-27T15:44:13.524Z",
+    "updated_at": "2026-02-27T15:44:13.524Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 29,
+  "fields": {
+    "user": [
+      "guest_125dcbd80765"
+    ],
+    "scenario_type": "TERMINATION",
+    "created_at": "2026-02-27T15:44:33.331Z",
+    "updated_at": "2026-02-27T15:44:33.332Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 30,
+  "fields": {
+    "user": [
+      "guest_6c8ef017cf96"
+    ],
+    "scenario_type": "RETIREMENT",
+    "created_at": "2026-02-27T15:44:33.349Z",
+    "updated_at": "2026-02-27T15:44:33.349Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 31,
+  "fields": {
+    "user": [
+      "guest_63b83dc1e818"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-27T15:44:45.861Z",
+    "updated_at": "2026-02-27T15:44:45.861Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 32,
+  "fields": {
+    "user": [
+      "guest_d25cc13750a2"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-28T04:33:02.490Z",
+    "updated_at": "2026-02-28T04:33:02.490Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 33,
+  "fields": {
+    "user": [
+      "guest_42717f68b794"
+    ],
+    "scenario_type": "RETIREMENT",
+    "created_at": "2026-02-28T04:33:02.503Z",
+    "updated_at": "2026-02-28T04:33:02.503Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 34,
+  "fields": {
+    "user": [
+      "guest_cf9a6ee02a2b"
+    ],
+    "scenario_type": "HALF_FIRE",
+    "created_at": "2026-02-28T04:33:02.515Z",
+    "updated_at": "2026-02-28T04:33:02.515Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 35,
+  "fields": {
+    "user": [
+      "guest_501effb06e92"
+    ],
+    "scenario_type": "TERMINATION",
+    "created_at": "2026-02-28T04:33:02.526Z",
+    "updated_at": "2026-02-28T04:33:02.526Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 36,
+  "fields": {
+    "user": [
+      "guest_d5a6013db485"
+    ],
+    "scenario_type": "R2I",
+    "created_at": "2026-02-28T04:33:02.536Z",
+    "updated_at": "2026-02-28T04:33:02.536Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 37,
+  "fields": {
+    "user": [
+      "guest_01231ca2d083"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-28T04:33:11.373Z",
+    "updated_at": "2026-02-28T04:33:11.373Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 38,
+  "fields": {
+    "user": [
+      "guest_5977426d0ce1"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-02-28T06:35:10.313Z",
+    "updated_at": "2026-02-28T06:35:10.313Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 39,
+  "fields": {
+    "user": [
+      "guest_cbe6e1bbe0c5"
+    ],
+    "scenario_type": "RETIREMENT",
+    "created_at": "2026-02-28T06:35:10.328Z",
+    "updated_at": "2026-02-28T06:35:10.328Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 40,
+  "fields": {
+    "user": [
+      "guest_0b241bac92ae"
+    ],
+    "scenario_type": "HALF_FIRE",
+    "created_at": "2026-02-28T06:35:10.339Z",
+    "updated_at": "2026-02-28T06:35:10.339Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 41,
+  "fields": {
+    "user": [
+      "guest_d754039f1b0a"
+    ],
+    "scenario_type": "TERMINATION",
+    "created_at": "2026-02-28T06:35:10.350Z",
+    "updated_at": "2026-02-28T06:35:10.350Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 42,
+  "fields": {
+    "user": [
+      "guest_9356e87b4122"
+    ],
+    "scenario_type": "R2I",
+    "created_at": "2026-02-28T06:35:10.362Z",
+    "updated_at": "2026-02-28T06:35:10.362Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 43,
+  "fields": {
+    "user": [
+      "guest_46166f0ed045"
+    ],
+    "scenario_type": "RETIREMENT",
+    "created_at": "2026-03-01T15:35:26.034Z",
+    "updated_at": "2026-03-01T15:46:48.251Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 44,
+  "fields": {
+    "user": [
+      "guest_d2974185bd59"
+    ],
+    "scenario_type": "RETIREMENT",
+    "created_at": "2026-03-03T07:00:11.464Z",
+    "updated_at": "2026-03-03T07:07:14.532Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 45,
+  "fields": {
+    "user": [
+      "guest_9d7a1818bf4b"
+    ],
+    "scenario_type": "FOUNDER",
+    "created_at": "2026-03-04T05:07:26.501Z",
+    "updated_at": "2026-03-04T05:50:33.933Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+},
+{
+  "model": "core.scenarioprofile",
+  "pk": 46,
+  "fields": {
+    "user": [
+      "guest_832e0865afcf"
+    ],
+    "scenario_type": "R2I",
+    "created_at": "2026-03-04T09:06:32.240Z",
+    "updated_at": "2026-03-06T16:01:54.498Z",
+    "current_age": null,
+    "retirement_age": null,
+    "life_expectancy": null,
+    "pension_monthly": null,
+    "pension_start_age": null,
+    "gratuity_lumpsum": null,
+    "current_monthly_salary": null,
+    "parttime_monthly_income": null,
+    "parttime_start_month": null,
+    "full_fire_target_month": null,
+    "severance_lumpsum": null,
+    "severance_month_count": null,
+    "income_restart_month": null,
+    "restart_monthly_income": null,
+    "venture_bootstrapped": false,
+    "bootstrap_capital": null
+  }
+}
+]

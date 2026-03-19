@@ -1,0 +1,313 @@
+/* ============================================================
+   RUNWAY APP — THEME 04: AVIATION / ANALOG GAUGE
+   Fonts needed: Space Mono, Bebas Neue (Google Fonts)
+   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+   ============================================================ */
+
+:root {
+  --color-bg:         #0d0d08;
+  --color-surface:    rgba(255, 220, 100, 0.02);
+  --color-border:     #2a2a10;
+  --color-border-med: #3a3010;
+  --color-amber:      #ffe600;
+  --color-amber-dim:  rgba(255, 230, 0, 0.4);
+  --color-amber-glow: rgba(255, 230, 0, 0.6);
+  --color-warn:       #ff6b2b;
+  --color-warn-glow:  rgba(255, 107, 43, 0.4);
+  --color-red:        #ff4a4a;
+  --color-text:       #9a8a30;
+  --color-text-dim:   #5a5020;
+  --color-text-dimmer:#3a3010;
+  --font-mono:        'Space Mono', monospace;
+  --font-display:     'Bebas Neue', sans-serif;
+  --scanlines: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(255, 220, 100, 0.015) 3px,
+    rgba(255, 220, 100, 0.015) 4px
+  );
+}
+
+/* --- Base --- */
+body, .app-root {
+  background: linear-gradient(180deg, #1a1a0d 0%, var(--color-bg) 60%, #131308 100%);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* CRT scanline overlay — add a fixed div.scanlines to your layout root */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: var(--scanlines);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* --- Screen Header --- */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px 12px;
+}
+.app-header .craft-id {
+  font-size: 10px;
+  color: var(--color-text-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  box-shadow: 0 0 8px var(--color-amber);
+}
+.status-indicator.warn {
+  background: var(--color-warn);
+  box-shadow: 0 0 8px var(--color-warn-glow);
+}
+.status-indicator.red {
+  background: var(--color-red);
+  box-shadow: 0 0 8px rgba(255, 74, 74, 0.8);
+}
+.status-indicator.off {
+  background: var(--color-border);
+  box-shadow: none;
+}
+
+/* --- Gauge Panel --- */
+.gauge-panel {
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 20px;
+  background: var(--color-surface);
+  margin: 0 16px;
+  text-align: center;
+}
+.gauge-title {
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* --- Dial (pure CSS, no SVG needed) --- */
+.dial {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-med);
+  margin: 0 auto;
+  position: relative;
+  background: radial-gradient(circle, #1a1a08 0%, #0d0d04 100%);
+  box-shadow: 0 0 20px rgba(255, 220, 100, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+.dial-ring {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+}
+/* Needle: rotate via JS transform: rotate(Xdeg) 
+   0deg = 6 o'clock (empty), -135deg = 9 o'clock (full) */
+.dial-needle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 44px;
+  background: linear-gradient(to top, var(--color-amber), #fff);
+  transform-origin: bottom center;
+  transform: translate(-50%, -100%) rotate(-40deg); /* default ~50% */
+  border-radius: 1px;
+  box-shadow: 0 0 6px var(--color-amber-glow);
+}
+.dial-needle::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  box-shadow: 0 0 8px var(--color-amber);
+}
+/* Center display inside dial */
+.dial-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.dial-value {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: var(--color-amber);
+  line-height: 1;
+  text-shadow: 0 0 12px var(--color-amber-dim);
+}
+.dial-unit {
+  font-size: 8px;
+  color: var(--color-text-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* --- Readout Row --- */
+.readout-row {
+  display: flex;
+  gap: 8px;
+  margin: 14px 16px 0;
+}
+.readout-item {
+  flex: 1;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 10px 8px;
+  background: var(--color-surface);
+  text-align: left;
+}
+.readout-item .r-label {
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.readout-item .r-value {
+  font-size: 16px;
+  color: var(--color-amber);
+  text-shadow: 0 0 8px var(--color-amber-dim);
+}
+.readout-item .r-value.warn {
+  color: var(--color-warn);
+  text-shadow: 0 0 8px var(--color-warn-glow);
+}
+
+/* --- System Status Rows --- */
+.systems-label {
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  margin: 14px 16px 8px;
+}
+.system-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin: 0 16px 6px;
+  background: var(--color-surface);
+  font-size: 10px;
+  color: var(--color-text);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.system-row .sys-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+}
+
+/* --- LED Indicator --- */
+.led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.led.amber  { background: var(--color-amber); box-shadow: 0 0 6px var(--color-amber); }
+.led.red    { background: var(--color-red); box-shadow: 0 0 6px rgba(255, 74, 74, 0.8); }
+.led.off    { background: var(--color-border); box-shadow: none; }
+
+/* --- Slider --- */
+.slider-panel {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin: 0 16px;
+  background: var(--color-surface);
+}
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--color-text-dim);
+  margin-bottom: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: #1a1a08;
+  border: 1px solid var(--color-border);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  box-shadow: 0 0 8px var(--color-amber-glow);
+  border: 1px solid var(--color-border-med);
+  cursor: pointer;
+  margin-top: -5px;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  box-shadow: 0 0 8px var(--color-amber-glow);
+  border: 1px solid var(--color-border-med);
+  cursor: pointer;
+}
+
+/* --- Checkbox --- */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--color-border);
+  background: #0d0d08;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+input[type="checkbox"]:checked {
+  background: var(--color-amber);
+  border-color: var(--color-amber);
+  box-shadow: 0 0 6px var(--color-amber-glow);
+}
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: -1px;
+  left: 2px;
+  font-size: 11px;
+  color: #000;
+  font-weight: 700;
+}
+
+/* JS helper: update needle rotation
+   Usage: dial.style.setProperty('--rotation', angle + 'deg')
+   Map months 0-24 → -135deg to +135deg
+*/

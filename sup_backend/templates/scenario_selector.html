@@ -1,0 +1,430 @@
+{% extends "base_mobile.html" %}
+
+{% block title %}runway — You might be more free than you think{% endblock %}
+
+{% block app_header %}{% endblock %}
+{% block app_footer %}{% endblock %}
+
+{% block body %}
+<script type="application/json" id="django-data">
+  {"isAuthenticated": {% if request.user.is_authenticated %}true{% else %}false{% endif %}, "csrfToken": "{{ csrf_token }}"}
+</script>
+<script>
+  // Read Django-provided values from JSON block (formatter-safe)
+  var _djangoData=JSON.parse(document.getElementById('django-data').textContent);
+  var _isAuthenticated=_djangoData.isAuthenticated;
+  var _csrfToken=_djangoData.csrfToken;
+
+
+  function scenarioSelector() {
+    return {
+      loading: false,
+      error: null,
+      isUserAuthenticated: _isAuthenticated,
+
+      async selectScenario(scenarioType) {
+        this.loading=true;
+        this.error=null;
+
+        try {
+          if(!this.isUserAuthenticated) {
+            const guestResponse=await fetch('/start/', {
+              method: 'POST',
+              headers: {
+                'X-CSRFToken': _csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+              }
+            });
+
+            if(!guestResponse.ok) {
+              throw new Error('Session error: '+guestResponse.status);
+            }
+
+            const guestData=await guestResponse.json();
+            if(guestData.csrfToken) {
+              _csrfToken=guestData.csrfToken;
+            }
+
+            this.isUserAuthenticated=true;
+          }
+
+          const response=await fetch('/api/scenarios/select/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': _csrfToken,
+            },
+            body: JSON.stringify({
+              scenario_type: scenarioType
+            })
+          });
+
+          if(!response.ok) {
+            var errorMsg='Failed to select scenario';
+            try {
+              var errorData=await response.json();
+              errorMsg=errorData.error||errorMsg;
+            } catch(e) {
+              errorMsg='Server error: '+response.status;
+            }
+            throw new Error(errorMsg);
+          }
+
+          var data=await response.json();
+          sessionStorage.clear();
+          sessionStorage.setItem('scenario', JSON.stringify(data.scenario));
+          sessionStorage.setItem('current_tier', data.current_tier);
+          window.location.href='/questions/';
+
+        } catch(err) {
+          console.error('Scenario selection failed:', err);
+          this.error=err.message;
+          this.loading=false;
+        }
+      }
+    };
+  }
+</script>
+
+<div x-data="scenarioSelector()">
+
+  <!-- ===== TOP BAR with login ===== -->
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
+    <div style="font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink);">sup</div>
+    <a href="/start/"
+      style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px;">Login</a>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <span class="wave">&#128075;</span>
+
+    <h1>You might be<br>more <em>free</em> than<br>you think.</h1>
+
+    <p class="sub">Figure out your financial runway — how long your money can sustain you if you leap. Takes 2
+      minutes. We don't even ask your name.</p>
+
+    <a href="#stories" class="btn-primary">Find out &rarr;</a>
+
+    <p class="aside">No signup &middot; No data stored &middot; Free forever</p>
+  </section>
+
+
+  <!-- ===== TICKER ===== -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>&#128640; 14 months more runway than I thought</span>
+      <span class="sep">&bull;</span>
+      <span>&#127796; Finally have a retirement target: ₹3.2Cr</span>
+      <span class="sep">&bull;</span>
+      <span>&#9992;&#65039; Our NRI savings = 4.8 years in Pune</span>
+      <span class="sep">&bull;</span>
+      <span>&#9968;&#65039; Turns out I can coast at ₹60K/month</span>
+      <span class="sep">&bull;</span>
+      <span>&#128221; 11 months buffer after the layoff</span>
+      <span class="sep">&bull;</span>
+      <!-- duplicate for seamless loop -->
+      <span>&#128640; 14 months more runway than I thought</span>
+      <span class="sep">&bull;</span>
+      <span>&#127796; Finally have a retirement target: ₹3.2Cr</span>
+      <span class="sep">&bull;</span>
+      <span>&#9992;&#65039; Our NRI savings = 4.8 years in Pune</span>
+      <span class="sep">&bull;</span>
+      <span>&#9968;&#65039; Turns out I can coast at ₹60K/month</span>
+      <span class="sep">&bull;</span>
+      <span>&#128221; 11 months buffer after the layoff</span>
+      <span class="sep">&bull;</span>
+    </div>
+  </div>
+
+
+  <!-- ===== THE QUESTION ===== -->
+  <section class="the-q fi">
+    <span class="big-emoji">&#129300;</span>
+    <h2>What if you could<br>just... stop?</h2>
+    <p>Stop the job. Start the thing. Take the break. Move back home. How long does your money last?</p>
+  </section>
+
+
+  <!-- ===== SCENARIOS AS STORIES ===== -->
+  <section class="stories fi" id="stories">
+
+    <div class="story" @click="selectScenario('FOUNDER')" :class="{'opacity-50': loading}">
+      <div class="story-color c1"></div>
+      <div class="story-body">
+        <h3>The Founder Leap</h3>
+        <p>You're quitting your ₹25L job to build something. How many months before the savings run out?</p>
+      </div>
+      <div class="story-emoji">&#128640;</div>
+    </div>
+
+    <div class="story" @click="selectScenario('RETIREMENT')" :class="{'opacity-50': loading}">
+      <div class="story-color c2"></div>
+      <div class="story-body">
+        <h3>The Retirement Question</h3>
+        <p>You want to retire at 50, or 55, or 60. Will the corpus last till 85? With inflation?</p>
+      </div>
+      <div class="story-emoji">&#127796;</div>
+    </div>
+
+    <div class="story" @click="selectScenario('R2I')" :class="{'opacity-50': loading}">
+      <div class="story-color c3"></div>
+      <div class="story-body">
+        <h3>The R2I Move</h3>
+        <p>Coming back from the US, UK, or Gulf. What does your NRI nest egg mean in India?</p>
+      </div>
+      <div class="story-emoji">&#9992;&#65039;</div>
+    </div>
+
+    <div class="story" @click="selectScenario('HALF_FIRE')" :class="{'opacity-50': loading}">
+      <div class="story-color c4"></div>
+      <div class="story-body">
+        <h3>The Half-FIRE Life</h3>
+        <p>You don't want to quit entirely — just do less, earn less, stress less. What's the math?</p>
+      </div>
+      <div class="story-emoji">&#9968;&#65039;</div>
+    </div>
+
+    <div class="story" @click="selectScenario('TERMINATION')" :class="{'opacity-50': loading}">
+      <div class="story-color c5"></div>
+      <div class="story-body">
+        <h3>The Layoff Buffer</h3>
+        <p>It happened, or it's coming. Severance + savings = how many months to figure it out?</p>
+      </div>
+      <div class="story-emoji">&#128221;</div>
+    </div>
+
+  </section>
+
+
+  <!-- Loading Spinner -->
+  <div x-show="loading" style="padding: 24px; text-align: center;">
+    <div class="spinner"></div>
+    <p style="font-size: 0.8rem; color: var(--ink-muted); margin-top: 8px;">Setting things up...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div x-show="error" class="error-card">
+    <p x-text="error"></p>
+  </div>
+
+
+  <!-- ===== HOW — napkin explanation ===== -->
+  <section class="napkin fi">
+    <h2>Here's the deal</h2>
+
+    <div class="napkin-step">
+      <div class="napkin-n">1</div>
+      <div class="napkin-text">
+        <h4>Pick your story</h4>
+        <p>Founder? Retiring? Moving back? Each one asks different questions.</p>
+      </div>
+    </div>
+
+    <div class="napkin-step">
+      <div class="napkin-n">2</div>
+      <div class="napkin-text">
+        <h4>Slide, don't type</h4>
+        <p>No forms, no spreadsheets. Just drag sliders and tap cards. Under 2 minutes.</p>
+      </div>
+    </div>
+
+    <div class="napkin-step">
+      <div class="napkin-n">3</div>
+      <div class="napkin-text">
+        <h4>Get your number</h4>
+        <p>Your runway in months. Your burn rate. Your "oh wait, I'm actually okay" moment.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== DEMO ===== -->
+  <section style="padding: 32px 24px;" class="fi">
+    <h2 style="font-family: var(--serif); font-size: 1.15rem; font-weight: 400; margin-bottom: 4px;">It feels like this
+    </h2>
+    <div class="section-subtitle">Sliders and taps. No spreadsheets.</div>
+
+    <div class="demo-box">
+      <div class="demo-top">
+        <span>&#128640; Founder Leap</span>
+        <span style="font-size:0.7rem; opacity:0.6;">4 of 12</span>
+      </div>
+      <div style="padding: 0 14px;">
+        <div class="demo-progress-bar">
+          <div class="demo-progress-fill" style="width: 33%;"></div>
+        </div>
+      </div>
+
+      <div class="demo-content">
+        <div class="demo-label">What's your spending style?</div>
+        <div class="choice-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+          <div class="choice"><span class="em">&#127838;</span>Essential</div>
+          <div class="choice on"><span class="em">&#9749;</span>Comfortable</div>
+          <div class="choice"><span class="em">&#129346;</span>Premium</div>
+        </div>
+
+        <div class="demo-sep"></div>
+
+        <div class="demo-label" style="margin-bottom: 4px;">Estimated monthly expenses</div>
+        <div class="slider-value-display" style="margin-bottom: 2px;">&#8377;1.5L</div>
+        <div style="display: flex; gap: 3px; height: 5px; border-radius: 3px; overflow: hidden; margin-bottom: 4px;">
+          <div style="flex: 55; background: var(--forest); border-radius: 3px 0 0 3px;"></div>
+          <div style="flex: 45; background: var(--mustard); border-radius: 0 3px 3px 0;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--ink-muted);">
+          <span>Needs &#8377;82K</span>
+          <span>Wants &#8377;68K</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== THE REVEAL — gauge result ===== -->
+  <section class="reveal fi">
+    <h2>And then you see this</h2>
+
+    <div class="gauge-wrap">
+      <div class="gauge-bg"></div>
+      <div class="gauge-mask"></div>
+      <div class="gauge-needle"></div>
+      <div class="gauge-dot"></div>
+      <div class="gauge-labels">
+        <span>tight</span>
+        <span>comfy</span>
+        <span>free</span>
+      </div>
+    </div>
+
+    <div class="reveal-number">8.2 <span class="yr">years</span></div>
+    <div class="reveal-label">of runway at your current burn rate</div>
+
+    <div class="reveal-stats">
+      <div class="reveal-stat">
+        <div class="v">&#8377;2.4Cr</div>
+        <div class="k">Total assets</div>
+      </div>
+      <div class="reveal-stat">
+        <div class="v">&#8377;1.8L</div>
+        <div class="k">Monthly burn</div>
+      </div>
+      <div class="reveal-stat">
+        <div class="v">6%</div>
+        <div class="k">Inflation</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== DEPTH — tiers ===== -->
+  <section style="padding: 32px 24px;" class="fi">
+    <h2 style="font-family: var(--serif); font-size: 1.2rem; font-weight: 400; margin-bottom: 16px;">Want more
+      precision?<br>Go deeper.</h2>
+
+    <div class="depth-item">
+      <div class="depth-badge t1">Quick</div>
+      <div class="depth-text">
+        <h4>2-min estimate</h4>
+        <p>~10 questions. Smart expense estimates from your family profile. Your runway number in minutes.</p>
+      </div>
+    </div>
+
+    <div class="depth-item">
+      <div class="depth-badge t2">Full</div>
+      <div class="depth-text">
+        <h4>20-year projection</h4>
+        <p>Detailed asset classes, inflation modeling, year-by-year breakdown. The real picture.</p>
+      </div>
+    </div>
+
+    <div class="depth-item">
+      <div class="depth-badge t3">Deep</div>
+      <div class="depth-text">
+        <h4>Monte Carlo + tax</h4>
+        <p>Probability analysis + tax optimization. <span class="soon-tag">Coming soon</span></p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== VOICES ===== -->
+  <section class="voice-section fi">
+    <h2>Overheard</h2>
+
+    <div class="voice">
+      <div class="qt">"I had 14 months of runway, not 6 like I feared. That changed everything."</div>
+      <div class="who"><em>First-time founder</em> &middot; SaaS, Bangalore</div>
+    </div>
+
+    <div class="voice">
+      <div class="qt">"₹3.2Cr to retire at 50. Now I know the number. Now I can plan."</div>
+      <div class="who"><em>IT lead, 42</em> &middot; Wants out by 50</div>
+    </div>
+
+    <div class="voice">
+      <div class="qt">"We ran the R2I scenario three times with different cities. Pune won."</div>
+      <div class="who"><em>NRI couple</em> &middot; Bay Area → India</div>
+    </div>
+  </section>
+
+
+  <!-- ===== BOTTOM CTA ===== -->
+  <section class="bottom-cta fi">
+    <span class="big-emoji">&#127793;</span>
+
+    <h2>Your money might<br>buy more <em>freedom</em><br>than you think.</h2>
+
+    <p>Find out in 2 minutes. No signup,<br>no data stored, no judgement.</p>
+
+    <a href="#stories" class="btn-primary"
+      @click.prevent="document.getElementById('stories').scrollIntoView({behavior:'smooth'})">Check my runway &rarr;</a>
+
+    <div class="trust-row">
+      <span>&#128274; Anonymous</span>
+      <span>&#127470;&#127475; Made for India</span>
+      <span>&#9889; No signup needed</span>
+    </div>
+
+    <p class="fine">Built for people making life moves.</p>
+  </section>
+
+
+  <!-- ===== ABOUT (brief) ===== -->
+  <section style="padding: 32px 24px; background: var(--cream-dark);" class="fi" id="about">
+    <h2 style="font-family: var(--serif); font-size: 1.1rem; font-weight: 400; margin-bottom: 10px;">About sup</h2>
+    <p style="font-size: 0.82rem; color: var(--ink-muted); line-height: 1.6; max-width: 360px;">
+      sup helps salaried Indians and startup founders figure out if they can afford to make a life change — quit to
+      start something, retire early, move back from abroad, or ride out a layoff. All numbers are in Indian context
+      (rupees, Indian inflation, Indian expense patterns). No signup, no data stored, no ads.
+    </p>
+  </section>
+
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="logo">sup</div>
+    <div class="links">
+      <a href="#about">About</a>
+      <a href="#privacy">Privacy</a>
+      <a href="/start/" style="font-weight: 600;">Login</a>
+    </div>
+    <div id="privacy"
+      style="margin-top: 16px; font-size: 0.68rem; color: rgba(255,255,255,0.3); line-height: 1.5; max-width: 320px;">
+      We don't collect personal data. No cookies, no analytics, no tracking. Guest sessions are anonymous
+      and server-side only. Your financial numbers are never stored permanently.
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const obs=new IntersectionObserver(es => {
+      es.forEach(e => {if(e.isIntersecting) e.target.classList.add('v');});
+    }, {threshold: 0.1});
+    document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+  });
+</script>
+{% endblock %}
