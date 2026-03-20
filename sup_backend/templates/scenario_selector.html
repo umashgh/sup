@@ -27,6 +27,10 @@
         this.error=null;
 
         try {
+          // TODO(perf): For unauthenticated users, /start/ and /api/scenarios/select/ are
+          // inherently sequential — select/ requires the authenticated session created by start/.
+          // A combined endpoint (e.g. POST /api/start-and-select/) that creates the guest session
+          // and selects the scenario in one round-trip would halve network latency here.
           if(!this.isUserAuthenticated) {
             const guestResponse=await fetch('/start/', {
               method: 'POST',
@@ -93,7 +97,7 @@
   <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
     <div style="font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink);">sup</div>
     <a href="/start/"
-      style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px;">Login</a>
+      style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; display: inline-flex; align-items: center; min-height: 44px;">Login</a>
   </div>
 
   <!-- ===== HERO ===== -->
@@ -150,7 +154,7 @@
   <!-- ===== SCENARIOS AS STORIES ===== -->
   <section class="stories fi" id="stories">
 
-    <div class="story" @click="selectScenario('FOUNDER')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('FOUNDER')" @keydown.enter.prevent="selectScenario('FOUNDER')" @keydown.space.prevent="selectScenario('FOUNDER')" :class="{'opacity-50': loading}">
       <div class="story-color c1"></div>
       <div class="story-body">
         <h3>The Founder Leap</h3>
@@ -159,7 +163,7 @@
       <div class="story-emoji">&#128640;</div>
     </div>
 
-    <div class="story" @click="selectScenario('RETIREMENT')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('RETIREMENT')" @keydown.enter.prevent="selectScenario('RETIREMENT')" @keydown.space.prevent="selectScenario('RETIREMENT')" :class="{'opacity-50': loading}">
       <div class="story-color c2"></div>
       <div class="story-body">
         <h3>The Retirement Question</h3>
@@ -168,7 +172,7 @@
       <div class="story-emoji">&#127796;</div>
     </div>
 
-    <div class="story" @click="selectScenario('R2I')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('R2I')" @keydown.enter.prevent="selectScenario('R2I')" @keydown.space.prevent="selectScenario('R2I')" :class="{'opacity-50': loading}">
       <div class="story-color c3"></div>
       <div class="story-body">
         <h3>The R2I Move</h3>
@@ -177,7 +181,7 @@
       <div class="story-emoji">&#9992;&#65039;</div>
     </div>
 
-    <div class="story" @click="selectScenario('HALF_FIRE')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('HALF_FIRE')" @keydown.enter.prevent="selectScenario('HALF_FIRE')" @keydown.space.prevent="selectScenario('HALF_FIRE')" :class="{'opacity-50': loading}">
       <div class="story-color c4"></div>
       <div class="story-body">
         <h3>The Half-FIRE Life</h3>
@@ -186,7 +190,7 @@
       <div class="story-emoji">&#9968;&#65039;</div>
     </div>
 
-    <div class="story" @click="selectScenario('TERMINATION')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('TERMINATION')" @keydown.enter.prevent="selectScenario('TERMINATION')" @keydown.space.prevent="selectScenario('TERMINATION')" :class="{'opacity-50': loading}">
       <div class="story-color c5"></div>
       <div class="story-body">
         <h3>The Layoff Buffer</h3>

@@ -233,6 +233,9 @@
 
   <!-- ===== ACTION BUTTONS ===== -->
   <section style="padding: 0 24px 40px;" x-show="!loading">
+    <div x-show="advanceTierError" class="error-card" role="alert" style="margin: 0 0 12px;">
+      <p x-text="advanceTierError"></p>
+    </div>
     <div class="vertical-stack" style="gap: 10px;">
       <button class="btn-primary" @click="advanceTier()" x-show="canAdvance">
         Go deeper — unlock 20yr projection →
@@ -278,6 +281,7 @@
       loading: true,
       showChart: false,
       chart: null,
+      advanceTierError: null,
 
       // Computed: does this scenario show the gauge + runway number?
       get hasRunway() {
@@ -434,6 +438,19 @@
                   pointStyleWidth: 8,
                   padding: 16,
                 }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const val = context.parsed.y;
+                    let formatted;
+                    if (val >= 10000000) formatted = '₹' + (val / 10000000).toFixed(1) + 'Cr';
+                    else if (val >= 100000) formatted = '₹' + (val / 100000).toFixed(1) + 'L';
+                    else if (val >= 1000) formatted = '₹' + (val / 1000).toFixed(0) + 'K';
+                    else formatted = '₹' + val;
+                    return context.dataset.label + ': ' + formatted;
+                  }
+                }
               }
             },
             scales: {
@@ -482,7 +499,7 @@
           window.location.href = '/questions/';
 
         } catch (err) {
-          alert('Error: ' + err.message);
+          this.advanceTierError = 'Could not advance tier: ' + err.message;
         }
       },
 
