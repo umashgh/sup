@@ -6,7 +6,7 @@
 
   <!-- Fixed Header: Brand + Target Number -->
   <header class="sup-header">
-    <span class="sup-brand">sup</span>
+    <span class="sup-brand">salaryfree</span>
     <span class="sup-target"
           x-text="targetFormatted"
           :class="{ pulse: targetPulsing }">
@@ -16,7 +16,7 @@
   <!-- LANDING (unauthenticated) -->
   {% if not user.is_authenticated %}
   <div class="sup-landing">
-    <h1>sup</h1>
+    <h1>salaryfree</h1>
     <p>Figure out when you can quit your job.<br>
        No signup. Takes 2 minutes.</p>
     <a href="{% url 'guest_login' %}" class="sup-btn sup-btn-start">

@@ -1,6 +1,6 @@
 {% extends "base_mobile.html" %}
 
-{% block title %}Your Number — sup{% endblock %}
+{% block title %}Your Number — salaryfree{% endblock %}
 
 {% block extra_head %}
 <!-- Chart.js for mobile-optimized charts -->
@@ -207,8 +207,9 @@
   <!-- ===== CHART SECTION ===== -->
   <section style="padding: 0 24px 24px;" x-show="!loading && showChart">
     <div class="chart-container">
-      <h3>20-year projection</h3>
-      <canvas id="projectionChart" style="height: 200px; max-height: 200px;"></canvas>
+      <h3 style="font-size: 0.9rem; color: var(--ink); margin-bottom: 4px;">Asset Burn-Down</h3>
+      <p style="font-size: 0.72rem; color: var(--ink-muted); margin-bottom: 12px;">How your net worth evolves over 20 years with growth, expenses, and income</p>
+      <canvas id="projectionChart" style="height: 220px; max-height: 220px;"></canvas>
     </div>
   </section>
 
@@ -250,7 +251,7 @@
 
   <!-- ===== FOOTER ===== -->
   <footer x-show="!loading">
-    <div class="logo">runway</div>
+    <div class="logo">salaryfree</div>
     <div class="links">
       <a href="/">Start over</a>
       <a href="#">About</a>
@@ -412,14 +413,57 @@
         // Calculators return 'years' array; fall back to 'labels' if present
         const labels = chartData.years || chartData.labels || [];
 
-        // Build datasets from individual arrays (calculator output format).
-        // All Standard-tier scenarios return the same keys: assets, incomes, needs, wants.
-        let datasets = chartData.datasets || [];
-        if (!chartData.datasets) {
-          if (chartData.assets) datasets.push({ label: 'Assets', data: chartData.assets, borderColor: '#1a56db', backgroundColor: 'rgba(26,86,219,0.08)', fill: true, tension: 0.3 });
-          if (chartData.incomes) datasets.push({ label: 'Income', data: chartData.incomes, borderColor: '#2ea44f', backgroundColor: 'transparent', tension: 0.3 });
-          if (chartData.needs) datasets.push({ label: 'Needs', data: chartData.needs, borderColor: '#e8654a', backgroundColor: 'transparent', tension: 0.3 });
-          if (chartData.wants) datasets.push({ label: 'Wants', data: chartData.wants, borderColor: '#f59e0b', backgroundColor: 'transparent', tension: 0.3 });
+        // Build datasets for waterfall burn-down visualization
+        // Primary: Net Worth area (assets depleting over time)
+        let datasets = [];
+
+        if (chartData.assets) {
+          // Main area showing net worth declining
+          datasets.push({
+            label: 'Net Worth',
+            data: chartData.assets,
+            borderColor: '#2ea44f',
+            backgroundColor: 'rgba(46,164,79,0.15)',
+            fill: 'origin',
+            tension: 0.4,
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            order: 1
+          });
+        }
+
+        // Show income as a secondary line (offset effect)
+        if (chartData.incomes) {
+          datasets.push({
+            label: 'Annual Income',
+            data: chartData.incomes,
+            borderColor: '#0d9488',
+            backgroundColor: 'transparent',
+            borderDash: [4, 4],
+            tension: 0.3,
+            borderWidth: 1.5,
+            pointRadius: 0,
+            pointHoverRadius: 3,
+            order: 2
+          });
+        }
+
+        // Show total expenses (needs + wants) as reference line
+        if (chartData.needs && chartData.wants) {
+          const totalExpenses = chartData.needs.map((need, i) => need + (chartData.wants[i] || 0));
+          datasets.push({
+            label: 'Annual Expenses',
+            data: totalExpenses,
+            borderColor: '#dc2626',
+            backgroundColor: 'transparent',
+            borderDash: [4, 4],
+            tension: 0.3,
+            borderWidth: 1.5,
+            pointRadius: 0,
+            pointHoverRadius: 3,
+            order: 3
+          });
         }
 
         this.chart = new Chart(ctx, {
@@ -428,19 +472,29 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+              mode: 'index',
+              intersect: false
+            },
             plugins: {
               legend: {
                 position: 'bottom',
                 labels: {
-                  font: { family: "'Space Grotesk', system-ui", size: 11 },
+                  font: { family: "'Space Grotesk', system-ui", size: 10 },
                   color: '#7a7a7a',
                   usePointStyle: true,
                   pointStyleWidth: 8,
-                  padding: 16,
+                  padding: 12,
+                  boxHeight: 6
                 }
               },
               tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                padding: 10,
+                titleFont: { size: 11, family: "'Space Grotesk', system-ui" },
+                bodyFont: { size: 10, family: "'Space Grotesk', system-ui" },
                 callbacks: {
+                  title: (items) => 'Year ' + items[0].label,
                   label: (context) => {
                     const val = context.parsed.y;
                     let formatted;
@@ -457,23 +511,31 @@
               x: {
                 grid: { display: false },
                 ticks: {
-                  font: { family: "'Space Grotesk', system-ui", size: 10 },
-                  color: '#b5b0a8'
+                  font: { family: "'Space Grotesk', system-ui", size: 9 },
+                  color: '#b5b0a8',
+                  maxRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: 10
                 }
               },
               y: {
                 beginAtZero: true,
-                grid: { color: 'rgba(0,0,0,0.04)' },
+                grid: {
+                  color: 'rgba(0,0,0,0.04)',
+                  drawBorder: false
+                },
                 ticks: {
-                  font: { family: "'Space Grotesk', system-ui", size: 10 },
+                  font: { family: "'Space Grotesk', system-ui", size: 9 },
                   color: '#b5b0a8',
+                  padding: 8,
                   callback: (val) => {
                     if (val >= 10000000) return '₹' + (val / 10000000).toFixed(1) + 'Cr';
                     if (val >= 100000) return '₹' + (val / 100000).toFixed(0) + 'L';
                     if (val >= 1000) return '₹' + (val / 1000).toFixed(0) + 'K';
                     return '₹' + val;
                   }
-                }
+                },
+                border: { display: false }
               }
             }
           }

@@ -334,10 +334,10 @@ QUESTIONS = [
         scenarios=["FOUNDER", "RETIREMENT", "R2I", "HALF_FIRE", "TERMINATION"],
         slider_config={
             "min": 0,
-            "max": 50000000,  # ₹5Cr
+            "max": 200000000,  # ₹20Cr
             "step": 100000,
             "unit": "₹",
-            "presets": [500000, 1000000, 2500000, 5000000, 10000000],
+            "presets": [1000000, 2500000, 5000000, 10000000, 25000000, 50000000],
         },
         validation={"min": 0},
         widget_category="asset",
@@ -443,11 +443,9 @@ QUESTIONS = [
         widget_category="expense",
         text_by_scenario={
             "R2I": "Relocation & setup costs",
-            "TERMINATION": "Job search & transition costs",
         },
         help_by_scenario={
             "R2I": "Housing deposit, shipping, travel, or one-time R2I costs",
-            "TERMINATION": "Medical, upskilling, or unexpected costs during this period",
         },
     ),
 
@@ -471,8 +469,8 @@ QUESTIONS = [
 STANDARD_TIER_QUESTIONS = [
     Question(
         id="living_assets_split",
-        text="How is your Living Money split?",
-        help_text="Slide to adjust how your immediately available money is divided between purely liquid cash and semi-liquid bonds/FDs.",
+        text="Now let's split your Living Money between liquid and semi-liquid assets",
+        help_text="You entered your total living assets earlier. Now divide it: how much in instantly accessible cash vs bonds/FDs that take a few days to liquidate?",
         field_name="assets.living_split_ratio",
         input_type="split_slider",
         tier="STANDARD",
@@ -491,17 +489,17 @@ STANDARD_TIER_QUESTIONS = [
         },
         widget_category="asset",
         text_by_scenario={
-            "R2I": "Split your repatriated liquid savings",
+            "R2I": "Split your repatriated savings between liquid and semi-liquid",
         },
         help_by_scenario={
-            "R2I": "How much in immediately accessible cash vs bonds/FDs for stability?",
+            "R2I": "Of the money you're bringing back, how much in immediately accessible cash vs bonds/FDs for stability?",
         },
     ),
 
     Question(
         id="security_assets_split",
-        text="How is your Security Money split?",
-        help_text="Slide to adjust the balance between growth assets (Equity, PF) and property/real-estate.",
+        text="Now let's split your Security Money between growth assets and property",
+        help_text="You entered your total security assets earlier. Now divide it: how much in equity/PF/stocks vs real estate/property?",
         field_name="assets.security_split_ratio",
         input_type="split_slider",
         tier="STANDARD",
@@ -520,10 +518,10 @@ STANDARD_TIER_QUESTIONS = [
         },
         widget_category="asset",
         text_by_scenario={
-            "R2I": "Split your long-term India assets",
+            "R2I": "Split your long-term wealth between growth assets and property",
         },
         help_by_scenario={
-            "R2I": "How much is equity/MFs vs property in India?",
+            "R2I": "Of your total long-term assets in India, how much is in equity/MFs vs property/real estate?",
         },
     ),
 
