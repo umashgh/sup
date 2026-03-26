@@ -75,3 +75,12 @@ htmlcov/
 *.bak
 *.tmp
 server.log
+
+# Claude / AI-generated artifacts
+.claude/
+COMPREHENSIVE_SUMMARY.md
+FIXES_COMPLETE.md
+ISSUE_C_FIX.md
+MISSING_LIQUID_ASSETS_FIX.md
+READY_TO_TEST.md
+SYSTEM_DOCUMENTATION.md
