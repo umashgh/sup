@@ -20,6 +20,10 @@ class StandardFounderCalculator(StandardBaseCalculator):
             if self.venture_bootstrapped else 0
         )
         self.founder_salary = float(self.get_field_value('scenario.parttime_monthly_income', 0))
+        # Months from now before the salary begins (0 = from day one)
+        self.founder_salary_start_year = (
+            int(self.get_field_value('scenario.founder_salary_start_month', 0) or 0) // 12
+        )
 
     def _compute_available_cash(self):
         """Deduct bootstrap capital in addition to the standard deductions."""
@@ -46,6 +50,8 @@ class StandardFounderCalculator(StandardBaseCalculator):
         st['founder_salary'] = self.founder_salary * 12
 
     def _compute_year_income(self, year: int, st: dict) -> float:
+        if year < self.founder_salary_start_year:
+            return 0.0
         return st['founder_salary']
 
     def _inflate_scenario(self, year: int, st: dict):
@@ -55,6 +61,7 @@ class StandardFounderCalculator(StandardBaseCalculator):
         return {
             'bootstrap_capital': round(self.bootstrap_capital, 2),
             'founder_salary_monthly': round(self.founder_salary, 2),
+            'founder_salary_start_year': self.founder_salary_start_year,
             'scenario_type': 'FOUNDER',
             'tier': 'STANDARD',
         }

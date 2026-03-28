@@ -187,6 +187,113 @@
         </div>
       </template>
 
+      <!-- ===== Month/Year Picker (e.g. founder salary start date) ===== -->
+      <template x-if="currentQuestion?.input_type === 'month_year_picker'">
+        <div x-data="{
+          get currentVal() {
+            return parseInt($data.answers[currentQuestion.field_name] ?? 0);
+          },
+          monthNames: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+          get displayDate() {
+            const now = new Date();
+            now.setMonth(now.getMonth() + this.currentVal);
+            return this.monthNames[now.getMonth()] + ' ' + now.getFullYear();
+          },
+          setMonths(v) {
+            $data.answers[currentQuestion.field_name] = parseInt(v);
+          }
+        }">
+          <div style="text-align: center; margin-bottom: 16px;">
+            <div style="font-size: 1.5rem; font-family: var(--serif); font-weight: 400;"
+              x-text="currentVal === 0 ? 'From day one' : displayDate"></div>
+            <div style="font-size: 0.8rem; color: var(--ink-muted); margin-top: 4px;"
+              x-text="currentVal === 0 ? 'Salary starts immediately' : currentVal + ' months from now'"></div>
+          </div>
+          <input type="range" min="0" max="48" step="1"
+            :value="currentVal"
+            @input="setMonths($event.target.value)"
+            class="styled-range"
+            style="width: 100%;" />
+          <div style="display: flex; justify-content: space-between; font-size: 0.72rem;
+                      color: var(--ink-faint); margin-top: 6px;">
+            <span>Now</span>
+            <span>1 year</span>
+            <span>2 years</span>
+            <span>3 years</span>
+            <span>4 years</span>
+          </div>
+        </div>
+      </template>
+
+      <!-- ===== Kids Age Range (dual-handle: current age + independence age) ===== -->
+      <template x-if="currentQuestion?.input_type === 'kids_age_range'">
+        <div x-data="{
+          get cfg() { return currentQuestion.slider_config || {}; },
+          get kidAge()  { return parseInt($data.answers[currentQuestion.field_name] ?? cfg.age_default ?? 10); },
+          get indepAge() { return parseInt($data.answers[cfg.independence_field] ?? cfg.independence_default ?? 24); },
+          setKidAge(v) {
+            v = Math.min(parseInt(v), this.indepAge - 1);
+            $data.answers[currentQuestion.field_name] = v;
+          },
+          setIndepAge(v) {
+            v = Math.max(parseInt(v), this.kidAge + 1);
+            $data.answers[cfg.independence_field] = v;
+          },
+          get barMin()  { return cfg.age_min ?? 0; },
+          get barMax()  { return cfg.independence_max ?? 30; },
+          get leftPct() { return ((this.kidAge - this.barMin) / (this.barMax - this.barMin)) * 100; },
+          get rightPct(){ return ((this.indepAge - this.barMin) / (this.barMax - this.barMin)) * 100; },
+        }" style="padding: 8px 0;">
+
+          <!-- Labels above bar -->
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <div style="font-size: 0.8rem; color: var(--ink-muted);">
+              Current age: <strong x-text="kidAge + ' yrs'"></strong>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--ink-muted);">
+              Independent at: <strong x-text="indepAge + ' yrs'"></strong>
+            </div>
+          </div>
+
+          <!-- Visual bar with colored range -->
+          <div style="position: relative; height: 10px; border-radius: 5px;
+                      background: var(--cream-dark); margin: 20px 0 24px;">
+            <!-- Active range between age and independence -->
+            <div style="position: absolute; height: 100%; border-radius: 5px;
+                        background: var(--forest); opacity: 0.65;"
+              :style="`left: ${leftPct}%; width: ${rightPct - leftPct}%;`"></div>
+          </div>
+
+          <!-- Two range inputs overlaid on the bar -->
+          <div style="position: relative; margin-top: -44px; margin-bottom: 16px;">
+            <!-- Left handle: current kid age -->
+            <input type="range"
+              :min="cfg.age_min ?? 0" :max="cfg.age_max ?? 25" step="1"
+              :value="kidAge"
+              @input="setKidAge($event.target.value)"
+              style="position: absolute; width: 100%; pointer-events: auto;
+                     -webkit-appearance: none; background: transparent; height: 32px;"
+              class="dual-range-left" />
+            <!-- Right handle: independence age -->
+            <input type="range"
+              :min="cfg.independence_min ?? 18" :max="cfg.independence_max ?? 30" step="1"
+              :value="indepAge"
+              @input="setIndepAge($event.target.value)"
+              style="position: absolute; width: 100%; pointer-events: auto;
+                     -webkit-appearance: none; background: transparent; height: 32px;"
+              class="dual-range-right" />
+          </div>
+
+          <!-- Axis labels -->
+          <div style="display: flex; justify-content: space-between;
+                      font-size: 0.7rem; color: var(--ink-faint); margin-top: 12px;">
+            <span x-text="(cfg.age_min ?? 0) + ' yrs'"></span>
+            <span>← dependent years →</span>
+            <span x-text="(cfg.independence_max ?? 30) + ' yrs'"></span>
+          </div>
+        </div>
+      </template>
+
       <!-- ===== Split Slider (e.g. Living Assets split, Security Assets split) ===== -->
       <template x-if="currentQuestion?.input_type === 'split_slider'">
         <!--
@@ -259,19 +366,24 @@
             </div>
           </div>
 
-          <!-- Split Visualizer Bar -->
-          <div
-            style="display: flex; gap: 3px; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 12px; transition: all 0.1s ease-out;">
-            <div
-              :style="`flex: ${percent}; background: ${currentQuestion.slider_config.field_1_color || 'var(--forest)'};`">
+          <!-- Split Visualizer Bar with slider overlaid directly on it -->
+          <div style="position: relative; height: 32px; margin-bottom: 12px;">
+            <!-- Colored bar sits in the vertical centre of the 32px hit area -->
+            <div style="position: absolute; top: 50%; transform: translateY(-50%);
+                        left: 0; right: 0; height: 12px; border-radius: 6px;
+                        overflow: hidden; pointer-events: none; display: flex; gap: 3px;
+                        transition: all 0.1s ease-out;">
+              <div :style="`flex: ${percent}; background: ${currentQuestion.slider_config.field_1_color || 'var(--forest)'};`"></div>
+              <div :style="`flex: ${100 - percent}; background: ${currentQuestion.slider_config.field_2_color || 'var(--ocean)'};`"></div>
             </div>
-            <div
-              :style="`flex: ${100 - percent}; background: ${currentQuestion.slider_config.field_2_color || 'var(--ocean)'};`">
-            </div>
+            <!-- Range input overlaid on the bar — transparent track, thumb straddles boundary -->
+            <input type="range" min="0" max="100" step="1" x-model="percent"
+              class="on-bar"
+              style="position: absolute; top: 50%; transform: translateY(-50%);
+                     left: 0; width: 100%; margin: 0; padding: 0;
+                     -webkit-appearance: none; background: transparent;
+                     cursor: pointer; height: 32px;" />
           </div>
-
-          <!-- Slider Input -->
-          <input type="range" min="0" max="100" step="1" x-model="percent" />
 
           <!-- Split amounts breakdown -->
           <div style="display: flex; justify-content: space-between; margin-top: 16px; align-items: flex-start;">
@@ -922,6 +1034,18 @@
                 if (this.answers[amountField] === undefined) {
                   this.answers[amountField] = 0;
                 }
+              }
+            } else if (q.input_type === 'month_year_picker') {
+              if (this.answers[q.field_name] === undefined) {
+                this.answers[q.field_name] = parseInt(q.slider_config?.default_months_from_now || 0, 10);
+              }
+            } else if (q.input_type === 'kids_age_range') {
+              if (this.answers[q.field_name] === undefined) {
+                this.answers[q.field_name] = parseInt(q.slider_config?.age_default || 10, 10);
+              }
+              const indepField = q.slider_config?.independence_field;
+              if (indepField && this.answers[indepField] === undefined) {
+                this.answers[indepField] = parseInt(q.slider_config?.independence_default || 24, 10);
               }
             } else if (q.input_type === 'split_slider') {
               // The isolated alpine component for split_slider handles its own initialization on render,

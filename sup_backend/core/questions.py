@@ -117,10 +117,10 @@ QUESTIONS = [
     ),
 
     Question(
-        id="kids_average_age",
-        text="How old is your kid?",
+        id="kids_age_range",
+        text="How old is your kid, and when will they be independent?",
         field_name="family.kids_average_age",
-        input_type="slider",
+        input_type="kids_age_range",
         tier="QUICK",
         scenarios=["FOUNDER", "RETIREMENT", "R2I", "HALF_FIRE", "TERMINATION"],
         condition=lambda data: (
@@ -128,14 +128,11 @@ QUESTIONS = [
             and int(data.get("kids_count", 0) or 0) > 0
         ),
         slider_config={
-            "min": 0,
-            "max": 30,
-            "step": 1,
-            "unit": "years",
-            "default": 10,
+            "age_min": 0, "age_max": 25, "age_default": 10,
+            "independence_min": 18, "independence_max": 30, "independence_default": 24,
+            "independence_field": "family.kids_independence_age",
         },
-        validation={"min": 0, "max": 30},
-        help_text="Used for estimating education and settling-down expenses."
+        help_text="Drag the left handle for current age, right handle for when they're financially independent."
     ),
 
     # Conditional: Dependent adults count (shows for all non-solo family types)
@@ -667,6 +664,20 @@ STANDARD_TIER_QUESTIONS = [
             "presets": [0, 25000, 50000, 100000, 200000],
         },
         validation={"min": 0},
+    ),
+
+    # FOUNDER: When does the salary start?
+    Question(
+        id="founder_salary_start",
+        text="When do you start drawing this salary?",
+        field_name="scenario.founder_salary_start_month",
+        input_type="month_year_picker",
+        tier="STANDARD",
+        scenarios=["FOUNDER"],
+        condition=lambda data: float((data.get('scenario') or {}).get('parttime_monthly_income', 0) or 0) > 0,
+        help_text="Leave as today if you're drawing from day one. Shift forward if the venture needs time to generate revenue.",
+        widget_category="income",
+        slider_config={"default_months_from_now": 0},
     ),
 ]
 

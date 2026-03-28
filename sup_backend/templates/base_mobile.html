@@ -55,7 +55,7 @@
     }
 
     html {
-      font-size: 16px;
+      font-size: 17px;   /* +1px — proportionally lifts all rem values */
       -webkit-font-smoothing: antialiased;
       scroll-behavior: smooth;
     }
@@ -91,7 +91,7 @@
     }
 
     .section-subtitle {
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       color: var(--ink-muted);
       margin-bottom: 16px;
     }
@@ -571,6 +571,56 @@
       font-size: 0.65rem;
       color: var(--ink-faint);
       margin-top: 5px;
+    }
+
+    /* ---- RANGE OVERLAID ON COLOURED BAR (split slider) ---- */
+    /* Override global background so the track is invisible — the bar below shows through */
+    input[type="range"].on-bar {
+      background: transparent !important;
+    }
+    input[type="range"].on-bar::-webkit-slider-runnable-track {
+      background: transparent;
+    }
+    input[type="range"].on-bar::-moz-range-track {
+      background: transparent;
+    }
+
+    /* ---- DUAL-HANDLE RANGE (kids age + independence) ---- */
+    .dual-range-left,
+    .dual-range-right {
+      -webkit-appearance: none;
+      position: absolute;
+      width: 100%;
+      height: 32px;
+      background: transparent;
+      pointer-events: none;
+    }
+    .dual-range-left::-webkit-slider-thumb,
+    .dual-range-right::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .dual-range-left::-webkit-slider-thumb {
+      background: var(--cream);
+      border: 2.5px solid var(--ink);
+    }
+    .dual-range-right::-webkit-slider-thumb {
+      background: var(--forest);
+      border: 2.5px solid var(--forest);
+    }
+    .dual-range-left::-moz-range-thumb {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--cream); border: 2.5px solid var(--ink);
+      pointer-events: auto; cursor: pointer;
+    }
+    .dual-range-right::-moz-range-thumb {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--forest); border: 2.5px solid var(--forest);
+      pointer-events: auto; cursor: pointer;
     }
 
     /* ---- CARD SELECT (grid choices) ---- */

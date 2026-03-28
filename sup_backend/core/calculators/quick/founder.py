@@ -38,9 +38,6 @@ class QuickFounderCalculator(BaseCalculator):
         venture_bootstrapped = self.get_field_value('scenario.venture_bootstrapped', False)
         bootstrap_capital = float(self.get_field_value('scenario.bootstrap_capital', 0)) if venture_bootstrapped else 0
 
-        # Scenario-specific inputs
-        current_monthly_salary = float(self.get_field_value('scenario.current_monthly_salary', 0))
-
         # Check for one-time expenses
         one_time_expenses = float(self.get_field_value('family.one_time_expenses', 0))
 

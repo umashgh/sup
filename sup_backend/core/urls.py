@@ -16,4 +16,5 @@ urlpatterns = [
     path('api/scenarios/compute-expenses/', views.compute_expenses_view, name='compute_expenses'),
     path('api/scenarios/calculate/', views.calculate_tier, name='calculate_tier'),
     path('api/scenarios/advance-tier/', views.advance_tier, name='advance_tier'),
+    path('api/scenarios/rates/', views.rate_preferences, name='rate_preferences'),
 ]

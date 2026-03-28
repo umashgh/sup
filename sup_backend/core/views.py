@@ -470,6 +470,7 @@ def compute_expenses_view(request):
 def calculate_tier(request):
     """
     Runs calculation for current tier and returns results.
+    #flow: calculate number comes here
     """
     try:
         scenario = ScenarioProfile.objects.get(user=request.user)
@@ -487,6 +488,11 @@ def calculate_tier(request):
             {'error': 'data field is required'},
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    # Inject user rate preferences (or defaults) into user_data
+    from .models import UserRatePreferences
+    rate_prefs, _ = UserRatePreferences.objects.get_or_create(user=request.user)
+    user_data['rates'] = rate_prefs.as_dict()
 
     tier_names = {1: 'QUICK', 2: 'STANDARD', 3: 'ADVANCED'}
     current_tier_name = tier_names[profile.current_tier]
@@ -644,6 +650,37 @@ def calculate_tier(request):
         'tier_name': current_tier_name,
         'can_advance': profile.current_tier < 3,
     })
+
+
+@api_view(['GET', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def rate_preferences(request):
+    """
+    GET  — return current rate preferences (or defaults).
+    PATCH — update one or more rate fields.
+    """
+    from .models import UserRatePreferences
+    prefs, _ = UserRatePreferences.objects.get_or_create(user=request.user)
+
+    if request.method == 'GET':
+        return Response({'rates': prefs.as_pct_dict()})
+
+    # PATCH: update supplied fields
+    ALLOWED = {
+        'liquid_return_pct', 'semi_liquid_return_pct', 'growth_return_pct',
+        'property_appreciation_pct', 'property_rental_yield_pct',
+        'needs_inflation_pct', 'wants_inflation_pct',
+        'passive_growth_pct', 'swr_rate_pct',
+    }
+    updated = []
+    for field in ALLOWED:
+        if field in request.data:
+            setattr(prefs, field, request.data[field])
+            updated.append(field)
+    if updated:
+        prefs.save(update_fields=updated)
+
+    return Response({'rates': prefs.as_pct_dict(), 'updated': updated})
 
 
 @api_view(['POST'])

@@ -133,15 +133,31 @@ class StandardBaseCalculator(BaseCalculator):
     PROJECTION_YEARS = 21  # 0..20
 
     # ================================================================
-    #  Main entry point
+    #  Main entry point  #flow: calculate comes
     # ================================================================
     def calculate(self) -> Dict:
+        self._load_rates()
         self._read_common_inputs()
         self._read_scenario_inputs()
         self._compute_available_cash()
         self._compute_summary_metrics()
         self._run_projection()
         return self._build_results()
+
+    # ================================================================
+    #  Step 0 — load rate overrides from user_data['rates']
+    # ================================================================
+    def _load_rates(self):
+        r = self.user_data.get('rates', {})
+        self.LIQUID_RETURN          = r.get('liquid_return',          self.LIQUID_RETURN)
+        self.SEMI_LIQUID_RETURN     = r.get('semi_liquid_return',     self.SEMI_LIQUID_RETURN)
+        self.GROWTH_RETURN          = r.get('growth_return',          self.GROWTH_RETURN)
+        self.PROPERTY_APPRECIATION  = r.get('property_appreciation',  self.PROPERTY_APPRECIATION)
+        self.PROPERTY_RENTAL_YIELD  = r.get('property_rental_yield',  self.PROPERTY_RENTAL_YIELD)
+        self.NEEDS_INFLATION        = r.get('needs_inflation',        self.NEEDS_INFLATION)
+        self.WANTS_INFLATION        = r.get('wants_inflation',        self.WANTS_INFLATION)
+        self.PASSIVE_GROWTH         = r.get('passive_growth',         self.PASSIVE_GROWTH)
+        self.SWR_RATE               = r.get('swr_rate',               self.SWR_RATE)
 
     # ================================================================
     #  Step 1 — read common inputs
@@ -182,12 +198,15 @@ class StandardBaseCalculator(BaseCalculator):
             for k, v in raw_future.items():
                 self.future_assets_by_year[int(k)] = float(v)
 
-        # Kids (Issue #1)
+        # Kids
         self.kids_count = int(self.get_field_value('family.kids_count', 0) or 0)
         self.kids_avg_age = int(self.get_field_value('family.kids_average_age', 10) or 10)
-        # Year when kids turn 24 (expenses drop)
+        # Independence age: user-set via kids_age_range widget, default 24
+        kids_independence_age = int(
+            self.get_field_value('family.kids_independence_age', 24) or 24
+        )
         if self.kids_count > 0:
-            self.kids_independence_year = max(0, 24 - self.kids_avg_age)
+            self.kids_independence_year = max(0, kids_independence_age - self.kids_avg_age)
         else:
             self.kids_independence_year = None
 
@@ -318,15 +337,13 @@ class StandardBaseCalculator(BaseCalculator):
             )
             rental_income = self.st['property'] * self.PROPERTY_RENTAL_YIELD
             total_passive = self.st['passive'] + rental_income
-            financial_assets = (
-                self.st['liquid'] + self.st['semi_liquid'] + self.st['growth']
-            )
-            swr_income = financial_assets * self.SWR_RATE
 
             scenario_income = self._compute_year_income(year, self.st)
-            total_income = total_passive + swr_income + scenario_income
+            total_income = total_passive + scenario_income
             total_expenses = self.st['needs'] + self.st['wants'] + year_one_time
 
+            # free_up_year: passive + scenario income alone covers expenses
+            # (no asset drawdown needed — true financial independence)
             if self.free_up_year is None and total_income >= total_expenses:
                 self.free_up_year = year
 

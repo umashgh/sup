@@ -214,20 +214,103 @@
   </section>
 
 
+  <!-- ===== RATES & ASSUMPTIONS ===== -->
+  <section style="padding: 0 24px 8px;" x-show="!loading" x-data="ratesPanel()">
+    <button @click="toggle()"
+      style="width: 100%; display: flex; align-items: center; justify-content: space-between;
+             background: none; border: 1px solid rgba(0,0,0,0.1); border-radius: 10px;
+             padding: 12px 16px; cursor: pointer; font-size: 0.82rem; color: var(--ink-muted);">
+      <span>⚙ Rates &amp; Assumptions</span>
+      <span x-text="open ? '▲' : '▼'" style="font-size: 0.7rem;"></span>
+    </button>
+
+    <div x-show="open" x-collapse style="border: 1px solid rgba(0,0,0,0.08); border-top: none;
+         border-radius: 0 0 10px 10px; padding: 16px; background: #fafafa;">
+
+      <p style="font-size: 0.72rem; color: var(--ink-muted); margin-bottom: 14px;">
+        These defaults match Indian market averages. Edit to reflect your personal view — changes re-run the projection.
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <template x-for="field in rateFields" :key="field.key">
+          <label style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 0.68rem; color: var(--ink-muted);" x-text="field.label"></span>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <input type="number" step="0.5" min="0" max="30"
+                :value="rates[field.key]"
+                @change="onRateChange(field.key, $event.target.value)"
+                style="width: 64px; padding: 6px 8px; border: 1px solid rgba(0,0,0,0.15);
+                       border-radius: 6px; font-size: 0.82rem; background: white;" />
+              <span style="font-size: 0.75rem; color: var(--ink-muted);">%</span>
+            </div>
+          </label>
+        </template>
+      </div>
+
+      <div x-show="dirty" style="margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <button @click="saveRates()"
+          style="padding: 8px 18px; background: var(--blue); color: white; border: none;
+                 border-radius: 8px; font-size: 0.8rem; cursor: pointer;">
+          Save &amp; recalculate
+        </button>
+        <span x-show="savedMsg" x-text="savedMsg"
+          style="font-size: 0.75rem; color: var(--forest);"></span>
+      </div>
+
+      <!-- Guest login nudge (shown after first edit) -->
+      <div x-show="showLoginNudge"
+        style="margin-top: 12px; padding: 10px 14px; background: rgba(26,86,219,0.06);
+               border: 1px solid rgba(26,86,219,0.2); border-radius: 8px; font-size: 0.75rem;">
+        <strong>Create an account</strong> to save these rates across sessions —
+        your modelling data won't be lost.
+        <a href="/accounts/signup/" style="color: var(--blue); margin-left: 4px;">Sign up free →</a>
+      </div>
+    </div>
+  </section>
+
+
   <!-- ===== DEPTH — go deeper ===== -->
   <section style="padding: 24px;" x-show="!loading && canAdvance">
-    <h2 style="font-family: var(--serif); font-size: 1.2rem; font-weight: 400; margin-bottom: 8px;">Want the full
-      picture?</h2>
-    <p style="font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 16px;">
-      Answer 3-5 more questions. Your Quick estimate used flat numbers — the Full projection models growth rates, inflation, and year-by-year asset evolution.
+    <h2 style="font-family: var(--serif); font-size: 1.25rem; font-weight: 400; margin-bottom: 6px;">
+      Your Quick estimate has blind spots
+    </h2>
+    <p style="font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.55;">
+      It ignores inflation, asset growth, kids aging out, and big future expenses. That matters a lot over 10–20 years.
     </p>
 
-    <div class="depth-item" style="margin-bottom: 16px;">
+    <!-- What tier 1 misses -->
+    <div style="background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15);
+                border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;">
+      <div style="font-size: 0.72rem; font-weight: 600; color: #dc2626; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">
+        What Quick misses
+      </div>
+      <ul style="margin: 0; padding: 0 0 0 16px; font-size: 0.78rem; color: var(--ink-muted); line-height: 1.9;">
+        <li>Your expenses grow ~6–7% a year (inflation)</li>
+        <li>Your assets compound at different rates</li>
+        <li>Big planned spends (wedding, car, property)</li>
+        <li>Kids becoming independent reduces costs</li>
+        <li>Passive income growing over time</li>
+      </ul>
+    </div>
+
+    <!-- What tier 2 adds -->
+    <div class="depth-item" style="margin-bottom: 14px;">
       <div class="depth-badge t2">Full</div>
       <div class="depth-text">
-        <h4>20-year projection</h4>
-        <p>Each asset class grows at its own rate. Expenses inflate. See when your money runs out — or doesn't.</p>
+        <h4>20-year projection, year by year</h4>
+        <p>See exactly which year your money runs out — or when passive income permanently covers your life.</p>
       </div>
+    </div>
+
+    <!-- Login nudge -->
+    <div style="background: rgba(26,86,219,0.06); border: 1px solid rgba(26,86,219,0.18);
+                border-radius: 10px; padding: 12px 16px; margin-bottom: 16px;
+                font-size: 0.78rem; color: var(--ink); line-height: 1.55;">
+      Things are getting serious. <strong>Create a free account</strong> so you don't lose
+      this modelling if your session expires.
+      <a href="/accounts/signup/" style="color: var(--blue); display: inline-block; margin-top: 6px; font-weight: 600;">
+        Save my scenario →
+      </a>
     </div>
   </section>
 
@@ -272,6 +355,76 @@
 </div>
 
 <script>
+  function ratesPanel() {
+    return {
+      open: false,
+      dirty: false,
+      savedMsg: '',
+      showLoginNudge: false,
+      isGuest: false,
+      rates: {},
+      rateFields: [
+        { key: 'liquid_return_pct',          label: 'Liquid return' },
+        { key: 'semi_liquid_return_pct',     label: 'Semi-liquid return' },
+        { key: 'growth_return_pct',          label: 'Growth / equity return' },
+        { key: 'property_appreciation_pct',  label: 'Property appreciation' },
+        { key: 'property_rental_yield_pct',  label: 'Rental yield' },
+        { key: 'needs_inflation_pct',        label: 'Needs inflation' },
+        { key: 'wants_inflation_pct',        label: 'Wants inflation' },
+        { key: 'passive_growth_pct',         label: 'Passive income growth' },
+        { key: 'swr_rate_pct',               label: 'Safe withdrawal rate' },
+      ],
+
+      async init() {
+        try {
+          const res = await fetch('/api/scenarios/rates/', {
+            headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+          });
+          const json = await res.json();
+          this.rates = json.rates || {};
+          // detect guest user
+          const stored = sessionStorage.getItem('calculation_results');
+          if (stored) {
+            const username = JSON.parse(stored)?.username || '';
+            this.isGuest = username.startsWith('guest_');
+          }
+        } catch(e) {}
+      },
+
+      toggle() {
+        this.open = !this.open;
+      },
+
+      onRateChange(key, val) {
+        this.rates[key] = parseFloat(val);
+        this.dirty = true;
+        if (this.isGuest) this.showLoginNudge = true;
+      },
+
+      async saveRates() {
+        try {
+          const res = await fetch('/api/scenarios/rates/', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify(this.rates),
+          });
+          const json = await res.json();
+          if (json.rates) {
+            this.rates = json.rates;
+            this.dirty = false;
+            this.savedMsg = 'Saved — recalculate to see impact';
+            setTimeout(() => this.savedMsg = '', 3500);
+          }
+        } catch(e) {
+          this.savedMsg = 'Save failed';
+        }
+      },
+    };
+  }
+
   function resultsView() {
     return {
       results: {},
