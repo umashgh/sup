@@ -648,7 +648,7 @@ def calculate_tier(request):
         'results': results,
         'tier': profile.current_tier,
         'tier_name': current_tier_name,
-        'can_advance': profile.current_tier < 3,
+        'can_advance': profile.current_tier < 2,  # ADVANCED tier not yet implemented
     })
 
 

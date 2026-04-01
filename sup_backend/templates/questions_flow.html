@@ -229,67 +229,76 @@
       <template x-if="currentQuestion?.input_type === 'kids_age_range'">
         <div x-data="{
           get cfg() { return currentQuestion.slider_config || {}; },
-          get kidAge()  { return parseInt($data.answers[currentQuestion.field_name] ?? cfg.age_default ?? 10); },
+          get barMin()   { return cfg.age_min ?? 0; },
+          get barMax()   { return cfg.independence_max ?? 30; },
+          get kidAge()   { return parseInt($data.answers[currentQuestion.field_name] ?? cfg.age_default ?? 10); },
           get indepAge() { return parseInt($data.answers[cfg.independence_field] ?? cfg.independence_default ?? 24); },
           setKidAge(v) {
-            v = Math.min(parseInt(v), this.indepAge - 1);
+            v = Math.max(this.barMin, Math.min(parseInt(v), Math.min(cfg.age_max ?? 25, this.indepAge - 1)));
             $data.answers[currentQuestion.field_name] = v;
           },
           setIndepAge(v) {
-            v = Math.max(parseInt(v), this.kidAge + 1);
+            v = Math.max(Math.max(cfg.independence_min ?? 18, this.kidAge + 1), Math.min(parseInt(v), this.barMax));
             $data.answers[cfg.independence_field] = v;
           },
-          get barMin()  { return cfg.age_min ?? 0; },
-          get barMax()  { return cfg.independence_max ?? 30; },
-          get leftPct() { return ((this.kidAge - this.barMin) / (this.barMax - this.barMin)) * 100; },
-          get rightPct(){ return ((this.indepAge - this.barMin) / (this.barMax - this.barMin)) * 100; },
-        }" style="padding: 8px 0;">
+          get leftPct()  { return ((this.kidAge - this.barMin) / (this.barMax - this.barMin)) * 100; },
+          get rightPct() { return ((this.indepAge - this.barMin) / (this.barMax - this.barMin)) * 100; },
+          get depYears() { return this.indepAge - this.kidAge; },
+        }">
 
-          <!-- Labels above bar -->
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-            <div style="font-size: 0.8rem; color: var(--ink-muted);">
-              Current age: <strong x-text="kidAge + ' yrs'"></strong>
+          <!-- Hotel booking style: two "date" cards -->
+          <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; margin-bottom: 20px; align-items: center;">
+            <div style="background: var(--cream-dark); border-radius: 10px; padding: 12px 8px; text-align: center; border: 2px solid transparent;"
+                 :style="'border-color: var(--coral)'">
+              <div style="font-size: 0.65rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Child age now</div>
+              <div style="font-family: var(--serif); font-size: 2rem; color: var(--coral); line-height: 1;" x-text="kidAge"></div>
+              <div style="font-size: 0.72rem; color: var(--ink-muted); margin-top: 2px;">years</div>
             </div>
-            <div style="font-size: 0.8rem; color: var(--ink-muted);">
-              Independent at: <strong x-text="indepAge + ' yrs'"></strong>
+            <div style="text-align: center; color: var(--ink-faint);">
+              <div style="font-size: 0.65rem; color: var(--ink-muted);" x-text="depYears + ' yrs'"></div>
+              <div style="font-size: 1rem;">→</div>
+            </div>
+            <div style="background: var(--forest-light); border-radius: 10px; padding: 12px 8px; text-align: center; border: 2px solid var(--forest);">
+              <div style="font-size: 0.65rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Independent at</div>
+              <div style="font-family: var(--serif); font-size: 2rem; color: var(--forest); line-height: 1;" x-text="indepAge"></div>
+              <div style="font-size: 0.72rem; color: var(--ink-muted); margin-top: 2px;">years</div>
             </div>
           </div>
 
-          <!-- Visual bar with colored range -->
-          <div style="position: relative; height: 10px; border-radius: 5px;
-                      background: var(--cream-dark); margin: 20px 0 24px;">
-            <!-- Active range between age and independence -->
-            <div style="position: absolute; height: 100%; border-radius: 5px;
-                        background: var(--forest); opacity: 0.65;"
-              :style="`left: ${leftPct}%; width: ${rightPct - leftPct}%;`"></div>
-          </div>
-
-          <!-- Two range inputs overlaid on the bar -->
-          <div style="position: relative; margin-top: -44px; margin-bottom: 16px;">
-            <!-- Left handle: current kid age -->
+          <!-- Track with two overlaid sliders (same scale: barMin to barMax) -->
+          <div style="position: relative; height: 48px; margin-bottom: 8px;">
+            <!-- Background track -->
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 8px;
+                        border-radius: 4px; background: var(--cream-dark); transform: translateY(-50%);
+                        pointer-events: none;"></div>
+            <!-- Highlighted dependent-years range -->
+            <div :style="`position: absolute; top: 50%; left: ${leftPct}%;
+                          width: ${rightPct - leftPct}%; height: 8px;
+                          border-radius: 4px; background: var(--forest); opacity: 0.55;
+                          transform: translateY(-50%); pointer-events: none;`"></div>
+            <!-- Left input: current child age — same scale 0‒30 -->
             <input type="range"
-              :min="cfg.age_min ?? 0" :max="cfg.age_max ?? 25" step="1"
+              :min="barMin" :max="barMax" step="1"
               :value="kidAge"
               @input="setKidAge($event.target.value)"
-              style="position: absolute; width: 100%; pointer-events: auto;
-                     -webkit-appearance: none; background: transparent; height: 32px;"
+              style="position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%);
+                     -webkit-appearance: none; background: transparent; height: 48px; margin: 0; padding: 0;"
               class="dual-range-left" />
-            <!-- Right handle: independence age -->
+            <!-- Right input: independence age — same scale 0‒30 -->
             <input type="range"
-              :min="cfg.independence_min ?? 18" :max="cfg.independence_max ?? 30" step="1"
+              :min="barMin" :max="barMax" step="1"
               :value="indepAge"
               @input="setIndepAge($event.target.value)"
-              style="position: absolute; width: 100%; pointer-events: auto;
-                     -webkit-appearance: none; background: transparent; height: 32px;"
+              style="position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%);
+                     -webkit-appearance: none; background: transparent; height: 48px; margin: 0; padding: 0;"
               class="dual-range-right" />
           </div>
 
           <!-- Axis labels -->
-          <div style="display: flex; justify-content: space-between;
-                      font-size: 0.7rem; color: var(--ink-faint); margin-top: 12px;">
-            <span x-text="(cfg.age_min ?? 0) + ' yrs'"></span>
-            <span>← dependent years →</span>
-            <span x-text="(cfg.independence_max ?? 30) + ' yrs'"></span>
+          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--ink-faint);">
+            <span x-text="barMin + ' yrs'"></span>
+            <span style="color: var(--forest); font-size: 0.68rem;">← dependent years →</span>
+            <span x-text="barMax + ' yrs'"></span>
           </div>
         </div>
       </template>

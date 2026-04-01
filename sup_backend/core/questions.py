@@ -76,7 +76,7 @@ QUESTIONS = [
             {"value": "solo", "label": "Just me"},
             {"value": "partner", "label": "With partner"},
             {"value": "partner_kids", "label": "Partner + kids"},
-            {"value": "joint", "label": "Joint family"},
+            {"value": "joint", "label": "Partner + kids + parents"},
         ]
     ),
 
@@ -614,16 +614,16 @@ STANDARD_TIER_QUESTIONS = [
         input_type="slider",
         tier="STANDARD",
         scenarios=["TERMINATION"],
-        help_text="Approximate months until your next role. Keeps the projection realistic.",
+        help_text="Months until your next role. Set to 0 if you don't plan to restart / not sure.",
         widget_category="info",
         slider_config={
             "min": 0,
-            "max": 36,
+            "max": 24,
             "step": 1,
             "unit": "months",
             "default": 6,
         },
-        validation={"min": 0, "max": 36},
+        validation={"min": 0, "max": 24},
     ),
 
     Question(

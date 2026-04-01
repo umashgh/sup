@@ -392,6 +392,7 @@ class StandardBaseCalculator(BaseCalculator):
             'target_number': round(self.target_number, 2),
             'target_gap': round(self.target_gap, 2),
             'final_corpus': round(self.final_corpus, 2),
+            'sustainable': self.final_corpus > (self.annual_survival * 5),
             'chart_data': {
                 'years': self.years,
                 'assets': self.assets_values,
