@@ -6,7 +6,7 @@
 
   <!-- Fixed Header: Brand + Target Number -->
   <header class="sup-header">
-    <span class="sup-brand">salaryfree</span>
+    <span class="sup-brand"><span class="brand-salary">salary</span><span class="brand-free">free</span></span>
     <span class="sup-target"
           x-text="targetFormatted"
           :class="{ pulse: targetPulsing }">
@@ -16,7 +16,7 @@
   <!-- LANDING (unauthenticated) -->
   {% if not user.is_authenticated %}
   <div class="sup-landing">
-    <h1>salaryfree</h1>
+    <h1 style="font-size: 2rem; font-weight: 400; margin-bottom: 16px;"><span class="brand-salary" style="font-family:'Space Grotesk',system-ui,sans-serif; font-weight:400; color:#3a5080; letter-spacing:-0.01em;">salary</span><span class="brand-free" style="font-family:'DM Serif Display',Georgia,serif; font-style:italic; color:#c9715f; letter-spacing:-0.02em; position:relative; top:0.06em;">free</span></h1>
     <p>Figure out when you can quit your job.<br>
        No signup. Takes 2 minutes.</p>
     <a href="{% url 'guest_login' %}" class="sup-btn sup-btn-start">

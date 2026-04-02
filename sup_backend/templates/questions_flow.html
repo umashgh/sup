@@ -57,15 +57,23 @@
       <template x-if="currentQuestion?.input_type === 'slider'">
         <div>
           <div class="slider-value-display">
-            <span x-text="answers[currentQuestion.field_name] || currentQuestion.slider_config?.min"></span>
-            <span class="unit" x-text="currentQuestion.slider_config?.unit || ''"></span>
+            <template x-if="answers[currentQuestion.field_name] === 0 && currentQuestion.slider_config?.zero_label">
+              <span x-text="currentQuestion.slider_config.zero_label"
+                style="font-size: 1.1rem; color: var(--ink-muted);"></span>
+            </template>
+            <template x-if="!(answers[currentQuestion.field_name] === 0 && currentQuestion.slider_config?.zero_label)">
+              <div>
+                <span x-text="answers[currentQuestion.field_name] ?? currentQuestion.slider_config?.min"></span>
+                <span class="unit" x-text="currentQuestion.slider_config?.unit || ''"></span>
+              </div>
+            </template>
           </div>
           <input type="range" :min="currentQuestion.slider_config?.min || 0"
             :max="currentQuestion.slider_config?.max || 100" :step="currentQuestion.slider_config?.step || 1"
             x-model.number="answers[currentQuestion.field_name]" />
           <div class="slider-range">
-            <span x-text="currentQuestion.slider_config?.min"></span>
-            <span x-text="currentQuestion.slider_config?.max"></span>
+            <span x-text="currentQuestion.slider_config?.zero_label || currentQuestion.slider_config?.min"></span>
+            <span x-text="currentQuestion.slider_config?.max + ' ' + (currentQuestion.slider_config?.unit || '')"></span>
           </div>
         </div>
       </template>
@@ -225,81 +233,103 @@
         </div>
       </template>
 
-      <!-- ===== Kids Age Range (dual-handle: current age + independence age) ===== -->
-      <template x-if="currentQuestion?.input_type === 'kids_age_range'">
+      <!-- ===== Kids Ages (one dual-handle slider per child) ===== -->
+      <template x-if="currentQuestion?.input_type === 'kids_ages_multi'">
         <div x-data="{
+          kids: [],
           get cfg() { return currentQuestion.slider_config || {}; },
-          get barMin()   { return cfg.age_min ?? 0; },
-          get barMax()   { return cfg.independence_max ?? 30; },
-          get kidAge()   { return parseInt($data.answers[currentQuestion.field_name] ?? cfg.age_default ?? 10); },
-          get indepAge() { return parseInt($data.answers[cfg.independence_field] ?? cfg.independence_default ?? 24); },
-          setKidAge(v) {
-            v = Math.max(this.barMin, Math.min(parseInt(v), Math.min(cfg.age_max ?? 25, this.indepAge - 1)));
-            $data.answers[currentQuestion.field_name] = v;
+          get barMin() { return this.cfg.age_min ?? 0; },
+          get barMax() { return this.cfg.independence_max ?? 30; },
+          init() {
+            const cfg = currentQuestion.slider_config || {};
+            const n = Math.min(parseInt($data.answers[cfg.count_field || 'kids_count'] || 1), 5);
+            this.kids = [];
+            for (let i = 0; i < n; i++) {
+              this.kids.push({
+                age:      parseInt($data.answers['family.kid_' + (i+1) + '_age']       ?? cfg.age_default          ?? 10),
+                indepAge: parseInt($data.answers['family.kid_' + (i+1) + '_indep_age'] ?? cfg.independence_default ?? 24),
+              });
+            }
+            // Write initial values to answers
+            this.kids.forEach((k, i) => {
+              $data.answers['family.kid_' + (i+1) + '_age']       = k.age;
+              $data.answers['family.kid_' + (i+1) + '_indep_age'] = k.indepAge;
+            });
+            // Also set field_name to signal question is answered
+            $data.answers[currentQuestion.field_name] = this.kids[0]?.age ?? cfg.age_default ?? 10;
           },
-          setIndepAge(v) {
-            v = Math.max(Math.max(cfg.independence_min ?? 18, this.kidAge + 1), Math.min(parseInt(v), this.barMax));
-            $data.answers[cfg.independence_field] = v;
+          setAge(i, v) {
+            v = Math.max(this.barMin, Math.min(parseInt(v), Math.min(this.cfg.age_max ?? 25, this.kids[i].indepAge - 1)));
+            this.kids[i].age = v;
+            this.kids = [...this.kids];
+            $data.answers['family.kid_' + (i+1) + '_age']  = v;
+            $data.answers[currentQuestion.field_name]       = this.kids[0].age;
           },
-          get leftPct()  { return ((this.kidAge - this.barMin) / (this.barMax - this.barMin)) * 100; },
-          get rightPct() { return ((this.indepAge - this.barMin) / (this.barMax - this.barMin)) * 100; },
-          get depYears() { return this.indepAge - this.kidAge; },
+          setIndepAge(i, v) {
+            v = Math.max(Math.max(this.cfg.independence_min ?? 18, this.kids[i].age + 1), Math.min(parseInt(v), this.barMax));
+            this.kids[i].indepAge = v;
+            this.kids = [...this.kids];
+            $data.answers['family.kid_' + (i+1) + '_indep_age'] = v;
+          },
+          leftPct(k)  { return ((k.age      - this.barMin) / (this.barMax - this.barMin)) * 100; },
+          rightPct(k) { return ((k.indepAge - this.barMin) / (this.barMax - this.barMin)) * 100; },
+          depYears(k) { return k.indepAge - k.age; },
         }">
+          <template x-for="(kid, i) in kids" :key="i">
+            <div :style="i > 0 ? 'margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.07);' : ''">
 
-          <!-- Hotel booking style: two "date" cards -->
-          <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; margin-bottom: 20px; align-items: center;">
-            <div style="background: var(--cream-dark); border-radius: 10px; padding: 12px 8px; text-align: center; border: 2px solid transparent;"
-                 :style="'border-color: var(--coral)'">
-              <div style="font-size: 0.65rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Child age now</div>
-              <div style="font-family: var(--serif); font-size: 2rem; color: var(--coral); line-height: 1;" x-text="kidAge"></div>
-              <div style="font-size: 0.72rem; color: var(--ink-muted); margin-top: 2px;">years</div>
-            </div>
-            <div style="text-align: center; color: var(--ink-faint);">
-              <div style="font-size: 0.65rem; color: var(--ink-muted);" x-text="depYears + ' yrs'"></div>
-              <div style="font-size: 1rem;">→</div>
-            </div>
-            <div style="background: var(--forest-light); border-radius: 10px; padding: 12px 8px; text-align: center; border: 2px solid var(--forest);">
-              <div style="font-size: 0.65rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Independent at</div>
-              <div style="font-family: var(--serif); font-size: 2rem; color: var(--forest); line-height: 1;" x-text="indepAge"></div>
-              <div style="font-size: 0.72rem; color: var(--ink-muted); margin-top: 2px;">years</div>
-            </div>
-          </div>
+              <!-- Child label -->
+              <div style="font-size: 0.78rem; font-weight: 600; color: var(--ink-muted); margin-bottom: 12px;"
+                x-text="kids.length > 1 ? 'Child ' + (i+1) : 'Your child'"></div>
 
-          <!-- Track with two overlaid sliders (same scale: barMin to barMax) -->
-          <div style="position: relative; height: 48px; margin-bottom: 8px;">
-            <!-- Background track -->
-            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 8px;
-                        border-radius: 4px; background: var(--cream-dark); transform: translateY(-50%);
-                        pointer-events: none;"></div>
-            <!-- Highlighted dependent-years range -->
-            <div :style="`position: absolute; top: 50%; left: ${leftPct}%;
-                          width: ${rightPct - leftPct}%; height: 8px;
-                          border-radius: 4px; background: var(--forest); opacity: 0.55;
-                          transform: translateY(-50%); pointer-events: none;`"></div>
-            <!-- Left input: current child age — same scale 0‒30 -->
-            <input type="range"
-              :min="barMin" :max="barMax" step="1"
-              :value="kidAge"
-              @input="setKidAge($event.target.value)"
-              style="position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%);
-                     -webkit-appearance: none; background: transparent; height: 48px; margin: 0; padding: 0;"
-              class="dual-range-left" />
-            <!-- Right input: independence age — same scale 0‒30 -->
-            <input type="range"
-              :min="barMin" :max="barMax" step="1"
-              :value="indepAge"
-              @input="setIndepAge($event.target.value)"
-              style="position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%);
-                     -webkit-appearance: none; background: transparent; height: 48px; margin: 0; padding: 0;"
-              class="dual-range-right" />
-          </div>
+              <!-- Age display cards -->
+              <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; margin-bottom: 20px; align-items: center;">
+                <div style="background: var(--cream-dark); border-radius: 10px; padding: 12px 8px; text-align: center; border: 2px solid var(--coral);">
+                  <div style="font-size: 0.65rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Age now</div>
+                  <div style="font-family: var(--serif); font-size: 2rem; color: var(--coral); line-height: 1;" x-text="kid.age"></div>
+                  <div style="font-size: 0.72rem; color: var(--ink-muted); margin-top: 2px;">years</div>
+                </div>
+                <div style="text-align: center; color: var(--ink-faint);">
+                  <div style="font-size: 0.65rem; color: var(--ink-muted);" x-text="depYears(kid) + ' yrs'"></div>
+                  <div style="font-size: 1rem;">→</div>
+                </div>
+                <div style="background: var(--forest-light); border-radius: 10px; padding: 12px 8px; text-align: center; border: 2px solid var(--forest);">
+                  <div style="font-size: 0.65rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Independent at</div>
+                  <div style="font-family: var(--serif); font-size: 2rem; color: var(--forest); line-height: 1;" x-text="kid.indepAge"></div>
+                  <div style="font-size: 0.72rem; color: var(--ink-muted); margin-top: 2px;">years</div>
+                </div>
+              </div>
 
-          <!-- Axis labels -->
-          <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--ink-faint);">
-            <span x-text="barMin + ' yrs'"></span>
-            <span style="color: var(--forest); font-size: 0.68rem;">← dependent years →</span>
-            <span x-text="barMax + ' yrs'"></span>
-          </div>
+              <!-- Dual-handle slider -->
+              <div style="position: relative; height: 48px; margin-bottom: 8px;">
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 8px;
+                            border-radius: 4px; background: var(--cream-dark); transform: translateY(-50%);
+                            pointer-events: none;"></div>
+                <div :style="`position: absolute; top: 50%; left: ${leftPct(kid)}%;
+                              width: ${rightPct(kid) - leftPct(kid)}%; height: 8px;
+                              border-radius: 4px; background: var(--forest); opacity: 0.55;
+                              transform: translateY(-50%); pointer-events: none;`"></div>
+                <input type="range" :min="barMin" :max="barMax" step="1"
+                  :value="kid.age"
+                  @input="setAge(i, $event.target.value)"
+                  style="position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%);
+                         -webkit-appearance: none; background: transparent; height: 48px; margin: 0; padding: 0;"
+                  class="dual-range-left" />
+                <input type="range" :min="barMin" :max="barMax" step="1"
+                  :value="kid.indepAge"
+                  @input="setIndepAge(i, $event.target.value)"
+                  style="position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%);
+                         -webkit-appearance: none; background: transparent; height: 48px; margin: 0; padding: 0;"
+                  class="dual-range-right" />
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--ink-faint);">
+                <span x-text="barMin + ' yrs'"></span>
+                <span style="color: var(--forest); font-size: 0.68rem;">← dependent years →</span>
+                <span x-text="barMax + ' yrs'"></span>
+              </div>
+
+            </div>
+          </template>
         </div>
       </template>
 
@@ -766,6 +796,33 @@
             style="text-align: center; padding: 10px 0; font-size: 0.82rem; color: var(--ink-muted);">
             No expected future assets? You can skip this step.
           </div>
+        </div>
+      </template>
+
+      <!-- ===== Rate Inputs (inline rate config for tier 2) ===== -->
+      <template x-if="currentQuestion?.input_type === 'rate_inputs'">
+        <div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <template x-for="field in currentQuestion.options" :key="field.field">
+              <label style="display: flex; flex-direction: column; gap: 6px;
+                            background: white; border-radius: 10px; padding: 12px;
+                            border: 1px solid rgba(0,0,0,0.07);">
+                <span style="font-size: 0.72rem; color: var(--ink-muted); line-height: 1.3;"
+                  x-text="field.label"></span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <input type="number" step="0.5" min="0" max="30"
+                    :value="answers[field.field] ?? field.default"
+                    @change="answers[field.field] = parseFloat($event.target.value)"
+                    style="width: 68px; padding: 8px; border: 1px solid rgba(0,0,0,0.15);
+                           border-radius: 6px; font-size: 1rem; font-family: var(--serif);
+                           font-weight: 600; color: var(--ink);" />
+                  <span style="font-size: 0.78rem; color: var(--ink-muted);" x-text="field.unit"></span>
+                </div>
+              </label>
+            </template>
+          </div>
+          <!-- Mark this question confirmed when user continues -->
+          <div x-init="answers[currentQuestion.field_name] = true"></div>
         </div>
       </template>
 
@@ -1449,7 +1506,8 @@
             family: {},
             assets: {},
             income: {},
-            profile: {}
+            profile: {},
+            rates: {}
           };
 
           Object.keys(this.answers).forEach(fieldPath => {
@@ -1498,6 +1556,7 @@
           }
 
           sessionStorage.setItem('calculation_results', JSON.stringify(results));
+          sessionStorage.setItem('last_answers', JSON.stringify(data));
           window.location.href = '/results/';
 
         } catch (err) {

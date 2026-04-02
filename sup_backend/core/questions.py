@@ -118,9 +118,9 @@ QUESTIONS = [
 
     Question(
         id="kids_age_range",
-        text="How old is your kid, and when will they be independent?",
-        field_name="family.kids_average_age",
-        input_type="kids_age_range",
+        text="How old are your children, and when will each be independent?",
+        field_name="family.kid_1_age",
+        input_type="kids_ages_multi",
         tier="QUICK",
         scenarios=["FOUNDER", "RETIREMENT", "R2I", "HALF_FIRE", "TERMINATION"],
         condition=lambda data: (
@@ -130,12 +130,12 @@ QUESTIONS = [
         slider_config={
             "age_min": 0, "age_max": 25, "age_default": 10,
             "independence_min": 18, "independence_max": 30, "independence_default": 24,
-            "independence_field": "family.kids_independence_age",
+            "count_field": "kids_count",
         },
-        help_text="Drag the left handle for current age, right handle for when they're financially independent."
+        help_text="Left handle = current age, right handle = when they become financially independent."
     ),
 
-    # Conditional: Dependent adults count (shows for all non-solo family types)
+    # Conditional: Dependent adults count (only for 'joint' — partner+kids+parents)
     Question(
         id="dependent_adults_count",
         text="How many dependent adults (parents, etc.)?",
@@ -143,7 +143,7 @@ QUESTIONS = [
         input_type="slider",
         tier="QUICK",
         scenarios=["FOUNDER", "RETIREMENT", "R2I", "HALF_FIRE", "TERMINATION"],
-        condition=lambda data: data.get("family_type") in ["partner", "partner_kids", "joint"],
+        condition=lambda data: data.get("family_type") == "joint",
         slider_config={
             "min": 0,
             "max": 4,
@@ -522,6 +522,42 @@ STANDARD_TIER_QUESTIONS = [
         },
     ),
 
+    # ── Inline rate config questions (shown after asset splits) ─────────────
+    Question(
+        id="asset_growth_rates",
+        text="Confirm your asset growth rates",
+        field_name="rates.asset_rates_confirmed",
+        input_type="rate_inputs",
+        tier="STANDARD",
+        scenarios=["FOUNDER", "RETIREMENT", "R2I", "HALF_FIRE", "TERMINATION"],
+        help_text="These are Indian market averages. Edit to reflect your personal view — they drive the 20-year projection.",
+        widget_category="asset",
+        options=[
+            {"field": "rates.liquid_return_pct",         "label": "Cash / liquid return",    "default": 6,  "unit": "%/yr"},
+            {"field": "rates.semi_liquid_return_pct",    "label": "Bonds / debt MFs",         "default": 8,  "unit": "%/yr"},
+            {"field": "rates.growth_return_pct",         "label": "Equity / PF / NPS",        "default": 12, "unit": "%/yr"},
+            {"field": "rates.property_appreciation_pct", "label": "Property appreciation",    "default": 5,  "unit": "%/yr"},
+            {"field": "rates.property_rental_yield_pct", "label": "Rental yield",             "default": 3,  "unit": "%/yr"},
+        ],
+    ),
+
+    Question(
+        id="inflation_rates",
+        text="Confirm inflation assumptions",
+        field_name="rates.inflation_confirmed",
+        input_type="rate_inputs",
+        tier="STANDARD",
+        scenarios=["FOUNDER", "RETIREMENT", "R2I", "HALF_FIRE", "TERMINATION"],
+        help_text="Expenses typically grow 6–7%/yr in India. Adjust if your spending is different.",
+        widget_category="expense",
+        options=[
+            {"field": "rates.needs_inflation_pct",  "label": "Essentials inflation",    "default": 6, "unit": "%/yr"},
+            {"field": "rates.wants_inflation_pct",  "label": "Lifestyle inflation",      "default": 7, "unit": "%/yr"},
+            {"field": "rates.passive_growth_pct",   "label": "Passive income growth",   "default": 4, "unit": "%/yr"},
+            {"field": "rates.swr_rate_pct",         "label": "Safe withdrawal rate",     "default": 4, "unit": "%"},
+        ],
+    ),
+
     # Retirement & R2I: Pension details
     Question(
         id="pension_monthly",
@@ -614,16 +650,17 @@ STANDARD_TIER_QUESTIONS = [
         input_type="slider",
         tier="STANDARD",
         scenarios=["TERMINATION"],
-        help_text="Months until your next role. Set to 0 if you don't plan to restart / not sure.",
+        help_text="Drag to set months until your next role. Leave at 0 if you're not planning to restart or aren't sure.",
         widget_category="info",
         slider_config={
             "min": 0,
-            "max": 24,
+            "max": 36,
             "step": 1,
             "unit": "months",
             "default": 6,
+            "zero_label": "Not planning to restart",
         },
-        validation={"min": 0, "max": 24},
+        validation={"min": 0, "max": 36},
     ),
 
     Question(

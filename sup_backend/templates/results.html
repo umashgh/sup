@@ -11,7 +11,7 @@
 {% block app_footer %}{% endblock %}
 
 {% block body %}
-<div x-data="resultsView()">
+<div x-data="resultsView()" @recalc-done.window="onRecalcDone($event.detail)">
 
   <!-- ===== THE REVEAL (gauge + big number) ===== -->
   <section class="reveal" x-show="!loading">
@@ -254,25 +254,46 @@
       <div class="result-card-sub" x-text="results.sustainable ? 'Corpus remains healthy through the plan period' : 'Consider increasing assets, passive income, or reducing expenses'"></div>
     </div>
 
+    <!-- Projection-adjusted depletion year -->
+    <div class="result-card" style="margin-bottom: 8px; background: rgba(239,68,68,0.04); border-color: rgba(239,68,68,0.15);">
+      <div class="result-card-label">Inflation-adjusted runway</div>
+      <template x-if="results.depletion_year !== null && results.depletion_year !== undefined">
+        <div>
+          <div class="result-card-value coral">Year <span x-text="results.depletion_year"></span></div>
+          <div class="result-card-sub">Money runs out at Year <span x-text="results.depletion_year"></span> after accounting for 6–7%/yr inflation and asset growth — sooner than the simple comfort runway suggests.</div>
+        </div>
+      </template>
+      <template x-if="results.depletion_year === null || results.depletion_year === undefined">
+        <div>
+          <div class="result-card-value forest">Beyond 20 years</div>
+          <div class="result-card-sub">Even with inflation and compounding, your corpus lasts the full 20-year projection window.</div>
+        </div>
+      </template>
+    </div>
+
   </section>
 
 
-  <!-- ===== RATES & ASSUMPTIONS (tier 2 only — changing them re-runs projection) ===== -->
+  <!-- ===== WHAT WENT IN (tier 2 only — review inputs + rates, recalculate) ===== -->
   <section style="padding: 0 24px 8px;" x-show="!loading && results.tier === 'STANDARD'" x-data="ratesPanel()">
-    <button @click="toggle()"
-      style="width: 100%; display: flex; align-items: center; justify-content: space-between;
-             background: none; border: 1px solid rgba(0,0,0,0.1); border-radius: 10px;
-             padding: 12px 16px; cursor: pointer; font-size: 0.82rem; color: var(--ink-muted);">
-      <span>⚙ Rates &amp; Assumptions</span>
-      <span x-text="open ? '▲' : '▼'" style="font-size: 0.7rem;"></span>
-    </button>
+    <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+                color: var(--ink-muted); margin-bottom: 10px;">What went in</div>
 
-    <div x-show="open" x-collapse style="border: 1px solid rgba(0,0,0,0.08); border-top: none;
-         border-radius: 0 0 10px 10px; padding: 16px; background: #fafafa;">
+    <!-- Key inputs summary -->
+    <div style="background: #f8f8f5; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
+                font-size: 0.78rem; color: var(--ink-muted); line-height: 2;">
+      <div>Monthly expenses: <strong style="color: var(--ink);" x-text="formatCurrency(results.monthly_expenses)"></strong></div>
+      <div>Total assets: <strong style="color: var(--ink);" x-text="formatCurrency(results.total_assets)"></strong></div>
+      <div x-show="results.monthly_passive > 0">Passive income: <strong style="color: var(--ink);" x-text="formatCurrency(results.monthly_passive) + '/mo'"></strong></div>
+      <div>Emergency fund lock: <strong style="color: var(--ink);" x-text="formatCurrency(results.emergency_fund_lock)"></strong></div>
+    </div>
 
-      <p style="font-size: 0.72rem; color: var(--ink-muted); margin-bottom: 14px;">
-        These defaults match Indian market averages. Edit to reflect your personal view — changes re-run the projection.
-      </p>
+    <!-- Rates section (always visible, editable) -->
+    <div style="border: 1px solid rgba(0,0,0,0.08); border-radius: 10px; padding: 14px 16px; background: #fafafa;">
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--ink); margin-bottom: 10px;">
+        Rates &amp; assumptions
+        <span style="font-weight: 400; color: var(--ink-muted); font-size: 0.7rem; margin-left: 4px;">— edit and recalculate</span>
+      </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         <template x-for="field in rateFields" :key="field.key">
@@ -281,7 +302,7 @@
             <div style="display: flex; align-items: center; gap: 4px;">
               <input type="number" step="0.5" min="0" max="30"
                 :value="rates[field.key]"
-                @change="onRateChange(field.key, $event.target.value)"
+                @input="onRateChange(field.key, $event.target.value)"
                 style="width: 64px; padding: 6px 8px; border: 1px solid rgba(0,0,0,0.15);
                        border-radius: 6px; font-size: 0.82rem; background: white;" />
               <span style="font-size: 0.75rem; color: var(--ink-muted);">%</span>
@@ -290,12 +311,15 @@
         </template>
       </div>
 
-      <div x-show="dirty" style="margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-        <button @click="saveRates()"
-          style="padding: 8px 18px; background: var(--blue); color: white; border: none;
-                 border-radius: 8px; font-size: 0.8rem; cursor: pointer;">
-          Save &amp; recalculate
+      <div style="margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <button @click="saveAndRecalc()"
+          :style="dirty ? 'background: var(--blue);' : 'background: rgba(0,0,0,0.25);'"
+          style="padding: 9px 18px; color: white; border: none;
+                 border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 500;
+                 transition: background 0.2s;">
+          Recalculate →
         </button>
+        <span x-show="dirty" style="font-size: 0.72rem; color: var(--mustard);">Rates changed</span>
         <span x-show="savedMsg" x-text="savedMsg"
           style="font-size: 0.75rem; color: var(--forest);"></span>
       </div>
@@ -338,6 +362,62 @@
   </section>
 
 
+  <!-- ===== GUEST LOGIN NUDGE (tier 1, guests only) ===== -->
+  <section style="padding: 0 24px 16px;"
+    x-show="!loading && isGuest && results.tier === 'QUICK'">
+    <div style="background: linear-gradient(135deg, #f0f7ff, #e8f4ff);
+                border: 1px solid rgba(26,86,219,0.15); border-radius: 12px; padding: 16px;">
+      <div style="font-size: 0.85rem; font-weight: 600; color: var(--blue); margin-bottom: 6px;">
+        Save your scenario
+      </div>
+      <div style="font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 12px; line-height: 1.5;">
+        You're browsing as a guest. Create a free account to save this scenario, compare options, and pick up where you left off.
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="/accounts/signup/"
+           style="padding: 9px 18px; background: var(--blue); color: white; border-radius: 8px;
+                  font-size: 0.8rem; text-decoration: none; font-weight: 500;">
+          Create free account
+        </a>
+        <a href="/accounts/login/"
+           style="padding: 9px 18px; background: transparent; color: var(--blue);
+                  border: 1px solid var(--blue); border-radius: 8px; font-size: 0.8rem; text-decoration: none;">
+          Sign in
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ADVANCED OPTIMIZER TEASER (tier 2 end) ===== -->
+  <section style="padding: 0 24px 16px;" x-show="!loading && results.tier === 'STANDARD'">
+    <div style="background: linear-gradient(135deg, #f5f0ff, #ede8ff);
+                border: 1px solid rgba(109,40,217,0.15); border-radius: 12px; padding: 16px;">
+      <div style="font-size: 0.72rem; font-weight: 700; color: #7c3aed; text-transform: uppercase;
+                  letter-spacing: 0.06em; margin-bottom: 6px;">Advanced · Coming soon</div>
+      <div style="font-size: 0.85rem; font-weight: 600; color: var(--ink); margin-bottom: 6px;">
+        Optimize your plan
+      </div>
+      <div style="font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 12px; line-height: 1.5;">
+        The Advanced optimizer will find specific actions to improve your number — reducing wants spend, adjusting your start date, bootstrapping differently, or modelling part-time income.
+      </div>
+      <ul style="margin: 0 0 12px; padding: 0 0 0 16px; font-size: 0.78rem; color: var(--ink-muted); line-height: 1.9;">
+        <li>Scenario comparisons (delay by 1yr, cut wants 20%)</li>
+        <li>Personalized advisory for your scenario</li>
+        <li>Save &amp; resume calculations</li>
+      </ul>
+      <button
+        style="padding: 9px 18px; background: #7c3aed; color: white; border: none;
+               border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 500; opacity: 0.7;"
+        @click="showAdvancedTeaser = !showAdvancedTeaser">
+        Notify me when ready
+      </button>
+      <div x-show="showAdvancedTeaser"
+           style="margin-top: 10px; font-size: 0.78rem; color: #7c3aed; font-weight: 500;">
+        ✓ We'll build it — sign in to save your spot.
+      </div>
+    </div>
+  </section>
+
   <!-- ===== ACTION BUTTONS ===== -->
   <section style="padding: 0 24px 40px;" x-show="!loading">
     <div x-show="advanceTierError" class="error-card" role="alert" style="margin: 0 0 12px;">
@@ -357,7 +437,7 @@
 
   <!-- ===== FOOTER ===== -->
   <footer x-show="!loading">
-    <div class="logo">salaryfree</div>
+    <div class="logo brand-mark"><span class="brand-salary">salary</span><span class="brand-free">free</span></div>
     <div class="links">
       <a href="/">Start over</a>
       <a href="#">About</a>
@@ -386,6 +466,14 @@
       showLoginNudge: false,
       isGuest: false,
       rates: {},
+
+      formatCurrency(amount) {
+        if (!amount && amount !== 0) return '₹—';
+        if (amount >= 10000000) return `₹${(amount / 10000000).toFixed(1)}Cr`;
+        if (amount >= 100000) return `₹${(amount / 100000).toFixed(1)}L`;
+        if (amount >= 1000) return `₹${(amount / 1000).toFixed(0)}K`;
+        return `₹${amount}`;
+      },
       rateFields: [
         { key: 'liquid_return_pct',          label: 'Liquid return' },
         { key: 'semi_liquid_return_pct',     label: 'Semi-liquid return' },
@@ -438,11 +526,50 @@
           if (json.rates) {
             this.rates = json.rates;
             this.dirty = false;
-            this.savedMsg = 'Saved — recalculate to see impact';
-            setTimeout(() => this.savedMsg = '', 3500);
           }
+          return json.success !== false;
         } catch(e) {
-          this.savedMsg = 'Save failed';
+          return false;
+        }
+      },
+
+      async saveAndRecalc() {
+        this.savedMsg = 'Recalculating…';
+        const lastAnswersRaw = sessionStorage.getItem('last_answers');
+        if (!lastAnswersRaw) {
+          // Fallback: save to DB then re-run questions flow
+          await this.saveRates();
+          sessionStorage.setItem('advancing_to_tier_2', 'true');
+          window.location.href = '/questions/';
+          return;
+        }
+
+        // Merge updated rates into last answers and re-POST
+        try {
+          const lastData = JSON.parse(lastAnswersRaw);
+          lastData.rates = { ...lastData.rates, ...this.rates };
+
+          const res = await fetch('/api/scenarios/calculate/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({ data: lastData }),
+          });
+
+          if (!res.ok) throw new Error('Calculation failed');
+
+          const newResults = await res.json();
+          sessionStorage.setItem('calculation_results', JSON.stringify(newResults));
+          sessionStorage.setItem('last_answers', JSON.stringify(lastData));
+          this.dirty = false;
+          this.savedMsg = '✓ Updated';
+          setTimeout(() => this.savedMsg = '', 3000);
+          // Update resultsView in-place — no page reload
+          this.$dispatch('recalc-done', { payload: newResults });
+        } catch(e) {
+          this.savedMsg = 'Recalculation failed';
         }
       },
     };
@@ -455,10 +582,12 @@
       scenarioName: '',
       scenarioEmoji: '',
       canAdvance: false,
+      isGuest: false,
       loading: true,
       showChart: false,
       chart: null,
       advanceTierError: null,
+      showAdvancedTeaser: false,
 
       // Computed: does this scenario show the gauge + runway number?
       get hasRunway() {
@@ -467,8 +596,9 @@
 
       // Gauge angle: -90 (tight) to +90 (free)
       get gaugeAngle() {
-        const months = this.results.comfort_runway_months || 0;
-        if (!months) return 90; // infinite = free
+        const months = this.results.comfort_runway_months;
+        if (months === null || months === undefined) return 90; // infinite = free
+        if (months === 0) return -90; // no available cash = tight
         // 0-6 months = tight (-90 to -30), 6-24 = comfy (-30 to 30), 24+ = free (30 to 90)
         if (months <= 6) return -90 + (months / 6) * 60;
         if (months <= 24) return -30 + ((months - 6) / 18) * 60;
@@ -479,7 +609,8 @@
       get primaryNumber() {
         if (this.hasRunway) {
           const m = this.results.comfort_runway_months;
-          if (!m) return '∞';
+          if (m === null || m === undefined) return '∞';
+          if (m === 0) return '0';
           if (m >= 12) return (m / 12).toFixed(1);
           return Math.round(m);
         }
@@ -492,7 +623,8 @@
       get primaryUnit() {
         if (this.hasRunway) {
           const m = this.results.comfort_runway_months;
-          if (!m) return '';
+          if (m === null || m === undefined) return '';
+          if (m === 0) return 'months';
           return m >= 12 ? 'years' : 'months';
         }
         if (this.scenarioType === 'RETIREMENT') {
@@ -519,7 +651,7 @@
 
         if (this.hasRunway) {
           // All runway scenarios show austerity + FIRE target + gap
-          if (r.austerity_runway_months) {
+          if (r.austerity_runway_months !== null && r.austerity_runway_months !== undefined) {
             stats.push({ value: this.formatRunway(r.austerity_runway_months), label: 'Austerity' });
           }
           if (r.target_number) {
@@ -557,6 +689,7 @@
         this.results = data.results;
         this.scenarioType = this.results.scenario_type;
         this.canAdvance = data.can_advance;
+        this.isGuest = (data.username || '').startsWith('guest_');
 
         // Set scenario name + emoji
         const scenarios = {
@@ -746,8 +879,22 @@
         window.location.href = '/';
       },
 
+      onRecalcDone(detail) {
+        const data = detail.payload;
+        if (!data || !data.results) return;
+        this.results = data.results;
+        this.canAdvance = data.can_advance;
+        // Redraw chart if projection data changed
+        if (this.results.chart_data) {
+          if (this.chart) { this.chart.destroy(); this.chart = null; }
+          this.showChart = true;
+          this.$nextTick(() => this.initChart());
+        }
+      },
+
       formatRunway(months, suffix = '') {
-        if (!months) return '∞';
+        if (months === null || months === undefined) return '∞';
+        if (months === 0) return '0 months';
         const sfx = suffix ? ' ' + suffix : '';
         if (months >= 24) return (months / 12).toFixed(1) + ' years' + sfx;
         if (months >= 12) return (months / 12).toFixed(1) + ' years' + sfx;

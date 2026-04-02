@@ -95,9 +95,23 @@
 
   <!-- ===== TOP BAR with login ===== -->
   <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
-    <div style="font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink);">salaryfree</div>
-    <a href="/start/"
-      style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; display: inline-flex; align-items: center; min-height: 44px;">Login</a>
+    <div class="brand-mark" style="font-size: 1rem;"><span class="brand-salary">salary</span><span class="brand-free">free</span></div>
+    {% if user.is_authenticated %}
+      {% if user.username|slice:":6" == "guest_" %}
+      <a href="/accounts/login/"
+        style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; display: inline-flex; align-items: center; min-height: 44px;">
+        Sign in</a>
+      {% else %}
+      <span style="font-size: 0.78rem; color: var(--ink-muted); margin-right: 6px;">{{ user.username }}</span>
+      <a href="/accounts/logout/"
+        style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; display: inline-flex; align-items: center; min-height: 44px;">
+        Sign out</a>
+      {% endif %}
+    {% else %}
+    <a href="/accounts/login/"
+      style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; display: inline-flex; align-items: center; min-height: 44px;">
+      Sign in</a>
+    {% endif %}
   </div>
 
   <!-- ===== HERO ===== -->
@@ -397,7 +411,7 @@
 
   <!-- ===== ABOUT (brief) ===== -->
   <section style="padding: 32px 24px; background: var(--cream-dark);" class="fi" id="about">
-    <h2 style="font-family: var(--serif); font-size: 1.1rem; font-weight: 400; margin-bottom: 10px;">About salaryfree</h2>
+    <h2 style="font-family: var(--serif); font-size: 1.1rem; font-weight: 400; margin-bottom: 10px;">About <span class="brand-mark" style="font-size: 1em;"><span class="brand-salary">salary</span><span class="brand-free">free</span></span></h2>
     <p style="font-size: 0.82rem; color: var(--ink-muted); line-height: 1.6; max-width: 360px;">
       salaryfree helps salaried Indians and startup founders figure out if they can afford to make a life change — quit to
       start something, retire early, move back from abroad, or ride out a layoff. All numbers are in Indian context
@@ -408,7 +422,7 @@
 
   <!-- ===== FOOTER ===== -->
   <footer>
-    <div class="logo">salaryfree</div>
+    <div class="logo brand-mark"><span class="brand-salary">salary</span><span class="brand-free">free</span></div>
     <div class="links">
       <a href="#about">About</a>
       <a href="#privacy">Privacy</a>

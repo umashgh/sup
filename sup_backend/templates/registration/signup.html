@@ -1,0 +1,67 @@
+{% extends "base_mobile.html" %}
+{% block title %}Create account — salaryfree{% endblock %}
+{% block app_header %}{% endblock %}
+{% block app_footer %}{% endblock %}
+
+{% block body %}
+<div style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            padding: 32px 24px; background: var(--cream);">
+
+  <div style="margin-bottom: 32px;">
+    <a href="/" class="brand-mark" style="font-size: 1rem;"><span class="brand-salary">salary</span><span class="brand-free">free</span></a>
+  </div>
+
+  <h1 style="font-family: var(--serif); font-size: 2rem; font-weight: 400;
+              margin-bottom: 8px; color: var(--ink);">Pick a username.</h1>
+  <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 6px; line-height: 1.5;">
+    That's all we need. Your scenarios are saved under this handle — no email, no password.
+  </p>
+  <p style="font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 28px; line-height: 1.5;
+            padding: 10px 14px; background: rgba(26,86,219,0.05);
+            border-radius: 8px; border-left: 3px solid var(--blue);">
+    Keep your username private — it's the only thing that unlocks your data.
+    You can optionally encrypt your data with a passphrase later.
+  </p>
+
+  {% if error %}
+  <div style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+              border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;
+              font-size: 0.82rem; color: #dc2626;">
+    {{ error }}
+  </div>
+  {% endif %}
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 16px;">
+    {% csrf_token %}
+
+    <div>
+      <label style="display: block; font-size: 0.78rem; font-weight: 600;
+                    color: var(--ink-muted); margin-bottom: 6px;">Choose a username</label>
+      <input type="text" name="username" autocomplete="username" autofocus
+        placeholder="e.g. rahul_fires_at_40"
+        style="width: 100%; padding: 14px 16px; border: 1.5px solid rgba(0,0,0,0.12);
+               border-radius: 10px; font-size: 1rem; background: white;
+               color: var(--ink); box-sizing: border-box;" />
+      <div style="font-size: 0.72rem; color: var(--ink-muted); margin-top: 6px;">
+        Letters, numbers, hyphens, underscores. Min 3 characters.
+      </div>
+    </div>
+
+    <button type="submit" class="btn-primary" style="margin-top: 4px;">
+      Create account →
+    </button>
+  </form>
+
+  <p style="font-size: 0.82rem; color: var(--ink-muted); margin-top: 24px; text-align: center;">
+    Already have an account?
+    <a href="/accounts/login/" style="color: var(--blue); text-decoration: none; font-weight: 600;">
+      Sign in
+    </a>
+    &nbsp;·&nbsp;
+    <a href="/start/" style="color: var(--ink-muted); text-decoration: none;">
+      Continue as guest
+    </a>
+  </p>
+
+</div>
+{% endblock %}

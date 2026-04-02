@@ -17,6 +17,10 @@ from finance.models import (
 
 def guest_login(request):
     """Create a guest user, log them in via session, redirect to main flow."""
+    # Don't create a new session if already authenticated
+    if request.user.is_authenticated:
+        return redirect('scenario_selector')
+
     username = f"guest_{uuid.uuid4().hex[:12]}"
     user = User.objects.create_user(username=username)
     login(request, user)
@@ -489,9 +493,25 @@ def calculate_tier(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Inject user rate preferences (or defaults) into user_data
+    # Apply any rate overrides submitted with this calculation, then inject
     from .models import UserRatePreferences
     rate_prefs, _ = UserRatePreferences.objects.get_or_create(user=request.user)
+
+    submitted_rates = user_data.get('rates', {}) or {}
+    if submitted_rates:
+        RATE_FIELDS = {
+            'liquid_return_pct', 'semi_liquid_return_pct', 'growth_return_pct',
+            'property_appreciation_pct', 'property_rental_yield_pct',
+            'needs_inflation_pct', 'wants_inflation_pct', 'passive_growth_pct', 'swr_rate_pct',
+        }
+        updated_fields = []
+        for field in RATE_FIELDS:
+            if field in submitted_rates and submitted_rates[field] is not None:
+                setattr(rate_prefs, field, float(submitted_rates[field]))
+                updated_fields.append(field)
+        if updated_fields:
+            rate_prefs.save(update_fields=updated_fields)
+
     user_data['rates'] = rate_prefs.as_dict()
 
     tier_names = {1: 'QUICK', 2: 'STANDARD', 3: 'ADVANCED'}
@@ -648,7 +668,8 @@ def calculate_tier(request):
         'results': results,
         'tier': profile.current_tier,
         'tier_name': current_tier_name,
-        'can_advance': profile.current_tier < 2,  # ADVANCED tier not yet implemented
+        'can_advance': profile.current_tier < 2,
+        'username': request.user.username,
     })
 
 

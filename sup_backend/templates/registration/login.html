@@ -1,0 +1,59 @@
+{% extends "base_mobile.html" %}
+{% block title %}Sign in — salaryfree{% endblock %}
+{% block app_header %}{% endblock %}
+{% block app_footer %}{% endblock %}
+
+{% block body %}
+<div style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            padding: 32px 24px; background: var(--cream);">
+
+  <div style="margin-bottom: 32px;">
+    <a href="/" class="brand-mark" style="font-size: 1rem;"><span class="brand-salary">salary</span><span class="brand-free">free</span></a>
+  </div>
+
+  <h1 style="font-family: var(--serif); font-size: 2rem; font-weight: 400;
+              margin-bottom: 8px; color: var(--ink);">Welcome back.</h1>
+  <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 28px; line-height: 1.5;">
+    Enter your username to pick up where you left off.
+  </p>
+
+  {% if error %}
+  <div style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+              border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;
+              font-size: 0.82rem; color: #dc2626;">
+    {{ error }}
+  </div>
+  {% endif %}
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 16px;">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+    <div>
+      <label style="display: block; font-size: 0.78rem; font-weight: 600;
+                    color: var(--ink-muted); margin-bottom: 6px;">Username</label>
+      <input type="text" name="username" autocomplete="username" autofocus
+        placeholder="your-handle"
+        style="width: 100%; padding: 14px 16px; border: 1.5px solid rgba(0,0,0,0.12);
+               border-radius: 10px; font-size: 1rem; background: white;
+               color: var(--ink); box-sizing: border-box;" />
+    </div>
+
+    <button type="submit" class="btn-primary" style="margin-top: 4px;">
+      Sign in →
+    </button>
+  </form>
+
+  <p style="font-size: 0.82rem; color: var(--ink-muted); margin-top: 24px; text-align: center;">
+    No account yet?
+    <a href="/accounts/signup/" style="color: var(--blue); text-decoration: none; font-weight: 600;">
+      Create one free
+    </a>
+    &nbsp;·&nbsp;
+    <a href="/start/" style="color: var(--ink-muted); text-decoration: none;">
+      Continue as guest
+    </a>
+  </p>
+
+</div>
+{% endblock %}

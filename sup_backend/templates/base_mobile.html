@@ -1169,12 +1169,6 @@
       align-items: center;
     }
 
-    footer .logo {
-      font-family: var(--serif);
-      font-size: 1.1rem;
-      color: var(--ink);
-    }
-
     footer .links {
       display: flex;
       gap: 14px;
@@ -1394,6 +1388,37 @@
       font-size: 1.2rem;
       cursor: pointer;
       color: var(--cream);
+    }
+
+    /* ── Brand mark ────────────────────────────────────────
+       salary  → Space Grotesk (the workaday sans, already loaded)
+       free    → DM Serif Display italic (the aspirational serif, already loaded)
+       Use .brand-mark as the wrapper; control size via font-size on parent.
+    ───────────────────────────────────────────────────────── */
+    .brand-mark {
+      display: inline-flex;
+      align-items: baseline;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .brand-salary {
+      font-family: var(--sans);
+      font-weight: 400;
+      color: var(--ink-muted);
+      letter-spacing: -0.01em;
+    }
+    .brand-free {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--coral);
+      letter-spacing: -0.02em;
+      position: relative;
+      top: 0.06em; /* optical baseline align — serif sits slightly lower */
+    }
+
+    /* Footer logo uses brand-mark; override only font-size */
+    footer .logo {
+      font-size: 1.1rem;
     }
   </style>
 

@@ -31,11 +31,28 @@ body {
   align-items: center;
 }
 
+/* Brand mark — dark-theme variant (used in sup-header) */
 .sup-brand {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--sup-brand);
-  letter-spacing: -0.5px;
+  display: inline-flex;
+  align-items: baseline;
+  line-height: 1;
+  font-size: 1.3rem;
+}
+
+.sup-brand .brand-salary {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 400;
+  color: #3a5080;          /* muted on dark bg */
+  letter-spacing: -0.01em;
+}
+
+.sup-brand .brand-free {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-style: italic;
+  color: #c9715f;          /* coral lifted for dark bg */
+  letter-spacing: -0.02em;
+  position: relative;
+  top: 0.06em;
 }
 
 .sup-target {

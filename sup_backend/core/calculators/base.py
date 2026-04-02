@@ -198,17 +198,27 @@ class StandardBaseCalculator(BaseCalculator):
             for k, v in raw_future.items():
                 self.future_assets_by_year[int(k)] = float(v)
 
-        # Kids
+        # Kids — read individual ages (family.kid_1_age, kid_2_age, …) when available,
+        # fall back to the legacy single-average fields for old sessions.
         self.kids_count = int(self.get_field_value('family.kids_count', 0) or 0)
-        self.kids_avg_age = int(self.get_field_value('family.kids_average_age', 10) or 10)
-        # Independence age: user-set via kids_age_range widget, default 24
-        kids_independence_age = int(
-            self.get_field_value('family.kids_independence_age', 24) or 24
-        )
+        self.kids_independence_year = None  # legacy single-trigger (unused when events set)
+        self.kids_independence_events: list = []  # [(year_offset, count)] per child
+
         if self.kids_count > 0:
-            self.kids_independence_year = max(0, kids_independence_age - self.kids_avg_age)
-        else:
-            self.kids_independence_year = None
+            has_individual = self.get_field_value('family.kid_1_age') is not None
+            if has_individual:
+                for idx in range(1, self.kids_count + 1):
+                    age = int(self.get_field_value(f'family.kid_{idx}_age', 10) or 10)
+                    indep_age = int(self.get_field_value(f'family.kid_{idx}_indep_age', 24) or 24)
+                    year_offset = max(0, indep_age - age)
+                    self.kids_independence_events.append(year_offset)
+            else:
+                # Legacy: single average age + independence age
+                avg_age = int(self.get_field_value('family.kids_average_age', 10) or 10)
+                indep_age = int(self.get_field_value('family.kids_independence_age', 24) or 24)
+                year_offset = max(0, indep_age - avg_age)
+                for _ in range(self.kids_count):
+                    self.kids_independence_events.append(year_offset)
 
         # Derived annual values
         self.monthly_survival = self.monthly_expenses * self.NEEDS_PCT
@@ -308,6 +318,7 @@ class StandardBaseCalculator(BaseCalculator):
         self._init_projection_state(self.st)
 
         self.free_up_year: Optional[int] = None
+        self.depletion_year: Optional[int] = None
 
         for year in range(self.PROJECTION_YEARS):
             self.years.append(f"Year {year}")
@@ -322,12 +333,11 @@ class StandardBaseCalculator(BaseCalculator):
             # ── one-time expenses this year (Issue #3) ──
             year_one_time = self.one_time_by_year.get(year, 0)
 
-            # ── kids independence (Issue #1) ──
-            if (self.kids_independence_year is not None
-                    and year == self.kids_independence_year
-                    and self.kids_count > 0):
-                # Remove kid expense factor: each kid adds ~10% to needs
-                factor = 1.0 / (1.0 + 0.10 * self.kids_count)
+            # ── kids independence: staggered per child ──
+            # Each kid adds ~10% to needs; reduce when that child becomes independent
+            kids_becoming_independent = self.kids_independence_events.count(year)
+            if kids_becoming_independent > 0:
+                factor = 1.0 / (1.0 + 0.10 * kids_becoming_independent)
                 self.st['needs'] *= factor
 
             # ── 1. snapshot ──
@@ -347,7 +357,10 @@ class StandardBaseCalculator(BaseCalculator):
             if self.free_up_year is None and total_income >= total_expenses:
                 self.free_up_year = year
 
-            self.assets_values.append(round(total_assets, 2))
+            if self.depletion_year is None and total_assets <= 0:
+                self.depletion_year = year
+
+            self.assets_values.append(round(max(total_assets, 0), 2))
             self.needs_values.append(round(self.st['needs'], 2))
             self.wants_values.append(round(self.st['wants'], 2))
             self.income_values.append(round(total_income, 2))
@@ -379,6 +392,7 @@ class StandardBaseCalculator(BaseCalculator):
     def _build_results(self) -> Dict:
         base = {
             'free_up_year': self.free_up_year,
+            'depletion_year': self.depletion_year,
             'emergency_lock': round(self.emergency_lock, 2),
             'emergency_fund_lock': round(self.emergency_lock, 2),
             'one_time_expenses': round(self.one_time_expenses, 2),

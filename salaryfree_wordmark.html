@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>salaryfree — Wordmark (aligned with design system)</title>
+  <!-- Exact same font load as base_mobile.html -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ── Exact tokens from base_mobile.html ─────────────── */
+    :root {
+      --cream:        #faf7f2;
+      --cream-dark:   #f0ebe3;
+      --ink:          #1a1a1a;
+      --ink-light:    #3d3d3d;
+      --ink-muted:    #7a7a7a;
+      --ink-faint:    #b5b0a8;
+      --coral:        #b04030;
+      --coral-light:  #fce8e4;
+      --mustard:      #e0a530;
+      --mustard-light:#fef5dc;
+      --forest:       #2d7a5f;
+      --forest-light: #dff0e8;
+      --ocean:        #3667a6;
+      --serif: 'DM Serif Display', Georgia, serif;
+      --sans:  'Space Grotesk', system-ui, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 48px 24px 64px;
+    }
+
+    .page-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    /* ── Layout ─────────────────────────────────────────── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 28px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+
+    .concepts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      max-width: 800px;
+      margin: 0 auto 48px;
+    }
+
+    .cell {
+      background: #fff;
+      padding: 44px 32px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      min-height: 160px;
+    }
+
+    .cell.cream { background: var(--cream); }
+    .cell.dark  { background: var(--ink); }
+    .cell.coral-bg { background: var(--coral); }
+
+    .cell-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      align-self: flex-start;
+    }
+    .cell.dark .cell-label { color: #444; }
+    .cell.coral-bg .cell-label { color: rgba(255,255,255,0.5); }
+
+    /* ═══════════════════════════════════════════════════
+       THE WORDMARK COMPONENT
+       salary  → Space Grotesk (the workaday sans)
+       free    → DM Serif Display italic (the aspirational serif)
+
+       This is the ONLY font pairing in the project,
+       so the wordmark costs zero extra kilobytes.
+    ═══════════════════════════════════════════════════ */
+
+    /* ── Concept 1: Muted salary + coral serif free ──── */
+    .wm {
+      display: inline-flex;
+      align-items: baseline;
+      line-height: 1;
+    }
+
+    .wm .s {
+      font-family: var(--sans);
+      font-weight: 400;
+      color: var(--ink-muted);
+      letter-spacing: -0.01em;
+    }
+
+    .wm .f {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--coral);
+      letter-spacing: -0.02em;
+      line-height: 0.92;
+      /* Optically align serif baseline with sans */
+      position: relative;
+      top: 0.06em;
+    }
+
+    /* Sizes */
+    .wm.xs  .s { font-size: 12px; }
+    .wm.xs  .f { font-size: 16px; }
+
+    .wm.sm  .s { font-size: 14px; }
+    .wm.sm  .f { font-size: 20px; }
+
+    .wm.md  .s { font-size: 18px; }
+    .wm.md  .f { font-size: 26px; }
+
+    .wm.lg  .s { font-size: 24px; }
+    .wm.lg  .f { font-size: 36px; }
+
+    .wm.xl  .s { font-size: 30px; }
+    .wm.xl  .f { font-size: 46px; }
+
+    /* ── Variant: mustard free ───────────────────────── */
+    .wm.mustard .f { color: var(--mustard); }
+
+    /* ── Variant: forest free ────────────────────────── */
+    .wm.forest .f { color: var(--forest); }
+
+    /* ── Variant: ink free (monochrome) ──────────────── */
+    .wm.mono .s { color: var(--ink-faint); }
+    .wm.mono .f { color: var(--ink); font-style: italic; }
+
+    /* ── Variant: on dark background ─────────────────── */
+    .wm.on-dark .s { color: #444; }
+    .wm.on-dark .f { color: #c9715f; }  /* coral lifted for dark bg */
+
+    /* ── Variant: on coral background ────────────────── */
+    .wm.on-coral .s { color: rgba(255,255,255,0.55); }
+    .wm.on-coral .f { color: #fff; }
+
+    /* ── Recommended full lockup (with tagline) ─────── */
+    .lockup {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .lockup .tagline {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    /* ── Scale row ───────────────────────────────────── */
+    .scale-strip {
+      max-width: 800px;
+      margin: 0 auto 48px;
+      background: #fff;
+      padding: 40px 40px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .scale-row {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+    .scale-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .scale-ctx {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    /* ── Hero usage mockup ───────────────────────────── */
+    .hero-mockup {
+      max-width: 800px;
+      margin: 0 auto 48px;
+      background: var(--cream);
+      border: 2px solid var(--cream-dark);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .mockup-bar {
+      background: var(--cream);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+
+    .mockup-sign-in {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 6px 14px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 20px;
+      font-family: var(--sans);
+      font-weight: 500;
+    }
+
+    .mockup-hero {
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+
+    .mockup-hero .wave {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .mockup-hero h1 {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .mockup-hero h1 em {
+      color: var(--coral);
+      font-style: italic;
+    }
+
+    .mockup-hero p {
+      font-size: 0.9rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      max-width: 300px;
+      margin: 0 auto 28px;
+    }
+
+    .mockup-cta {
+      display: inline-block;
+      background: var(--coral);
+      color: #fff;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 13px 32px;
+      border-radius: 8px;
+    }
+
+    .mockup-note {
+      font-size: 0.75rem;
+      color: var(--ink-faint);
+      margin-top: 14px;
+    }
+
+    /* ── CSS snippet ─────────────────────────────────── */
+    .snippet-box {
+      max-width: 800px;
+      margin: 0 auto 16px;
+      background: var(--ink);
+      border-radius: 10px;
+      padding: 28px 32px;
+      font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #c9d1d9;
+    }
+
+    .tok-comment { color: #555; }
+    .tok-prop    { color: #79c0ff; }
+    .tok-val     { color: #a5d6a7; }
+    .tok-class   { color: #ffa657; }
+    .tok-tag     { color: #ff7b72; }
+    .tok-str     { color: #a5d6a7; }
+
+    @media (max-width: 560px) {
+      .concepts { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <p class="page-label">salaryfree — wordmark (using project design system)</p>
+
+  <!-- ═══ COLOR VARIANTS ════════════════════════════════ -->
+  <div class="section-title" style="max-width:800px;margin:0 auto 16px;">Color variants</div>
+
+  <div class="concepts">
+
+    <div class="cell cream">
+      <span class="cell-label">Coral · recommended</span>
+      <div class="wm lg">
+        <span class="s">salary</span><span class="f">free</span>
+      </div>
+    </div>
+
+    <div class="cell">
+      <span class="cell-label">Mustard</span>
+      <div class="wm lg mustard">
+        <span class="s">salary</span><span class="f">free</span>
+      </div>
+    </div>
+
+    <div class="cell cream">
+      <span class="cell-label">Forest</span>
+      <div class="wm lg forest">
+        <span class="s">salary</span><span class="f">free</span>
+      </div>
+    </div>
+
+    <div class="cell">
+      <span class="cell-label">Monochrome</span>
+      <div class="wm lg mono">
+        <span class="s">salary</span><span class="f">free</span>
+      </div>
+    </div>
+
+    <div class="cell dark">
+      <span class="cell-label">On dark ink</span>
+      <div class="wm lg on-dark">
+        <span class="s">salary</span><span class="f">free</span>
+      </div>
+    </div>
+
+    <div class="cell coral-bg">
+      <span class="cell-label">On coral</span>
+      <div class="wm lg on-coral">
+        <span class="s">salary</span><span class="f">free</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ SCALE ═══════════════════════════════════════ -->
+  <div class="section-title" style="max-width:800px;margin:0 auto 16px;">Scale — one markup, all sizes</div>
+
+  <div class="scale-strip">
+    <div class="scale-row">
+      <span class="scale-ctx">Nav / app bar</span>
+      <div class="wm sm"><span class="s">salary</span><span class="f">free</span></div>
+    </div>
+    <div class="scale-row">
+      <span class="scale-ctx">Card / section</span>
+      <div class="wm md"><span class="s">salary</span><span class="f">free</span></div>
+    </div>
+    <div class="scale-row">
+      <span class="scale-ctx">Page header</span>
+      <div class="wm lg"><span class="s">salary</span><span class="f">free</span></div>
+    </div>
+    <div class="scale-row">
+      <span class="scale-ctx">Hero / splash</span>
+      <div class="wm xl"><span class="s">salary</span><span class="f">free</span></div>
+    </div>
+    <div class="scale-row">
+      <span class="scale-ctx">Full lockup</span>
+      <div class="lockup">
+        <div class="wm lg"><span class="s">salary</span><span class="f">free</span></div>
+        <span class="tagline">Your financial freedom planner</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ IN-CONTEXT MOCKUP ════════════════════════════ -->
+  <div class="section-title" style="max-width:800px;margin:0 auto 16px;">In context — scenario selector page</div>
+
+  <div class="hero-mockup">
+    <div class="mockup-bar">
+      <div class="wm sm"><span class="s">salary</span><span class="f">free</span></div>
+      <span class="mockup-sign-in">Sign in</span>
+    </div>
+    <div class="mockup-hero">
+      <span class="wave">👋</span>
+      <h1>You might be<br>more <em>free</em> than<br>you think.</h1>
+      <p>Figure out your financial runway — how long your money can sustain you if you leap. Takes 2 minutes.</p>
+      <div class="mockup-cta">Find out →</div>
+      <p class="mockup-note">No signup · No data stored · Free forever</p>
+    </div>
+  </div>
+
+  <!-- ═══ HTML SNIPPET ════════════════════════════════ -->
+  <div class="section-title" style="max-width:800px;margin:0 auto 16px;">Drop-in HTML — replaces plain "salaryfree" text</div>
+
+  <div class="snippet-box">
+<span class="tok-comment">&lt;!-- Nav bar (currently: scenario_selector.html line 98, base_mobile.html headers) --&gt;</span><br>
+<span class="tok-tag">&lt;span</span> <span class="tok-prop">class</span>=<span class="tok-str">"brand-mark"</span><span class="tok-tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="tok-tag">&lt;span</span> <span class="tok-prop">class</span>=<span class="tok-str">"brand-salary"</span><span class="tok-tag">&gt;</span>salary<span class="tok-tag">&lt;/span&gt;</span><br>
+&nbsp;&nbsp;<span class="tok-tag">&lt;span</span> <span class="tok-prop">class</span>=<span class="tok-str">"brand-free"</span><span class="tok-tag">&gt;</span>free<span class="tok-tag">&lt;/span&gt;</span><br>
+<span class="tok-tag">&lt;/span&gt;</span>
+  </div>
+
+  <div class="snippet-box">
+<span class="tok-comment">/* Add to base_mobile.html &lt;style&gt; block — uses vars already defined there */</span><br>
+<br>
+<span class="tok-class">.brand-mark</span> {<br>
+&nbsp;&nbsp;<span class="tok-prop">display</span>: <span class="tok-val">inline-flex</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">align-items</span>: <span class="tok-val">baseline</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">line-height</span>: <span class="tok-val">1</span>;<br>
+}<br>
+<br>
+<span class="tok-class">.brand-salary</span> {<br>
+&nbsp;&nbsp;<span class="tok-prop">font-family</span>: <span class="tok-val">var(--sans)</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">font-weight</span>: <span class="tok-val">400</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">color</span>: <span class="tok-val">var(--ink-muted)</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">letter-spacing</span>: <span class="tok-val">-0.01em</span>;<br>
+}<br>
+<br>
+<span class="tok-class">.brand-free</span> {<br>
+&nbsp;&nbsp;<span class="tok-prop">font-family</span>: <span class="tok-val">var(--serif)</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">font-style</span>: <span class="tok-val">italic</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">color</span>: <span class="tok-val">var(--coral)</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">letter-spacing</span>: <span class="tok-val">-0.02em</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">position</span>: <span class="tok-val">relative</span>;<br>
+&nbsp;&nbsp;<span class="tok-prop">top</span>: <span class="tok-val">0.06em</span>; <span class="tok-comment">/* optical baseline align, serif sits slightly lower */</span><br>
+}<br>
+<br>
+<span class="tok-comment">/* Size via font-size on the parent .brand-mark */</span><br>
+<span class="tok-class">.brand-mark</span> { <span class="tok-prop">font-size</span>: <span class="tok-val">1rem</span>; } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-comment">/* nav */</span><br>
+<span class="tok-class">.brand-mark.brand-lg</span> { <span class="tok-prop">font-size</span>: <span class="tok-val">1.6rem</span>; } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-comment">/* page header */</span><br>
+<span class="tok-class">.brand-mark.brand-xl</span> { <span class="tok-prop">font-size</span>: <span class="tok-val">2.2rem</span>; } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-comment">/* hero */</span>
+  </div>
+
+</body>
+</html>
