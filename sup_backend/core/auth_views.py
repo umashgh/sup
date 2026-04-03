@@ -1,4 +1,5 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
+from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
@@ -92,3 +93,9 @@ def signin(request):
                 return redirect(request.POST.get('next') or '/')
 
     return render(request, 'registration/login.html', {'error': error})
+
+
+@require_POST
+def signout(request):
+    logout(request)
+    return redirect('/')

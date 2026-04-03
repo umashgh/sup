@@ -1,0 +1,96 @@
+{% extends "base_mobile.html" %}
+{% block title %}Discuss — salaryfree{% endblock %}
+
+{% block body %}
+<div style="padding: 24px 20px 80px;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+    <div>
+      <h1 style="font-family: var(--serif); font-size: 1.6rem; font-weight: 400;
+                  color: var(--ink); margin: 0 0 4px;">Discuss</h1>
+      <p style="font-size: 0.82rem; color: var(--ink-muted); margin: 0;">
+        Share your thought, ask your question or help someone.
+      </p>
+    </div>
+    <a href="{% url 'forum:create' %}"
+       style="background: var(--blue); color: white; font-size: 0.82rem; font-weight: 600;
+              padding: 10px 16px; border-radius: 10px; text-decoration: none; white-space: nowrap;">
+      + Post
+    </a>
+  </div>
+
+  {% if page.object_list %}
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      {% for thread in page.object_list %}
+      <a href="{% url 'forum:thread' thread.pk %}"
+         style="display: block; background: white; border-radius: 14px;
+                border: 1.5px solid rgba(0,0,0,0.07); padding: 16px 18px;
+                text-decoration: none; color: inherit;">
+
+        <div style="font-family: var(--serif); font-size: 1.05rem; font-weight: 400;
+                    color: var(--ink); margin-bottom: 6px; line-height: 1.3;">
+          {{ thread.title }}
+        </div>
+
+        <div style="font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 10px;
+                    overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;">
+          {{ thread.body }}
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;
+                    font-size: 0.75rem; color: var(--ink-muted);">
+          <span>{{ thread.display_author }}</span>
+          <span>·</span>
+          <span>{{ thread.created_at|timesince }} ago</span>
+          {% with rc=thread.replies.count %}
+          {% if rc %}
+          <span>· {{ rc }} repl{{ rc|pluralize:"y,ies" }}</span>
+          {% endif %}
+          {% endwith %}
+          {% with rxc=thread.reactions.count %}
+          {% if rxc %}
+          <span style="margin-left: auto; background: rgba(26,86,219,0.08);
+                       color: var(--blue); padding: 2px 8px; border-radius: 100px;
+                       font-weight: 600;">
+            {{ rxc }} ❤
+          </span>
+          {% endif %}
+          {% endwith %}
+        </div>
+
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if page.has_other_pages %}
+    <div style="display: flex; justify-content: center; gap: 12px; margin-top: 24px;">
+      {% if page.has_previous %}
+      <a href="?page={{ page.previous_page_number }}"
+         style="padding: 8px 16px; border-radius: 10px; border: 1.5px solid rgba(0,0,0,0.12);
+                font-size: 0.82rem; color: var(--ink-muted); text-decoration: none;">← Prev</a>
+      {% endif %}
+      {% if page.has_next %}
+      <a href="?page={{ page.next_page_number }}"
+         style="padding: 8px 16px; border-radius: 10px; border: 1.5px solid rgba(0,0,0,0.12);
+                font-size: 0.82rem; color: var(--ink-muted); text-decoration: none;">Next →</a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+  {% else %}
+    <div style="text-align: center; padding: 60px 20px; color: var(--ink-muted);">
+      <div style="font-size: 2.5rem; margin-bottom: 12px;">💬</div>
+      <p style="font-family: var(--serif); font-size: 1.1rem; color: var(--ink); margin-bottom: 8px;">
+        No posts yet.
+      </p>
+      <p style="font-size: 0.85rem; margin-bottom: 20px;">Be the first to share your journey.</p>
+      <a href="{% url 'forum:create' %}" class="btn-primary"
+         style="display: inline-block; text-decoration: none;">
+        Start a thread →
+      </a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

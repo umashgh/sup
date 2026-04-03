@@ -1431,6 +1431,9 @@
   <!-- App Header -->
   <header class="app-header">
     <a href="/" class="app-header-logo brand-mark"><span class="brand-salary">salary</span><span class="brand-free">free</span></a>
+    <a href="/forum/" style="font-size: 0.78rem; font-weight: 600; color: var(--ink-muted);
+       text-decoration: none; padding: 6px 12px; border-radius: 8px;
+       border: 1px solid rgba(0,0,0,0.1);">Discuss</a>
     <div class="app-header-target" x-data="{ targetLabel: 'Target: --' }" x-init="
            setInterval(() => {
              const res = JSON.parse(sessionStorage.getItem('calculation_results'));
@@ -1453,8 +1456,17 @@
   <!-- App Footer -->
   <footer class="app-footer">
     <a href="/" class="footer-btn" onclick="sessionStorage.clear();">Start Over</a>
-    <a href="#" class="footer-btn">Login</a>
-    <div class="hamburger">☰</div>
+    {% if user.is_authenticated and not user.username|slice:":6" == "guest_" %}
+    <form method="post" action="/accounts/logout/" style="margin: 0;">
+      {% csrf_token %}
+      <button type="submit" class="footer-btn"
+              style="background: none; border: none; padding: 0; cursor: pointer;">
+        {{ user.username }} · sign out
+      </button>
+    </form>
+    {% else %}
+    <a href="/accounts/login/" class="footer-btn">Sign in</a>
+    {% endif %}
   </footer>
   {% endblock %}
 

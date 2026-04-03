@@ -1,0 +1,70 @@
+{% extends "base_mobile.html" %}
+{% block title %}New post — salaryfree{% endblock %}
+
+{% block body %}
+<div style="padding: 24px 20px 80px;">
+
+  <a href="{% url 'forum:list' %}"
+     style="font-size: 0.82rem; color: var(--ink-muted); text-decoration: none;
+            display: inline-flex; align-items: center; gap: 4px; margin-bottom: 24px;">
+    ← Discuss
+  </a>
+
+  <h1 style="font-family: var(--serif); font-size: 1.6rem; font-weight: 400;
+              color: var(--ink); margin: 0 0 6px;">Share your thought.</h1>
+  <p style="font-size: 0.82rem; color: var(--ink-muted); margin: 0 0 6px; line-height: 1.5;">
+    This is a public thread. Other community members can read and reply.
+  </p>
+  <p style="font-size: 0.78rem; color: var(--ink-muted); margin: 0 0 24px; line-height: 1.5;
+            padding: 10px 14px; background: rgba(26,86,219,0.05);
+            border-radius: 8px; border-left: 3px solid var(--blue);">
+    Don't share specific financial figures publicly — exact savings, salary, or investment
+    amounts are yours to keep private. Talk about the journey, not the numbers.
+  </p>
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 16px;">
+    {% csrf_token %}
+
+    <div>
+      <label style="display: block; font-size: 0.78rem; font-weight: 600;
+                    color: var(--ink-muted); margin-bottom: 6px;">Title</label>
+      <input type="text" name="title" value="{{ title|default:default_title }}" autofocus
+             maxlength="200" placeholder="e.g. Thinking about a sabbatical — scared but excited"
+        style="width: 100%; padding: 13px 15px; border: 1.5px solid rgba(0,0,0,0.12);
+               border-radius: 10px; font-size: 1rem; background: white;
+               color: var(--ink); box-sizing: border-box;" />
+      {% if errors.title %}
+      <div style="font-size: 0.75rem; color: #dc2626; margin-top: 4px;">{{ errors.title }}</div>
+      {% endif %}
+    </div>
+
+    <div>
+      <label style="display: block; font-size: 0.78rem; font-weight: 600;
+                    color: var(--ink-muted); margin-bottom: 6px;">Your thought</label>
+      <textarea name="body" rows="6"
+                placeholder="What's on your mind? What are you wrestling with? What would help to hear from others who've been there?"
+        style="width: 100%; padding: 13px 15px; border: 1.5px solid rgba(0,0,0,0.12);
+               border-radius: 10px; font-size: 0.95rem; font-family: var(--sans);
+               background: white; color: var(--ink); box-sizing: border-box;
+               resize: none; line-height: 1.55;">{{ body|default:default_body }}</textarea>
+      {% if errors.body %}
+      <div style="font-size: 0.75rem; color: #dc2626; margin-top: 4px;">{{ errors.body }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn-primary" style="margin-top: 4px;">
+      Post to community →
+    </button>
+  </form>
+
+  {% if not request.user.is_authenticated %}
+  <p style="font-size: 0.78rem; color: var(--ink-muted); margin-top: 16px; text-align: center;">
+    Posting anonymously.
+    <a href="/accounts/login/?next={% url 'forum:create' %}"
+       style="color: var(--blue); text-decoration: none;">Sign in</a>
+    to post under your handle.
+  </p>
+  {% endif %}
+
+</div>
+{% endblock %}

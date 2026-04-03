@@ -23,7 +23,7 @@ def guest_login(request):
 
     username = f"guest_{uuid.uuid4().hex[:12]}"
     user = User.objects.create_user(username=username)
-    login(request, user)
+    login(request, user, backend='core.backends.UsernameOnlyBackend')
     FamilyProfile.objects.create(user=user)
 
     # Support both AJAX and regular requests

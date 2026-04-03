@@ -1,0 +1,115 @@
+{% extends "base_mobile.html" %}
+{% block title %}{{ thread.title }} — salaryfree{% endblock %}
+
+{% block body %}
+<div style="padding: 20px 20px 100px;">
+
+  <!-- Back -->
+  <a href="{% url 'forum:list' %}"
+     style="font-size: 0.82rem; color: var(--ink-muted); text-decoration: none;
+            display: inline-flex; align-items: center; gap: 4px; margin-bottom: 20px;">
+    ← Discuss
+  </a>
+
+  <!-- Thread body -->
+  <div style="background: white; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.07);
+              padding: 20px 18px; margin-bottom: 16px;">
+    <h1 style="font-family: var(--serif); font-size: 1.3rem; font-weight: 400;
+                color: var(--ink); margin: 0 0 10px; line-height: 1.35;">
+      {{ thread.title }}
+    </h1>
+    <p style="font-size: 0.88rem; color: var(--ink); line-height: 1.6; margin: 0 0 14px;
+              white-space: pre-wrap;">{{ thread.body }}</p>
+    <div style="font-size: 0.75rem; color: var(--ink-muted);">
+      {{ thread.display_author }} · {{ thread.created_at|timesince }} ago
+    </div>
+  </div>
+
+  <!-- Reactions -->
+  <div id="reactions-{{ thread.pk }}"
+       style="display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">
+    {% if can_interact %}
+      {% include "forum/_reactions.html" %}
+    {% else %}
+      <a href="/accounts/login/?next={{ request.path }}"
+         style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none;
+                padding: 7px 13px; border-radius: 100px; border: 1.5px solid rgba(0,0,0,0.1);">
+        Sign in to react
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Replies -->
+  {% if replies %}
+  <div style="margin-bottom: 24px;">
+    <h2 style="font-size: 0.75rem; font-weight: 600; color: var(--ink-muted);
+                text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">
+      {{ replies.count }} repl{{ replies.count|pluralize:"y,ies" }}
+    </h2>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      {% for reply in replies %}
+      <div style="background: {% if reply.is_ai %}rgba(26,86,219,0.04){% else %}white{% endif %};
+                  border-radius: 12px;
+                  border: 1.5px solid {% if reply.is_ai %}rgba(26,86,219,0.15){% else %}rgba(0,0,0,0.07){% endif %};
+                  padding: 14px 16px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          {% if reply.is_ai %}
+          <span style="font-size: 0.7rem; font-weight: 700; color: var(--blue);
+                       background: rgba(26,86,219,0.1); padding: 2px 8px; border-radius: 100px;
+                       letter-spacing: 0.03em;">Asha · Advisor</span>
+          {% else %}
+          <span style="font-size: 0.75rem; color: var(--ink-muted);">{{ reply.display_author }}</span>
+          {% endif %}
+          <span style="font-size: 0.72rem; color: var(--ink-muted);">
+            · {{ reply.created_at|timesince }} ago
+          </span>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--ink); line-height: 1.6; margin: 0;
+                  white-space: pre-wrap;">{{ reply.body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% elif not thread.ai_replied %}
+  <div style="background: rgba(26,86,219,0.04); border-radius: 12px;
+              border: 1.5px solid rgba(26,86,219,0.12); padding: 14px 16px;
+              margin-bottom: 24px; font-size: 0.82rem; color: var(--ink-muted);">
+    Advisor Asha will respond after some time.
+  </div>
+  {% endif %}
+
+  <!-- Reply form or sign-in nudge -->
+  {% if can_interact %}
+  <div style="background: white; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.07);
+              padding: 18px;">
+    <h2 style="font-size: 0.75rem; font-weight: 600; color: var(--ink-muted);
+                text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 12px;">
+      Add your perspective
+    </h2>
+    <form method="post" action="{% url 'forum:reply' thread.pk %}">
+      {% csrf_token %}
+      <textarea name="body" rows="4" placeholder="Share a thought, ask a question…"
+        style="width: 100%; padding: 12px 14px; border: 1.5px solid rgba(0,0,0,0.12);
+               border-radius: 10px; font-size: 0.9rem; font-family: var(--sans);
+               color: var(--ink); background: var(--cream); resize: none;
+               box-sizing: border-box; line-height: 1.5;"></textarea>
+      <button type="submit" class="btn-primary"
+              style="margin-top: 10px; width: 100%;">Reply →</button>
+    </form>
+  </div>
+  {% else %}
+  <div style="background: white; border-radius: 14px; border: 1.5px solid rgba(0,0,0,0.07);
+              padding: 24px 18px; text-align: center;">
+    <p style="font-size: 0.88rem; color: var(--ink-muted); margin: 0 0 14px;">
+      Sign in to join the conversation.
+    </p>
+    <a href="/accounts/login/?next={{ request.path }}" class="btn-primary"
+       style="display: inline-block; text-decoration: none;">Sign in →</a>
+    &nbsp;
+    <a href="/accounts/signup/" style="font-size: 0.82rem; color: var(--ink-muted);
+       text-decoration: none; margin-left: 8px;">Create account</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

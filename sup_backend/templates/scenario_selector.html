@@ -103,9 +103,12 @@
         Sign in</a>
       {% else %}
       <span style="font-size: 0.78rem; color: var(--ink-muted); margin-right: 6px;">{{ user.username }}</span>
-      <a href="/accounts/logout/"
-        style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; display: inline-flex; align-items: center; min-height: 44px;">
-        Sign out</a>
+      <form method="post" action="/accounts/logout/" style="margin: 0;">
+        {% csrf_token %}
+        <button type="submit"
+          style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; display: inline-flex; align-items: center; min-height: 44px; background: none; cursor: pointer;">
+          Sign out</button>
+      </form>
       {% endif %}
     {% else %}
     <a href="/accounts/login/"

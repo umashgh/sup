@@ -1,0 +1,27 @@
+{% for rtype, label, emoji in reactions %}
+<form method="post" action="{% url 'forum:react' thread.pk %}"
+      hx-post="{% url 'forum:react' thread.pk %}"
+      hx-target="#reactions-{{ thread.pk }}"
+      hx-swap="innerHTML"
+      style="display: inline; margin: 0;">
+  {% csrf_token %}
+  <input type="hidden" name="reaction_type" value="{{ rtype }}">
+  {% if rtype in user_reactions %}
+  <button type="submit"
+    style="display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px;
+           border-radius: 100px; border: 1.5px solid var(--blue);
+           font-size: 0.8rem; font-weight: 500; cursor: pointer;
+           background: rgba(26,86,219,0.1); color: var(--blue);">
+    {{ emoji }}&nbsp;{{ label }}
+  </button>
+  {% else %}
+  <button type="submit"
+    style="display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px;
+           border-radius: 100px; border: 1.5px solid rgba(0,0,0,0.12);
+           font-size: 0.8rem; font-weight: 500; cursor: pointer;
+           background: white; color: var(--ink-muted);">
+    {{ emoji }}&nbsp;{{ label }}
+  </button>
+  {% endif %}
+</form>
+{% endfor %}
