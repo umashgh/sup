@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <title>{% block title %}runway — You might be more free than you think{% endblock %}</title>
+  <title>{% block title %}salaryfree — You might be more free than you think{% endblock %}</title>
 
   <!-- Fonts: DM Serif Display (editorial headlines) + Space Grotesk (clean sans) -->
   <link
@@ -1430,7 +1430,7 @@
   {% block app_header %}
   <!-- App Header -->
   <header class="app-header">
-    <a href="/" class="app-header-logo">runway</a>
+    <a href="/" class="app-header-logo brand-mark"><span class="brand-salary">salary</span><span class="brand-free">free</span></a>
     <div class="app-header-target" x-data="{ targetLabel: 'Target: --' }" x-init="
            setInterval(() => {
              const res = JSON.parse(sessionStorage.getItem('calculation_results'));

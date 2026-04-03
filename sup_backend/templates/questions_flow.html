@@ -1,6 +1,6 @@
 {% extends "base_mobile.html" %}
 
-{% block title %}Your Journey — runway{% endblock %}
+{% block title %}Your Journey — salaryfree{% endblock %}
 
 {% block body %}
 <div x-data="questionsFlow()">
@@ -990,6 +990,22 @@
 
       async init() {
         await this.loadQuestions();
+
+        // After questions load, seed history with index 0
+        history.replaceState({ questionIndex: 0 }, '');
+
+        // Handle browser back button — restore question index from history state
+        window.addEventListener('popstate', (e) => {
+          const idx = e.state?.questionIndex ?? -1;
+          if (idx >= 0) {
+            this.visibleIndex = idx;
+            this.validationError = null;
+            window.scrollTo(0, 0);
+          } else {
+            // No question state — let the browser navigate away normally
+            history.back();
+          }
+        });
       },
 
       async loadQuestions() {
@@ -1372,6 +1388,8 @@
           this.calculate();
         } else {
           this.visibleIndex++;
+          history.pushState({ questionIndex: this.visibleIndex }, '');
+          window.scrollTo(0, 0);
 
           const nextQ = this.visibleQuestions[this.visibleIndex];
 
@@ -1435,9 +1453,8 @@
 
       previousQuestion() {
         if (this.visibleIndex > 0) {
-          this.visibleIndex--;
-          this.validationError = null;
-          this.showCustomise = false;
+          // Use history.back() so browser history stays consistent with the popstate listener
+          history.back();
         }
       },
 
