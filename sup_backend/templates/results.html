@@ -374,12 +374,12 @@
         You're browsing as a guest. Create a free account to save this scenario, compare options, and pick up where you left off.
       </div>
       <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <a href="/accounts/signup/"
+        <a :href="'/accounts/signup/?next=' + encodeURIComponent(window.location.pathname + window.location.search)"
            style="padding: 9px 18px; background: var(--blue); color: white; border-radius: 8px;
                   font-size: 0.8rem; text-decoration: none; font-weight: 500;">
           Create free account
         </a>
-        <a href="/accounts/login/"
+        <a :href="'/accounts/login/?next=' + encodeURIComponent(window.location.pathname + window.location.search)"
            style="padding: 9px 18px; background: transparent; color: var(--blue);
                   border: 1px solid var(--blue); border-radius: 8px; font-size: 0.8rem; text-decoration: none;">
           Sign in
@@ -388,34 +388,183 @@
     </div>
   </section>
 
-  <!-- ===== ADVANCED OPTIMIZER TEASER (tier 2 end) ===== -->
+  <!-- ===== ADVANCED: MONTE CARLO ===== -->
   <section style="padding: 0 24px 16px;" x-show="!loading && results.tier === 'STANDARD'">
-    <div style="background: linear-gradient(135deg, #f5f0ff, #ede8ff);
-                border: 1px solid rgba(109,40,217,0.15); border-radius: 12px; padding: 16px;">
-      <div style="font-size: 0.72rem; font-weight: 700; color: #7c3aed; text-transform: uppercase;
-                  letter-spacing: 0.06em; margin-bottom: 6px;">Advanced · Coming soon</div>
-      <div style="font-size: 0.85rem; font-weight: 600; color: var(--ink); margin-bottom: 6px;">
-        Optimize your plan
+
+    <!-- Entry card — shown before simulation runs -->
+    <div x-show="!mcResults && !mcLoading"
+         style="background: linear-gradient(135deg, #f0f7ff, #e8f3ff);
+                border: 1.5px solid rgba(26,86,219,0.18); border-radius: 14px; padding: 18px;">
+      <div style="font-size: 0.68rem; font-weight: 700; color: var(--blue); text-transform: uppercase;
+                  letter-spacing: 0.07em; margin-bottom: 8px;">Advanced · Monte Carlo</div>
+      <div style="font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 6px;
+                  font-family: var(--serif);">How likely is your plan to succeed?</div>
+      <div style="font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.55;">
+        2,000 simulations with randomised returns, inflation, and unexpected expenses.
+        See the spread of outcomes — not just the median case.
       </div>
-      <div style="font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 12px; line-height: 1.5;">
-        The Advanced optimizer will find specific actions to improve your number — reducing wants spend, adjusting your start date, bootstrapping differently, or modelling part-time income.
-      </div>
-      <ul style="margin: 0 0 12px; padding: 0 0 0 16px; font-size: 0.78rem; color: var(--ink-muted); line-height: 1.9;">
-        <li>Scenario comparisons (delay by 1yr, cut wants 20%)</li>
-        <li>Personalized advisory for your scenario</li>
-        <li>Save &amp; resume calculations</li>
-      </ul>
-      <button
-        style="padding: 9px 18px; background: #7c3aed; color: white; border: none;
-               border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 500; opacity: 0.7;"
-        @click="showAdvancedTeaser = !showAdvancedTeaser">
-        Notify me when ready
+      <button @click="getMonteCarlo()"
+        style="padding: 11px 20px; background: var(--blue); color: white; border: none;
+               border-radius: 10px; font-size: 0.85rem; cursor: pointer; font-weight: 600;
+               width: 100%;">
+        Run simulation →
       </button>
-      <div x-show="showAdvancedTeaser"
-           style="margin-top: 10px; font-size: 0.78rem; color: #7c3aed; font-weight: 500;">
-        ✓ We'll build it — sign in to save your spot.
+      <div x-show="mcError" style="margin-top: 10px; font-size: 0.78rem; color: #dc2626;" x-text="mcError"></div>
+    </div>
+
+    <!-- Loading state -->
+    <div x-show="mcLoading"
+         style="background: linear-gradient(135deg, #f0f7ff, #e8f3ff);
+                border: 1.5px solid rgba(26,86,219,0.18); border-radius: 14px;
+                padding: 32px 18px; text-align: center;">
+      <div class="spinner" style="border-color: rgba(26,86,219,0.15); border-top-color: var(--blue);"></div>
+      <p style="margin-top: 16px; font-size: 0.85rem; color: var(--blue); font-weight: 500;">
+        Running 2,000 simulations…
+      </p>
+    </div>
+
+    <!-- Results -->
+    <div x-show="mcResults"
+         style="background: white; border: 1.5px solid rgba(26,86,219,0.18);
+                border-radius: 14px; overflow: hidden;">
+      <!-- Header -->
+      <div style="background: linear-gradient(135deg, #1a56db, #1e40af);
+                  padding: 14px 18px; display: flex; align-items: center; gap: 10px;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.2);
+                    display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">
+          ≋
+        </div>
+        <div>
+          <div style="font-size: 0.85rem; font-weight: 700; color: white;">Monte Carlo · <span x-text="mcResults?.n_iterations?.toLocaleString()"></span> simulations</div>
+          <div style="font-size: 0.7rem; color: rgba(255,255,255,0.7);">Randomised returns · inflation · shock expenses</div>
+        </div>
+        <button @click="mcResults = null; mcError = null; if(mcChart){mcChart.destroy();mcChart=null;}"
+                style="margin-left: auto; background: rgba(255,255,255,0.15); border: none;
+                       color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; cursor: pointer;">
+          Re-run
+        </button>
+      </div>
+
+      <!-- Success rate -->
+      <div style="padding: 20px 18px 0;">
+        <div style="text-align: center; margin-bottom: 16px;">
+          <div style="font-family: var(--serif); font-size: 3rem; font-weight: 400; line-height: 1;"
+               :style="(mcResults?.success_rate || 0) >= 75 ? 'color: var(--forest)' :
+                       (mcResults?.success_rate || 0) >= 50 ? 'color: var(--mustard)' : 'color: var(--coral)'"
+               x-text="(mcResults?.success_rate || 0) + '%'"></div>
+          <div style="font-size: 0.8rem; color: var(--ink-muted); margin-top: 4px;">
+            of paths remain solvent at Year 20
+          </div>
+        </div>
+
+        <!-- P10 / P50 / P90 final corpus -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+          <div style="background: rgba(239,68,68,0.06); border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 0.65rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Pessimistic</div>
+            <div style="font-size: 0.9rem; font-weight: 600; color: var(--coral);"
+                 x-text="formatCurrency(mcResults?.p10_final || 0)"></div>
+            <div style="font-size: 0.6rem; color: var(--ink-muted);">P10 at yr 20</div>
+          </div>
+          <div style="background: rgba(26,86,219,0.05); border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 0.65rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Median</div>
+            <div style="font-size: 0.9rem; font-weight: 600; color: var(--blue);"
+                 x-text="formatCurrency(mcResults?.p50_final || 0)"></div>
+            <div style="font-size: 0.6rem; color: var(--ink-muted);">P50 at yr 20</div>
+          </div>
+          <div style="background: rgba(34,197,94,0.06); border-radius: 8px; padding: 10px; text-align: center;">
+            <div style="font-size: 0.65rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Optimistic</div>
+            <div style="font-size: 0.9rem; font-weight: 600; color: var(--forest);"
+                 x-text="formatCurrency(mcResults?.p90_final || 0)"></div>
+            <div style="font-size: 0.6rem; color: var(--ink-muted);">P90 at yr 20</div>
+          </div>
+        </div>
+
+        <!-- Free-up year -->
+        <div x-show="mcResults?.median_free_up_year !== null && mcResults?.median_free_up_year !== undefined"
+             style="background: rgba(46,164,79,0.06); border: 1px solid rgba(46,164,79,0.15);
+                    border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;
+                    font-size: 0.8rem; color: var(--ink-muted); display: flex; gap: 10px; align-items: center;">
+          <span style="font-size: 1.1rem;">🎯</span>
+          <span>
+            Median financial freedom: <strong style="color: var(--forest);">Year <span x-text="mcResults?.median_free_up_year"></span></strong>
+            — in <span x-text="mcResults?.pct_achieve_free_up"></span>% of paths
+          </span>
+        </div>
+      </div>
+
+      <!-- Fan chart -->
+      <div style="padding: 0 18px 18px;">
+        <div style="font-size: 0.72rem; color: var(--ink-muted); margin-bottom: 8px;">
+          20-year portfolio spread across all simulations
+        </div>
+        <div style="height: 220px;">
+          <canvas id="mcFanChart" style="height: 220px; max-height: 220px;"></canvas>
+        </div>
       </div>
     </div>
+
+  </section>
+
+  <!-- ===== ADVANCED: ASHA ADVISOR ===== -->
+  <section style="padding: 0 24px 16px;" x-show="!loading && results.tier === 'STANDARD'">
+
+    <!-- Entry card — shown before advice is fetched -->
+    <div x-show="!advice && !adviceLoading"
+         style="background: linear-gradient(135deg, #f5f0ff, #ede8ff);
+                border: 1px solid rgba(109,40,217,0.15); border-radius: 14px; padding: 18px;">
+      <div style="font-size: 0.68rem; font-weight: 700; color: #7c3aed; text-transform: uppercase;
+                  letter-spacing: 0.07em; margin-bottom: 8px;">Advanced · AI Advisor</div>
+      <div style="font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 6px;
+                  font-family: var(--serif);">Ask Asha to analyse your plan</div>
+      <div style="font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 16px; line-height: 1.55;">
+        Asha will look at your specific numbers — not generic advice — and tell you exactly what's
+        working, what isn't, and what to change.
+      </div>
+      <button @click="getAdvice()"
+        style="padding: 11px 20px; background: #7c3aed; color: white; border: none;
+               border-radius: 10px; font-size: 0.85rem; cursor: pointer; font-weight: 600;
+               width: 100%;">
+        Analyse my plan →
+      </button>
+      <div x-show="adviceError"
+           style="margin-top: 10px; font-size: 0.78rem; color: #dc2626;" x-text="adviceError"></div>
+    </div>
+
+    <!-- Loading state -->
+    <div x-show="adviceLoading"
+         style="background: linear-gradient(135deg, #f5f0ff, #ede8ff);
+                border: 1px solid rgba(109,40,217,0.15); border-radius: 14px;
+                padding: 32px 18px; text-align: center;">
+      <div class="spinner" style="border-color: rgba(124,58,237,0.15); border-top-color: #7c3aed;"></div>
+      <p style="margin-top: 16px; font-size: 0.85rem; color: #7c3aed; font-weight: 500;">
+        Asha is reviewing your plan…
+      </p>
+    </div>
+
+    <!-- Advice card -->
+    <div x-show="advice"
+         style="background: white; border: 1.5px solid rgba(109,40,217,0.18);
+                border-radius: 14px; overflow: hidden;">
+      <!-- Header -->
+      <div style="background: linear-gradient(135deg, #7c3aed, #6d28d9);
+                  padding: 14px 18px; display: flex; align-items: center; gap: 10px;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.2);
+                    display: flex; align-items: center; justify-content: center;
+                    font-size: 1rem; flex-shrink: 0;">✦</div>
+        <div>
+          <div style="font-size: 0.85rem; font-weight: 700; color: white;">Asha · AI Advisor</div>
+          <div style="font-size: 0.7rem; color: rgba(255,255,255,0.7);">Based on your Standard projection</div>
+        </div>
+        <button @click="advice = null; adviceError = null"
+                style="margin-left: auto; background: rgba(255,255,255,0.15); border: none;
+                       color: white; font-size: 0.75rem; padding: 4px 10px; border-radius: 6px;
+                       cursor: pointer;">Refresh</button>
+      </div>
+      <!-- Body -->
+      <div style="padding: 18px; font-size: 0.85rem; line-height: 1.65; color: var(--ink);"
+           x-html="renderAdvice(advice)"></div>
+    </div>
+
   </section>
 
   <!-- ===== ACTION BUTTONS ===== -->
@@ -587,7 +736,17 @@
       showChart: false,
       chart: null,
       advanceTierError: null,
-      showAdvancedTeaser: false,
+
+      // Advanced advisor
+      advice: null,
+      adviceLoading: false,
+      adviceError: null,
+
+      // Monte Carlo
+      mcResults: null,
+      mcLoading: false,
+      mcError: null,
+      mcChart: null,
 
       // Computed: does this scenario show the gauge + runway number?
       get hasRunway() {
@@ -674,15 +833,38 @@
         return stats;
       },
 
-      init() {
-        this.loadResults();
+      async init() {
+        await this.loadResults();
       },
 
-      loadResults() {
-        const stored = sessionStorage.getItem('calculation_results');
+      async loadResults() {
+        let stored = sessionStorage.getItem('calculation_results');
+
         if (!stored) {
-          window.location.href = '/';
-          return;
+          // Try to silently recalculate from last_answers (survives same-tab sign-out/sign-in)
+          const lastAnswersRaw = sessionStorage.getItem('last_answers');
+          if (lastAnswersRaw) {
+            try {
+              const res = await fetch('/api/scenarios/calculate/', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: JSON.stringify({ data: JSON.parse(lastAnswersRaw) }),
+              });
+              if (res.ok) {
+                const newResults = await res.json();
+                stored = JSON.stringify(newResults);
+                sessionStorage.setItem('calculation_results', stored);
+              }
+            } catch(e) {}
+          }
+          if (!stored) {
+            // No results and no saved answers — go back to questions
+            window.location.href = '/questions/';
+            return;
+          }
         }
 
         const data = JSON.parse(stored);
@@ -872,6 +1054,206 @@
         } catch (err) {
           this.advanceTierError = 'Could not advance tier: ' + err.message;
         }
+      },
+
+      async getAdvice() {
+        this.adviceLoading = true;
+        this.adviceError = null;
+
+        const lastAnswers = JSON.parse(sessionStorage.getItem('last_answers') || '{}');
+
+        try {
+          const resp = await fetch('/api/scenarios/advise/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({
+              data: lastAnswers,
+              results: this.results,
+            }),
+          });
+
+          const data = await resp.json();
+
+          if (!resp.ok || !data.success) {
+            this.adviceError = data.error || 'Could not fetch advice. Please try again.';
+          } else {
+            this.advice = data.advice;
+          }
+        } catch (err) {
+          this.adviceError = 'Connection error. Please try again.';
+        } finally {
+          this.adviceLoading = false;
+        }
+      },
+
+      async getMonteCarlo() {
+        this.mcLoading = true;
+        this.mcError   = null;
+
+        const lastAnswers = JSON.parse(sessionStorage.getItem('last_answers') || '{}');
+
+        try {
+          const resp = await fetch('/api/scenarios/monte-carlo/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({ data: lastAnswers, results: this.results }),
+          });
+
+          const data = await resp.json();
+
+          if (!resp.ok || !data.success) {
+            this.mcError = data.error || 'Simulation failed. Please try again.';
+          } else {
+            this.mcResults = data.mc;
+            this.$nextTick(() => this.initMcChart());
+          }
+        } catch (err) {
+          this.mcError = 'Connection error. Please try again.';
+        } finally {
+          this.mcLoading = false;
+        }
+      },
+
+      initMcChart() {
+        const ctx = document.getElementById('mcFanChart');
+        if (!ctx || !this.mcResults) return;
+        if (this.mcChart) { this.mcChart.destroy(); this.mcChart = null; }
+
+        const fc = this.mcResults.fan_chart;
+        const labels = fc.years;
+
+        const fmtY = (val) => {
+          if (val >= 10000000) return '₹' + (val / 10000000).toFixed(1) + 'Cr';
+          if (val >= 100000)   return '₹' + (val / 100000).toFixed(0)   + 'L';
+          if (val >= 1000)     return '₹' + (val / 1000).toFixed(0)     + 'K';
+          return '₹' + val;
+        };
+
+        this.mcChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              // P10 — pessimistic floor (red dashed, no fill)
+              {
+                label: 'Pessimistic (P10)',
+                data: fc.p10,
+                fill: false,
+                borderColor: 'rgba(239,68,68,0.55)',
+                borderWidth: 1.5,
+                borderDash: [5, 4],
+                pointRadius: 0,
+                order: 3,
+              },
+              // P90 — optimistic ceiling (green dashed), fills down to P10
+              {
+                label: 'P10–P90 range',
+                data: fc.p90,
+                fill: 0,
+                backgroundColor: 'rgba(26,86,219,0.07)',
+                borderColor: 'rgba(34,197,94,0.55)',
+                borderWidth: 1.5,
+                borderDash: [5, 4],
+                pointRadius: 0,
+                order: 2,
+              },
+              // P50 — median (solid blue)
+              {
+                label: 'Median (P50)',
+                data: fc.p50,
+                fill: false,
+                borderColor: '#1a56db',
+                borderWidth: 2.5,
+                pointRadius: 0,
+                order: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  font: { family: "'Space Grotesk', system-ui", size: 10 },
+                  color: '#7a7a7a',
+                  usePointStyle: true,
+                  pointStyleWidth: 8,
+                  padding: 12,
+                  boxHeight: 6,
+                },
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0,0,0,0.85)',
+                padding: 10,
+                titleFont: { size: 11, family: "'Space Grotesk', system-ui" },
+                bodyFont:  { size: 10, family: "'Space Grotesk', system-ui" },
+                callbacks: {
+                  label: (ctx) => ctx.dataset.label + ': ' + fmtY(ctx.parsed.y),
+                },
+              },
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: {
+                  font: { family: "'Space Grotesk', system-ui", size: 9 },
+                  color: '#b5b0a8',
+                  maxRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: 10,
+                },
+              },
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
+                ticks: {
+                  font: { family: "'Space Grotesk', system-ui", size: 9 },
+                  color: '#b5b0a8',
+                  padding: 8,
+                  callback: fmtY,
+                },
+                border: { display: false },
+              },
+            },
+          },
+        });
+      },
+
+      renderAdvice(text) {
+        if (!text) return '';
+        // Escape HTML, handle **bold** and • bullets
+        text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        const lines = text.split('\n');
+        let html = '', inP = false, inUl = false;
+        for (const line of lines) {
+          const t = line.trim();
+          if (!t) {
+            if (inP)  { html += '</p>';  inP  = false; }
+            if (inUl) { html += '</ul>'; inUl = false; }
+          } else if (t.startsWith('•')) {
+            if (inP)  { html += '</p>';  inP  = false; }
+            if (!inUl) { html += '<ul style="margin:8px 0 8px 18px;padding:0;">'; inUl = true; }
+            html += `<li style="margin-bottom:5px;">${t.slice(1).trim()}</li>`;
+          } else {
+            if (inUl) { html += '</ul>'; inUl = false; }
+            if (!inP) { html += '<p style="margin:0 0 10px;">'; inP = true; }
+            else html += ' ';
+            html += t;
+          }
+        }
+        if (inP)  html += '</p>';
+        if (inUl) html += '</ul>';
+        return html;
       },
 
       restart() {

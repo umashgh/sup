@@ -31,17 +31,48 @@
   </div>
   {% endif %}
 
-  <form method="post" style="display: flex; flex-direction: column; gap: 16px;">
+  <form method="post" style="display: flex; flex-direction: column; gap: 16px;"
+        onsubmit="if(this.elements.username.value) localStorage.setItem('sf_username', this.elements.username.value)">
     {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
 
-    <div>
+    <div x-data="{
+      checking: false,
+      adj: ['bold','brave','bright','calm','clear','crisp','deep','fair','firm','fleet','free','fresh','glad','good','keen','kind','lean','light','neat','noble','prime','quick','quiet','sharp','smart','solid','swift','tough','warm','wise'],
+      nou: ['bison','cobra','crane','deer','dingo','duck','eagle','falcon','fox','gecko','hawk','hippo','horse','hyena','koala','lemur','lion','lynx','mole','moose','otter','owl','panda','raven','robin','seal','snail','swan','tiger','whale','wolf'],
+      async suggest() {
+        this.checking = true;
+        try {
+          for (let i = 0; i < 12; i++) {
+            const a = this.adj[Math.floor(Math.random() * this.adj.length)];
+            const n = this.nou[Math.floor(Math.random() * this.nou.length)];
+            const d = String(10 + Math.floor(Math.random() * 90));
+            const name = a + '_' + n + '_' + d;
+            const resp = await fetch('/accounts/check-username/?u=' + encodeURIComponent(name));
+            const data = await resp.json();
+            if (data.available) { $refs.usernameInput.value = name; break; }
+          }
+        } finally { this.checking = false; }
+      }
+    }">
       <label style="display: block; font-size: 0.78rem; font-weight: 600;
                     color: var(--ink-muted); margin-bottom: 6px;">Choose a username</label>
-      <input type="text" name="username" autocomplete="username" autofocus
-        placeholder="e.g. rahul_fires_at_40"
-        style="width: 100%; padding: 14px 16px; border: 1.5px solid rgba(0,0,0,0.12);
-               border-radius: 10px; font-size: 1rem; background: white;
-               color: var(--ink); box-sizing: border-box;" />
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="text" name="username" x-ref="usernameInput" autocomplete="username" autofocus
+          value="{{ request.GET.username }}"
+          placeholder="e.g. rahul_fires_at_40"
+          style="flex: 1; padding: 14px 16px; border: 1.5px solid rgba(0,0,0,0.12);
+                 border-radius: 10px; font-size: 1rem; background: white;
+                 color: var(--ink); box-sizing: border-box;" />
+        <button type="button" @click="suggest()" :disabled="checking"
+          style="padding: 10px 12px; border: 1.5px solid rgba(26,86,219,0.25); border-radius: 10px;
+                 font-size: 0.75rem; font-weight: 600; color: var(--blue); background: rgba(26,86,219,0.05);
+                 cursor: pointer; white-space: nowrap; min-height: 48px; transition: all 0.15s;"
+          :style="checking ? 'opacity:0.5; cursor:not-allowed;' : ''">
+          <span x-show="!checking">✦ Suggest</span>
+          <span x-show="checking">...</span>
+        </button>
+      </div>
       <div style="font-size: 0.72rem; color: var(--ink-muted); margin-top: 6px;">
         Letters, numbers, hyphens, underscores. Min 3 characters.
       </div>

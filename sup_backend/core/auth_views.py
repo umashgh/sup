@@ -1,5 +1,5 @@
 from django.contrib.auth import login, authenticate, logout
-from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
@@ -39,33 +39,13 @@ def signup(request):
             new_user = User.objects.create_user(username=username)
             FamilyProfile.objects.get_or_create(user=new_user)
 
-            # Transfer guest session data to the new account
             if guest_user:
-                try:
-                    from core.models import ScenarioProfile
-                    sp = ScenarioProfile.objects.get(user=guest_user)
-                    sp.user = new_user
-                    sp.save()
-                except Exception:
-                    pass
-                try:
-                    guest_fp = FamilyProfile.objects.get(user=guest_user)
-                    new_fp, _ = FamilyProfile.objects.get_or_create(user=new_user)
-                    for field in ['current_tier', 'wealth_level', 'income_level',
-                                  'expense_level', 'monthly_expenses', 'emergency_fund_months']:
-                        val = getattr(guest_fp, field, None)
-                        if val is not None:
-                            setattr(new_fp, field, val)
-                    new_fp.save()
-                    guest_fp.delete()
-                except Exception:
-                    pass
-                try:
-                    guest_user.delete()
-                except Exception:
-                    pass
+                _transfer_guest_data(guest_user, new_user)
 
             login(request, new_user, backend=BACKEND)
+            next_url = request.POST.get('next') or request.GET.get('next') or _get_smart_redirect_for_user(new_user)
+            if next_url.startswith('/'):
+                return redirect(next_url)
             return redirect('scenario_selector')
 
     return render(request, 'registration/signup.html', {'error': error})
@@ -87,15 +67,91 @@ def signin(request):
         else:
             user = authenticate(request, username=username)
             if user is None:
-                error = f'No account found for "{username}".'
+                return render(request, 'registration/login.html', {
+                    'not_found': True,
+                    'tried_username': username,
+                })
             else:
+                # Transfer any in-progress guest session to the signed-in account
+                guest_user = (
+                    request.user
+                    if request.user.is_authenticated and request.user.username.startswith('guest_')
+                    else None
+                )
+                if guest_user:
+                    _transfer_guest_data(guest_user, user)
+
                 login(request, user, backend=BACKEND)
-                return redirect(request.POST.get('next') or '/')
+                next_url = request.POST.get('next') or _get_smart_redirect_for_user(user)
+                return redirect(next_url)
 
-    return render(request, 'registration/login.html', {'error': error})
+    return render(request, 'registration/login.html', {})
 
 
-@require_POST
 def signout(request):
+    """Accept both POST and GET for mobile compatibility."""
     logout(request)
     return redirect('/')
+
+
+def check_username(request):
+    """Check if a username is available (for the suggest feature)."""
+    username = request.GET.get('u', '').strip()
+    if not username:
+        return JsonResponse({'available': False})
+    available = not User.objects.filter(username=username).exists()
+    return JsonResponse({'available': available})
+
+
+def _transfer_guest_data(guest_user, target_user):
+    """Transfer in-progress guest scenario/profile data to the target user."""
+    from core.models import ScenarioProfile
+    # ScenarioProfile
+    try:
+        guest_sp = ScenarioProfile.objects.get(user=guest_user)
+        existing_sp = ScenarioProfile.objects.filter(user=target_user).first()
+        if existing_sp:
+            existing_sp.scenario_type = guest_sp.scenario_type
+            existing_sp.save()
+            guest_sp.delete()
+        else:
+            guest_sp.user = target_user
+            guest_sp.save()
+    except ScenarioProfile.DoesNotExist:
+        pass
+    except Exception:
+        pass
+    # FamilyProfile
+    try:
+        guest_fp = FamilyProfile.objects.get(user=guest_user)
+        target_fp, _ = FamilyProfile.objects.get_or_create(user=target_user)
+        for field in ['current_tier', 'wealth_level', 'income_level',
+                      'expense_level', 'monthly_expenses', 'emergency_fund_months']:
+            val = getattr(guest_fp, field, None)
+            if val is not None:
+                setattr(target_fp, field, val)
+        target_fp.save()
+        guest_fp.delete()
+    except Exception:
+        pass
+    try:
+        guest_user.delete()
+    except Exception:
+        pass
+
+
+def _get_smart_redirect_for_user(user):
+    """Return the best redirect URL based on the user's saved progress."""
+    try:
+        from core.models import ScenarioProfile
+        from finance.models import Asset
+        ScenarioProfile.objects.get(user=user)
+        fp = FamilyProfile.objects.get(user=user)
+        if fp.current_tier >= 2:
+            return '/results/'
+        # Tier 1 calculation saves assets to DB — use that as completion signal
+        if Asset.objects.filter(user=user).exists():
+            return '/results/'
+        return '/questions/'
+    except Exception:
+        return '/'

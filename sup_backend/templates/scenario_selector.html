@@ -103,12 +103,9 @@
         Sign in</a>
       {% else %}
       <span style="font-size: 0.78rem; color: var(--ink-muted); margin-right: 6px;">{{ user.username }}</span>
-      <form method="post" action="/accounts/logout/" style="margin: 0;">
-        {% csrf_token %}
-        <button type="submit"
-          style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; display: inline-flex; align-items: center; min-height: 44px; background: none; cursor: pointer;">
-          Sign out</button>
-      </form>
+      <a href="/accounts/logout/"
+        style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; padding: 6px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 20px; display: inline-flex; align-items: center; min-height: 44px;">
+        Sign out</a>
       {% endif %}
     {% else %}
     <a href="/accounts/login/"
@@ -123,12 +120,11 @@
 
     <h1>You might be<br>more <em>free</em> than<br>you think.</h1>
 
-    <p class="sub">Figure out your financial runway — how long your money can sustain you if you leap. Takes 2
-      minutes. We don't even ask your name.</p>
+    <p class="sub">Figure out your financial runway — how long your money can sustain you if you leap. Takes a few minutes. We don't even ask your name.</p>
 
     <a href="#stories" class="btn-primary">Find out &rarr;</a>
 
-    <p class="aside">No signup &middot; No data stored &middot; Free forever</p>
+    <p class="aside">Don't guess. Be ready. In 7 mins.</p>
   </section>
 
 
@@ -178,6 +174,7 @@
         <p>You're quitting your ₹25L job to build something. How many months before the savings run out?</p>
       </div>
       <div class="story-emoji">&#128640;</div>
+      <div style="display:flex;align-items:center;padding-right:14px;color:rgba(0,0,0,0.2);font-size:1rem;">›</div>
     </div>
 
     <div class="story" role="button" tabindex="0" @click="selectScenario('RETIREMENT')" @keydown.enter.prevent="selectScenario('RETIREMENT')" @keydown.space.prevent="selectScenario('RETIREMENT')" :class="{'opacity-50': loading}">
@@ -187,6 +184,7 @@
         <p>You want to retire at 50, or 55, or 60. Will the corpus last till 85? With inflation?</p>
       </div>
       <div class="story-emoji">&#127796;</div>
+      <div style="display:flex;align-items:center;padding-right:14px;color:rgba(0,0,0,0.2);font-size:1rem;">›</div>
     </div>
 
     <div class="story" role="button" tabindex="0" @click="selectScenario('R2I')" @keydown.enter.prevent="selectScenario('R2I')" @keydown.space.prevent="selectScenario('R2I')" :class="{'opacity-50': loading}">
@@ -196,6 +194,7 @@
         <p>Coming back from the US, UK, or Gulf. What does your NRI nest egg mean in India?</p>
       </div>
       <div class="story-emoji">&#9992;&#65039;</div>
+      <div style="display:flex;align-items:center;padding-right:14px;color:rgba(0,0,0,0.2);font-size:1rem;">›</div>
     </div>
 
     <div class="story" role="button" tabindex="0" @click="selectScenario('HALF_FIRE')" @keydown.enter.prevent="selectScenario('HALF_FIRE')" @keydown.space.prevent="selectScenario('HALF_FIRE')" :class="{'opacity-50': loading}">
@@ -205,6 +204,7 @@
         <p>You don't want to quit entirely — just do less, earn less, stress less. What's the math?</p>
       </div>
       <div class="story-emoji">&#9968;&#65039;</div>
+      <div style="display:flex;align-items:center;padding-right:14px;color:rgba(0,0,0,0.2);font-size:1rem;">›</div>
     </div>
 
     <div class="story" role="button" tabindex="0" @click="selectScenario('TERMINATION')" @keydown.enter.prevent="selectScenario('TERMINATION')" @keydown.space.prevent="selectScenario('TERMINATION')" :class="{'opacity-50': loading}">
@@ -214,6 +214,7 @@
         <p>It happened, or it's coming. Severance + savings = how many months to figure it out?</p>
       </div>
       <div class="story-emoji">&#128221;</div>
+      <div style="display:flex;align-items:center;padding-right:14px;color:rgba(0,0,0,0.2);font-size:1rem;">›</div>
     </div>
 
   </section>
@@ -239,7 +240,7 @@
       <div class="napkin-n">1</div>
       <div class="napkin-text">
         <h4>Pick your story</h4>
-        <p>Founder? Retiring? Moving back? Each one asks different questions.</p>
+        <p>Founder? Retiring? Moving back? Each journey is different.</p>
       </div>
     </div>
 
@@ -247,7 +248,7 @@
       <div class="napkin-n">2</div>
       <div class="napkin-text">
         <h4>Slide, don't type</h4>
-        <p>No forms, no spreadsheets. Just drag sliders and tap cards. Under 2 minutes.</p>
+        <p>No forms, no spreadsheets. Just drag sliders and tap cards.</p>
       </div>
     </div>
 
@@ -348,7 +349,7 @@
       <div class="depth-badge t1">Quick</div>
       <div class="depth-text">
         <h4>2-min estimate</h4>
-        <p>~10 questions. Smart expense estimates from your family profile. Your runway number in minutes.</p>
+        <p>Smart expense estimates from your family profile. Your runway number in minutes.</p>
       </div>
     </div>
 
@@ -397,7 +398,7 @@
 
     <h2>Your money might<br>buy more <em>freedom</em><br>than you think.</h2>
 
-    <p>Find out in 2 minutes. No signup,<br>no data stored, no judgement.</p>
+    <p>Find out in 2 minutes. No jargon,<br>no spreadsheets, no judgement.</p>
 
     <a href="#stories" class="btn-primary"
       @click.prevent="document.getElementById('stories').scrollIntoView({behavior:'smooth'})">Check my runway &rarr;</a>
@@ -405,7 +406,7 @@
     <div class="trust-row">
       <span>&#128274; Anonymous</span>
       <span>&#127470;&#127475; Made for India</span>
-      <span>&#9889; No signup needed</span>
+      <span>&#9889; Free forever</span>
     </div>
 
     <p class="fine">Built for people making life moves.</p>
@@ -418,7 +419,7 @@
     <p style="font-size: 0.82rem; color: var(--ink-muted); line-height: 1.6; max-width: 360px;">
       salaryfree helps salaried Indians and startup founders figure out if they can afford to make a life change — quit to
       start something, retire early, move back from abroad, or ride out a layoff. All numbers are in Indian context
-      (rupees, Indian inflation, Indian expense patterns). No signup, no data stored, no ads.
+      (rupees, Indian inflation, Indian expense patterns). No jargon, no spreadsheets, no ads.
     </p>
   </section>
 

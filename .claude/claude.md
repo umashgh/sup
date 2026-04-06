@@ -30,8 +30,8 @@ ref/                  Reference PDFs/EPUBs
 ## Architecture
 
 ### Progressive Disclosure (3-Tier System)
-- **QUICK**: Fast estimates, 4-6 questions, ~2 minutes
-- **STANDARD**: Detailed 20-year projections, 10-15 questions
+- **QUICK**: Fast estimates, ~3 minutes (14 screens solo, up to 17 for joint family)
+- **STANDARD**: Detailed 20-year projections, ~7 minutes (adds 5–7 screens on top of QUICK)
 - **ADVANCED**: Monte Carlo, tax optimization (not yet implemented)
 
 ### 5 Scenarios

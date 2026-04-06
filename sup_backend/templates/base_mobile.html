@@ -311,64 +311,59 @@
     /* ---- STORIES / SCENARIO CARDS ---- */
     .stories {
       padding: 0 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .story {
       display: flex;
       align-items: stretch;
-      gap: 14px;
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      gap: 0;
+      background: white;
+      border-radius: 14px;
+      border: 1.5px solid rgba(0, 0, 0, 0.08);
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
-      transition: opacity 0.15s;
-    }
-
-    .story:last-child {
-      border-bottom: none;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+      overflow: hidden;
     }
 
     .story:active {
-      opacity: 0.7;
+      transform: scale(0.975);
+      box-shadow: none;
+    }
+
+    .story:hover {
+      border-color: rgba(0, 0, 0, 0.16);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
     }
 
     .story-color {
-      width: 4px;
-      min-width: 4px;
-      border-radius: 2px;
+      width: 5px;
+      min-width: 5px;
       flex-shrink: 0;
+      border-radius: 0;
     }
 
-    .story-color.c1 {
-      background: var(--coral);
-    }
-
-    .story-color.c2 {
-      background: var(--forest);
-    }
-
-    .story-color.c3 {
-      background: var(--mustard);
-    }
-
-    .story-color.c4 {
-      background: var(--ocean);
-    }
-
-    .story-color.c5 {
-      background: var(--plum);
-    }
+    .story-color.c1 { background: var(--coral); }
+    .story-color.c2 { background: var(--forest); }
+    .story-color.c3 { background: var(--mustard); }
+    .story-color.c4 { background: var(--ocean); }
+    .story-color.c5 { background: var(--plum); }
 
     .story-body {
       flex: 1;
       min-width: 0;
+      padding: 15px 12px 15px 16px;
     }
 
     .story-body h3 {
       font-family: var(--serif);
       font-size: 1.05rem;
       font-weight: 400;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
+      color: var(--ink);
     }
 
     .story-body p {
@@ -378,9 +373,10 @@
     }
 
     .story-emoji {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       display: flex;
       align-items: center;
+      padding: 0 16px 0 8px;
       flex-shrink: 0;
     }
 

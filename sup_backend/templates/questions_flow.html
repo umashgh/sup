@@ -991,20 +991,26 @@
       async init() {
         await this.loadQuestions();
 
-        // After questions load, seed history with index 0
-        history.replaceState({ questionIndex: 0 }, '');
+        // Save answers + position when navigating away (e.g. mid-flow to sign-in page)
+        window.addEventListener('beforeunload', () => {
+          if (!this.calculating) {
+            sessionStorage.setItem('flow_answers', JSON.stringify(this.answers));
+            sessionStorage.setItem('flow_visible_index', String(this.visibleIndex));
+          }
+        });
 
-        // Handle browser back button — restore question index from history state
+        // After questions load, seed history with index 0
+        history.replaceState({ questionIndex: this.visibleIndex }, '');
+
+        // Handle browser back/forward — restore question index from history state
         window.addEventListener('popstate', (e) => {
-          const idx = e.state?.questionIndex ?? -1;
-          if (idx >= 0) {
+          const idx = e.state?.questionIndex;
+          if (idx !== undefined && idx >= 0) {
             this.visibleIndex = idx;
             this.validationError = null;
-            window.scrollTo(0, 0);
-          } else {
-            // No question state — let the browser navigate away normally
-            history.back();
+            this.$nextTick(() => window.scrollTo(0, 0));
           }
+          // If no questionIndex state, browser is navigating away — do nothing
         });
       },
 
@@ -1019,6 +1025,9 @@
 
           if (advancingToTier2 === 'true') {
             sessionStorage.removeItem('advancing_to_tier_2');
+            // Clear tier-1 flow state so tier-2 starts at question 0, not mid-tier-1 position
+            sessionStorage.removeItem('flow_answers');
+            sessionStorage.removeItem('flow_visible_index');
           }
 
           // Fetch questions from server FIRST — so we know what tier we're at
@@ -1061,6 +1070,21 @@
               this.answers['assets.growth'] = this.answers['assets.growth'] ?? Math.round(securityTotal * 0.7);
               this.answers['assets.property'] = this.answers['assets.property'] ?? Math.round(securityTotal * 0.3);
             }
+          }
+
+          // Restore in-progress answers saved before navigating away (e.g. guest → sign-in → back)
+          // Applied after tier_1_answers so newer mid-flow values win, but only overwrites
+          // fields the user actually touched (existing non-undefined fields from tier_1_answers
+          // are only overwritten if flow_answers also has that field, which is intentional —
+          // it means the user re-answered it in this session).
+          const savedFlowAnswers = sessionStorage.getItem('flow_answers');
+          if (savedFlowAnswers) {
+            try {
+              const saved = JSON.parse(savedFlowAnswers);
+              Object.keys(saved).forEach(k => {
+                this.answers[k] = saved[k];
+              });
+            } catch(e) {}
           }
 
           // Tag questions with client-side condition metadata.
@@ -1163,8 +1187,12 @@
             this.answers[efKey] = efDefaults[scenarioType] || 6;
           }
 
-          this.visibleIndex = 0;
-          console.log(`✅ Loaded ${this.allQuestions.length} questions (${this.visibleQuestions.length} visible)`);
+          // Restore position if user was mid-flow when they navigated away
+          const savedFlowIdx = parseInt(sessionStorage.getItem('flow_visible_index') || '0');
+          this.visibleIndex = (savedFlowIdx > 0)
+            ? Math.min(savedFlowIdx, Math.max(0, this.visibleQuestions.length - 1))
+            : 0;
+          console.log(`✅ Loaded ${this.allQuestions.length} questions (${this.visibleQuestions.length} visible), resuming at index ${this.visibleIndex}`);
 
         } catch (err) {
           this.error = err.message;
@@ -1384,12 +1412,16 @@
 
         this.validationError = null;
 
+        // Snapshot answers before moving — survives same-tab navigations (e.g. sign-in mid-flow)
+        sessionStorage.setItem('flow_answers', JSON.stringify(this.answers));
+        sessionStorage.setItem('flow_visible_index', String(this.visibleIndex));
+
         if (this.isLastVisible) {
           this.calculate();
         } else {
           this.visibleIndex++;
           history.pushState({ questionIndex: this.visibleIndex }, '');
-          window.scrollTo(0, 0);
+          this.$nextTick(() => window.scrollTo(0, 0));
 
           const nextQ = this.visibleQuestions[this.visibleIndex];
 
@@ -1453,8 +1485,9 @@
 
       previousQuestion() {
         if (this.visibleIndex > 0) {
-          // Use history.back() so browser history stays consistent with the popstate listener
-          history.back();
+          this.visibleIndex--;
+          this.validationError = null;
+          this.$nextTick(() => window.scrollTo(0, 0));
         }
       },
 
@@ -1574,6 +1607,9 @@
 
           sessionStorage.setItem('calculation_results', JSON.stringify(results));
           sessionStorage.setItem('last_answers', JSON.stringify(data));
+          // Flow complete — clear in-progress snapshot
+          sessionStorage.removeItem('flow_answers');
+          sessionStorage.removeItem('flow_visible_index');
           window.location.href = '/results/';
 
         } catch (err) {

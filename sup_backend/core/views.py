@@ -1,7 +1,10 @@
 import json
+import logging
 import uuid
 from datetime import datetime
 from decimal import Decimal
+
+logger = logging.getLogger(__name__)
 
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -728,3 +731,99 @@ def advance_tier(request):
             {'error': 'Already at highest tier'},
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def advise(request):
+    """
+    Advanced tier: AI-powered financial advisor.
+    Accepts the same user_data dict as calculate_tier plus the results
+    from the most recent Standard calculation. Returns Asha's analysis.
+    """
+    from .advisor import get_advice
+
+    user_data = request.data.get('data')
+    results = request.data.get('results')
+
+    if not user_data or not results:
+        return Response(
+            {'error': 'Both data and results fields are required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    if results.get('tier') != 'STANDARD':
+        return Response(
+            {'error': 'Advanced advisor requires Standard tier results. Complete the full projection first.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Inject current rate preferences so Asha has accurate rates
+    from .models import UserRatePreferences
+    rate_prefs, _ = UserRatePreferences.objects.get_or_create(user=request.user)
+    user_data['rates'] = rate_prefs.as_dict()
+
+    try:
+        advice_text = get_advice(user_data, results)
+    except Exception as e:
+        logger.exception('Advisor failed for user %s', request.user.id)
+        return Response(
+            {'error': f'Advisor unavailable: {str(e)}'},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE
+        )
+
+    return Response({'success': True, 'advice': advice_text})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def monte_carlo(request):
+    """
+    Advanced tier: Monte Carlo simulation over N paths (default 2,000).
+
+    Accepts the same user_data dict as calculate_tier plus Standard tier
+    results. Runs a vectorised NumPy simulation with perturbed annual returns,
+    inflation, and random shock expenses.
+
+    Returns fan chart data (P10/P25/P50/P75/P90) and success statistics.
+    """
+    from .calculators.monte_carlo import MonteCarloEngine
+
+    user_data = request.data.get('data')
+    results   = request.data.get('results')
+
+    if not user_data or not results:
+        return Response(
+            {'error': 'Both data and results fields are required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    if results.get('tier') != 'STANDARD':
+        return Response(
+            {'error': 'Monte Carlo requires Standard tier results. Complete the full projection first.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    scenario_type = results.get('scenario_type', '')
+    if not scenario_type:
+        return Response(
+            {'error': 'scenario_type missing from results'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Inject current rate preferences so MC uses the same rates as the projection
+    from .models import UserRatePreferences
+    rate_prefs, _ = UserRatePreferences.objects.get_or_create(user=request.user)
+    user_data['rates'] = rate_prefs.as_dict()
+
+    try:
+        engine     = MonteCarloEngine(user_data, scenario_type)
+        mc_results = engine.run()
+    except Exception as e:
+        logger.exception('Monte Carlo failed for user %s', request.user.id)
+        return Response(
+            {'error': f'Simulation failed: {str(e)}'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+    return Response({'success': True, 'mc': mc_results})
