@@ -40,9 +40,30 @@ def guest_login(request):
 # NEW MOBILE-FIRST PAGES
 # ============================================================================
 
+_TICKER_ITEMS = [
+    "You can potentially find that… you have 11 months of buffer after the layoff",
+    "You can potentially find that… you can retire today with 90%+ confidence",
+    "You can potentially find that… you only need to work 3 months a year",
+    "You can potentially find that… your NRI savings = 6 years of runway in Pune",
+    "You can potentially find that… your FIRE number is already halfway covered",
+    "You can potentially find that… you can coast at ₹55K/month and never touch the corpus",
+    "You can potentially find that… the severance buys you 14 months, not 6",
+    "You can potentially find that… retiring at 52 is 4 years closer than you thought",
+    "You can potentially find that… switching to part-time only costs ₹8K/month extra",
+    "You can potentially find that… your passive income already covers 40% of expenses",
+    "You can potentially find that… the leap is survivable — even if the startup fails",
+    "You can potentially find that… you're two years away from not needing a salary",
+]
+
 def scenario_selector_page(request):
     """Mobile-first scenario selection page."""
-    return render(request, 'scenario_selector.html')
+    from forum.models import Thread
+    threads = Thread.objects.filter(is_visible=True).order_by('-score')[:12]
+    if threads.count() >= 50:
+        ticker_items = [t.title[:80] + ('…' if len(t.title) > 80 else '') for t in threads]
+    else:
+        ticker_items = _TICKER_ITEMS
+    return render(request, 'scenario_selector.html', {'ticker_items': ticker_items})
 
 
 @login_required

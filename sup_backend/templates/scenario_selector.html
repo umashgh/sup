@@ -131,27 +131,15 @@
   <!-- ===== TICKER ===== -->
   <div class="ticker-wrap">
     <div class="ticker">
-      <span>&#128640; 14 months more runway than I thought</span>
+      {% for item in ticker_items %}
+      <span>{{ item }}</span>
       <span class="sep">&bull;</span>
-      <span>&#127796; Finally have a retirement target: ₹3.2Cr</span>
-      <span class="sep">&bull;</span>
-      <span>&#9992;&#65039; Our NRI savings = 4.8 years in Pune</span>
-      <span class="sep">&bull;</span>
-      <span>&#9968;&#65039; Turns out I can coast at ₹60K/month</span>
-      <span class="sep">&bull;</span>
-      <span>&#128221; 11 months buffer after the layoff</span>
-      <span class="sep">&bull;</span>
+      {% endfor %}
       <!-- duplicate for seamless loop -->
-      <span>&#128640; 14 months more runway than I thought</span>
+      {% for item in ticker_items %}
+      <span>{{ item }}</span>
       <span class="sep">&bull;</span>
-      <span>&#127796; Finally have a retirement target: ₹3.2Cr</span>
-      <span class="sep">&bull;</span>
-      <span>&#9992;&#65039; Our NRI savings = 4.8 years in Pune</span>
-      <span class="sep">&bull;</span>
-      <span>&#9968;&#65039; Turns out I can coast at ₹60K/month</span>
-      <span class="sep">&bull;</span>
-      <span>&#128221; 11 months buffer after the layoff</span>
-      <span class="sep">&bull;</span>
+      {% endfor %}
     </div>
   </div>
 
