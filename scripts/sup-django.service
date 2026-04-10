@@ -1,0 +1,23 @@
+[Unit]
+Description=Sup Financial Freedom Planning Django App
+After=network.target
+
+[Service]
+Type=notify
+WorkingDirectory=/home/uma/apps/sup
+Environment="PATH=/home/uma/apps/sup/.venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONPATH=/home/uma/apps/sup/sup_backend"
+ExecStart=/home/uma/apps/sup/.venv/bin/gunicorn \
+    --bind 0.0.0.0:8082 \
+    --workers 3 \
+    --timeout 120 \
+    --access-logfile /home/uma/apps/sup/logs/gunicorn-access.log \
+    --error-logfile /home/uma/apps/sup/logs/gunicorn-error.log \
+    --log-level info \
+    --chdir /home/uma/apps/sup/sup_backend \
+    sup_backend.wsgi:application
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target

@@ -6,4 +6,5 @@ ebooklib
 bs4
 django-bootstrap5
 djangorestframework
-anthropic
+anthropic[bedrock]
+gunicorn

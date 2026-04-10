@@ -17,7 +17,8 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-ADVISOR_MODEL = 'us.anthropic.claude-sonnet-4-6-20251101-v1:0'
+import os
+ADVISOR_MODEL = os.environ.get('ANTHROPIC_DEFAULT_SONNET_MODEL', 'us.anthropic.claude-sonnet-4-6')
 
 
 # ─── Formatting helpers ───────────────────────────────────────────────────────

@@ -41,6 +41,8 @@
       --forest-light: #dff0e8;
       --ocean: #3667a6;
       --ocean-light: #e0ecf7;
+      --blue: #1a56db;
+      --blue-light: #e8f0fe;
       --plum: #7c4dac;
       --plum-light: #f0e8f7;
       --r: 12px;
@@ -282,7 +284,7 @@
     .ticker {
       display: flex;
       gap: 32px;
-      animation: scroll-ticker 18s linear infinite;
+      animation: scroll-ticker 45s linear infinite;
       white-space: nowrap;
       width: max-content;
     }
@@ -1469,6 +1471,23 @@
   <!-- Alpine.js + collapse plugin -->
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.8/dist/cdn.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+
+  <script>
+  // ── Anonymous behaviour tracking ─────────────────────────────────────────
+  // Fire-and-forget POST to /api/track/. Never throws, never blocks the UI.
+  function track(event, props) {
+    const body = Object.assign({ event: event }, props || {});
+    fetch('/api/track/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] || '',
+      },
+      body: JSON.stringify(body),
+      keepalive: true,
+    }).catch(function() {});
+  }
+  </script>
 
   {% block extra_js %}{% endblock %}
 </body>

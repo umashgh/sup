@@ -886,6 +886,10 @@
       validationError: null,
       serverTier: 1,
 
+      // Tracking: snapshot of answer value when each question was first shown
+      _firstSeen: {},
+      _flowCompleted: false,
+
       // Expense estimate state
       expenseItems: [],
       expenseTotal: 0,
@@ -1193,6 +1197,24 @@
             ? Math.min(savedFlowIdx, Math.max(0, this.visibleQuestions.length - 1))
             : 0;
           console.log(`✅ Loaded ${this.allQuestions.length} questions (${this.visibleQuestions.length} visible), resuming at index ${this.visibleIndex}`);
+          track('flow_started', {
+            scenario: data.scenario_type || '',
+            tier: this.serverTier,
+            total_questions: this.visibleQuestions.length,
+            resuming_at: this.visibleIndex,
+          });
+          window.addEventListener('beforeunload', () => {
+            if (!this._flowCompleted) {
+              const q = this.currentQuestion;
+              track('flow_abandoned', {
+                scenario: data.scenario_type || '',
+                tier: this.serverTier,
+                question_index: this.visibleIndex,
+                question_id: q ? q.id : null,
+                pct_complete: Math.round((this.visibleIndex / Math.max(this.visibleQuestions.length, 1)) * 100),
+              });
+            }
+          });
 
         } catch (err) {
           this.error = err.message;
@@ -1417,13 +1439,49 @@
         sessionStorage.setItem('flow_visible_index', String(this.visibleIndex));
 
         if (this.isLastVisible) {
+          // Track the final question being submitted before calculate
+          const lastQ = this.currentQuestion;
+          if (lastQ) {
+            const field = lastQ.field_name;
+            const initial = this._firstSeen[lastQ.id];
+            const current = this.answers[field];
+            track('question_advanced', {
+              question_id: lastQ.id,
+              question_index: this.visibleIndex,
+              tier: lastQ.tier || '',
+              changed_from_default: initial !== undefined && String(initial) !== String(current),
+            });
+          }
           this.calculate();
         } else {
+          // Track leaving current question
+          const curQ = this.currentQuestion;
+          if (curQ) {
+            const field = curQ.field_name;
+            const initial = this._firstSeen[curQ.id];
+            const current = this.answers[field];
+            track('question_advanced', {
+              question_id: curQ.id,
+              question_index: this.visibleIndex,
+              tier: curQ.tier || '',
+              changed_from_default: initial !== undefined && String(initial) !== String(current),
+            });
+          }
+
           this.visibleIndex++;
           history.pushState({ questionIndex: this.visibleIndex }, '');
           this.$nextTick(() => window.scrollTo(0, 0));
 
           const nextQ = this.visibleQuestions[this.visibleIndex];
+          // Snapshot the default value the moment the next question becomes visible
+          if (nextQ) {
+            this._firstSeen[nextQ.id] = this.answers[nextQ.field_name];
+            track('question_reached', {
+              question_id: nextQ.id,
+              question_index: this.visibleIndex,
+              tier: nextQ.tier || '',
+            });
+          }
 
           // Dynamic kids_average_age: text + default based on kid count and user age
           if (nextQ && nextQ.id === 'kids_average_age') {
@@ -1610,6 +1668,12 @@
           // Flow complete — clear in-progress snapshot
           sessionStorage.removeItem('flow_answers');
           sessionStorage.removeItem('flow_visible_index');
+          this._flowCompleted = true;
+          track('calculation_completed', {
+            tier: results.tier || '',
+            scenario: results.scenario_type || '',
+            success_rate: results.success_rate,
+          });
           window.location.href = '/results/';
 
         } catch (err) {

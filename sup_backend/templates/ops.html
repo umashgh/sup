@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>salaryfree.in — ops</title>
+  <style>
+    :root {
+      --bg:      #0f172a;
+      --surface: #1e293b;
+      --border:  #334155;
+      --text:    #f1f5f9;
+      --muted:   #94a3b8;
+      --green:   #34d399;
+      --yellow:  #fbbf24;
+      --red:     #f87171;
+      --blue:    #60a5fa;
+      --purple:  #a78bfa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.6; }
+
+    /* Layout */
+    .shell { display: flex; min-height: 100vh; }
+    nav { width: 200px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 24px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    main { flex: 1; padding: 32px; max-width: 960px; overflow-x: hidden; }
+
+    /* Nav */
+    .nav-logo { padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+    .nav-logo .site { font-weight: 700; color: var(--text); font-size: 15px; }
+    .nav-logo .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    nav a { display: block; padding: 8px 20px; color: var(--muted); text-decoration: none; font-size: 13px; border-left: 2px solid transparent; transition: all .15s; }
+    nav a:hover, nav a.active { color: var(--text); border-left-color: var(--blue); background: rgba(96,165,250,.06); }
+    .nav-section { padding: 12px 20px 4px; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--border); }
+
+    /* Sections */
+    section { margin-bottom: 48px; scroll-margin-top: 24px; }
+    h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    h3 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 20px 0 8px; }
+
+    /* Stat cards */
+    .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+    .stat-val { font-size: 28px; font-weight: 700; line-height: 1; }
+    .stat-val.green  { color: var(--green); }
+    .stat-val.yellow { color: var(--yellow); }
+    .stat-val.red    { color: var(--red); }
+    .stat-val.blue   { color: var(--blue); }
+    .stat-val.purple { color: var(--purple); }
+    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+    /* Funnel */
+    .funnel { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .funnel-step { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; text-align: center; }
+    .funnel-step .n { font-size: 22px; font-weight: 700; color: var(--blue); }
+    .funnel-step .l { font-size: 11px; color: var(--muted); }
+    .funnel-arrow { color: var(--border); font-size: 18px; }
+    .funnel-pct { font-size: 11px; color: var(--muted); align-self: flex-end; padding-bottom: 12px; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 6px 10px; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); }
+    td { padding: 7px 10px; border-bottom: 1px solid rgba(51,65,85,.5); }
+    tr:last-child td { border-bottom: none; }
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+
+    /* Code blocks */
+    .cmd-group { margin-bottom: 20px; }
+    .cmd-group h3 { margin-top: 0; }
+    .cmd { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; font-family: 'Courier New', monospace; font-size: 12px; color: var(--green); margin-bottom: 6px; position: relative; cursor: pointer; transition: border-color .15s; }
+    .cmd:hover { border-color: var(--blue); }
+    .cmd::after { content: 'copy'; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--muted); font-family: system-ui; }
+    .cmd.copied::after { content: 'copied ✓'; color: var(--green); }
+    .cmd .comment { color: var(--muted); }
+
+    /* Log output */
+    .log-box { background: #0a0f1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.7; overflow-x: auto; white-space: pre-wrap; word-break: break-all; max-height: 400px; overflow-y: auto; color: #e2e8f0; }
+    .log-box .err  { color: var(--red); }
+    .log-box .warn { color: var(--yellow); }
+
+    /* Badges */
+    .badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-green  { background: rgba(52,211,153,.15); color: var(--green); }
+    .badge-yellow { background: rgba(251,191,36,.15); color: var(--yellow); }
+    .badge-red    { background: rgba(248,113,113,.15); color: var(--red); }
+
+    /* Links */
+    a.ext { color: var(--blue); text-decoration: none; }
+    a.ext:hover { text-decoration: underline; }
+
+    /* Alert box */
+    .info-box { background: rgba(96,165,250,.08); border: 1px solid rgba(96,165,250,.25); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--blue); margin-bottom: 16px; }
+
+    /* Step list */
+    .steps { counter-reset: steps; }
+    .step { counter-increment: steps; display: flex; gap: 14px; margin-bottom: 12px; }
+    .step::before { content: counter(steps); width: 22px; height: 22px; background: var(--blue); color: #0f172a; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .step-body { flex: 1; }
+    .step-title { font-weight: 600; font-size: 13px; }
+    .step-desc { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Sidebar -->
+  <nav>
+    <div class="nav-logo">
+      <div class="site">salaryfree.in</div>
+      <div class="label">Ops &amp; Runbook</div>
+    </div>
+    <div class="nav-section">Monitor</div>
+    <a href="#health">🩺 Health</a>
+    <a href="#analytics">📊 Analytics</a>
+    <a href="#errors">🔴 Errors</a>
+    <div class="nav-section">Reference</div>
+    <a href="#services">⚙️ Services</a>
+    <a href="#deploy">🚀 Deploy</a>
+    <a href="#db">🗄️ Database</a>
+    <a href="#install">📦 Fresh Install</a>
+    <div class="nav-section">Links</div>
+    <a class="ext" href="/health/" target="_blank">↗ /health/</a>
+    <a class="ext" href="/admin/" target="_blank">↗ Django admin</a>
+    <a class="ext" href="https://dash.cloudflare.com" target="_blank">↗ Cloudflare</a>
+  </nav>
+
+  <!-- Main -->
+  <main>
+
+    <!-- ── Health ───────────────────────────────────── -->
+    <section id="health">
+      <h2>🩺 Health</h2>
+
+      <div class="info-box">
+        Health endpoint: <a class="ext" href="/health/" target="_blank">https://salaryfree.in/health/</a>
+        — returns <code>{"status":"ok","db":"ok"}</code> (HTTP 200) when all good, 503 on DB failure.
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-val green">200</div>
+          <div class="stat-lbl">Expected status</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val blue">2 min</div>
+          <div class="stat-lbl">Check interval</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val yellow">Telegram</div>
+          <div class="stat-lbl">Alert channel</div>
+        </div>
+      </div>
+
+      <h3>Alerts flow</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Trigger</th><th>What happens</th></tr>
+          <tr><td>Site returns non-200 or times out</td><td>🔴 Telegram "DOWN" with status code — once only (no spam)</td></tr>
+          <tr><td>Site comes back after being down</td><td>✅ Telegram "back up" with downtime duration</td></tr>
+          <tr><td>Django 500 error</td><td>🔴 Telegram with traceback (via <code>django.request</code> logger)</td></tr>
+          <tr><td>CSRF / security event</td><td>🔴 Telegram (via <code>django.security</code> logger)</td></tr>
+        </table>
+      </div>
+
+      <h3>Telegram bot</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Field</th><th>Value</th></tr>
+          <tr><td>Bot username</td><td>@bsktposbot</td></tr>
+          <tr><td>Config file</td><td><code>~/.config/salaryfree/telegram.conf</code></td></tr>
+          <tr><td>Flag file (down state)</td><td><code>/tmp/sf_site_was_down</code></td></tr>
+        </table>
+      </div>
+
+      <div class="cmd" onclick="copyCmd(this)">cat ~/.config/salaryfree/telegram.conf</div>
+      <div class="cmd" onclick="copyCmd(this)">systemctl --user status sf-healthcheck.timer</div>
+      <div class="cmd" onclick="copyCmd(this)">systemctl --user start sf-healthcheck.service  <span class="comment"># run check now</span></div>
+    </section>
+
+    <!-- ── Analytics ─────────────────────────────────── -->
+    <section id="analytics">
+      <h2>📊 Analytics <span style="font-size:13px;color:var(--muted);font-weight:400;">last 7 days</span></h2>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-val blue">{{ unique_sessions }}</div>
+          <div class="stat-lbl">Unique sessions</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val green">{{ started }}</div>
+          <div class="stat-lbl">Flows started</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val green">{{ completed }}</div>
+          <div class="stat-lbl">Calculations done</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val {% if funnel_pct >= 50 %}green{% elif funnel_pct >= 25 %}yellow{% else %}red{% endif %}">{{ funnel_pct }}%</div>
+          <div class="stat-lbl">Completion rate</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val red">{{ abandoned }}</div>
+          <div class="stat-lbl">Abandoned sessions</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val purple">{{ tinker_pct }}%</div>
+          <div class="stat-lbl">Changed defaults</div>
+        </div>
+      </div>
+
+      <h3>Funnel</h3>
+      <div class="funnel">
+        <div class="funnel-step"><div class="n">{{ unique_sessions }}</div><div class="l">Sessions</div></div>
+        <div class="funnel-arrow">→</div>
+        <div class="funnel-step"><div class="n">{{ started }}</div><div class="l">Started flow</div></div>
+        <div class="funnel-arrow">→</div>
+        <div class="funnel-step"><div class="n">{{ results_viewed }}</div><div class="l">Saw results</div></div>
+        <div class="funnel-arrow">→</div>
+        <div class="funnel-step"><div class="n">{{ completed }}</div><div class="l">Completed calc</div></div>
+      </div>
+
+      {% if scenarios %}
+      <h3>Scenarios used</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Scenario</th><th>Sessions</th></tr>
+          {% for s, n in scenarios.items %}
+          <tr><td>{{ s }}</td><td>{{ n }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+      {% endif %}
+
+      {% if features %}
+      <h3>Feature usage</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Feature</th><th>Uses</th></tr>
+          {% for f, n in features.items %}
+          <tr><td>{{ f }}</td><td>{{ n }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+      {% endif %}
+
+      <h3>Tinkering vs defaults</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Metric</th><th>Value</th></tr>
+          <tr><td>Questions answered (total)</td><td>{{ total_qa }}</td></tr>
+          <tr><td>Changed from default</td><td>{{ tinkered }}</td></tr>
+          <tr><td>Kept default</td><td>{{ total_qa|add:"-"|add:tinkered }}</td></tr>
+          <tr><td>Tinkering rate</td><td><span class="badge {% if tinker_pct >= 40 %}badge-green{% else %}badge-yellow{% endif %}">{{ tinker_pct }}%</span></td></tr>
+        </table>
+      </div>
+
+      {% if abandon_details %}
+      <h3>Recent abandonments (last 10)</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Time</th><th>Question</th><th>% complete</th><th>Scenario</th></tr>
+          {% for a in abandon_details %}
+          <tr>
+            <td>{{ a.ts|date:"d M H:i" }}</td>
+            <td>{{ a.properties.question_id|default:"—" }}</td>
+            <td>{{ a.properties.pct_complete|default:"—" }}%</td>
+            <td>{{ a.properties.scenario|default:"—" }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      {% endif %}
+
+      <h3>All event counts</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Event</th><th>Count</th></tr>
+          {% for e in by_event %}
+          <tr><td>{{ e.event }}</td><td>{{ e.n }}</td></tr>
+          {% empty %}
+          <tr><td colspan="2" style="color:var(--muted)">No events yet</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <h3>Query from shell</h3>
+      <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py shell</div>
+      <div class="cmd" onclick="copyCmd(this)">from core.models import BehaviourEvent; BehaviourEvent.objects.values('event').annotate(n=__import__('django.db.models',fromlist=['Count']).Count('id')).order_by('-n')</div>
+    </section>
+
+    <!-- ── Errors ──────────────────────────────────────── -->
+    <section id="errors">
+      <h2>🔴 Errors</h2>
+
+      <h3>Recent errors from gunicorn log</h3>
+      <div class="log-box">{% if error_log %}{{ error_log }}{% else %}(no errors found in recent log — all clear ✅){% endif %}</div>
+
+      <h3>Log file locations</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Log</th><th>Path</th></tr>
+          <tr><td>Gunicorn errors</td><td><code>~/apps/sup/logs/gunicorn-error.log</code></td></tr>
+          <tr><td>Gunicorn access</td><td><code>~/apps/sup/logs/gunicorn-access.log</code></td></tr>
+          <tr><td>Cloudflare tunnel</td><td><code>journalctl -u cloudflared</code></td></tr>
+          <tr><td>Healthcheck</td><td><code>journalctl --user -u sf-healthcheck</code></td></tr>
+        </table>
+      </div>
+
+      <div class="cmd" onclick="copyCmd(this)">tail -f ~/apps/sup/logs/gunicorn-error.log</div>
+      <div class="cmd" onclick="copyCmd(this)">tail -f ~/apps/sup/logs/gunicorn-access.log</div>
+      <div class="cmd" onclick="copyCmd(this)">journalctl -u cloudflared --no-pager -n 50</div>
+      <div class="cmd" onclick="copyCmd(this)">journalctl --user -u sf-healthcheck.service --no-pager -n 20</div>
+    </section>
+
+    <!-- ── Services ────────────────────────────────────── -->
+    <section id="services">
+      <h2>⚙️ Services</h2>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Service</th><th>Type</th><th>What it does</th></tr>
+          <tr><td><code>sup-django</code></td><td>user</td><td>Gunicorn serving Django on port 8082</td></tr>
+          <tr><td><code>cloudflared</code></td><td>system</td><td>Tunnel routing salaryfree.in → localhost:8082</td></tr>
+          <tr><td><code>sf-healthcheck.timer</code></td><td>user</td><td>Pings /health/ every 2 min, Telegrams on failure</td></tr>
+        </table>
+      </div>
+
+      <h3>Status</h3>
+      <div class="cmd" onclick="copyCmd(this)">systemctl --user status sup-django</div>
+      <div class="cmd" onclick="copyCmd(this)">systemctl status cloudflared</div>
+      <div class="cmd" onclick="copyCmd(this)">systemctl --user status sf-healthcheck.timer</div>
+
+      <h3>Restart</h3>
+      <div class="cmd" onclick="copyCmd(this)">systemctl --user restart sup-django</div>
+      <div class="cmd" onclick="copyCmd(this)">sudo systemctl restart cloudflared</div>
+
+      <h3>Service file locations</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>File</th><th>Path</th></tr>
+          <tr><td>sup-django.service</td><td><code>~/.config/systemd/user/sup-django.service</code></td></tr>
+          <tr><td>sf-healthcheck.service</td><td><code>~/.config/systemd/user/sf-healthcheck.service</code></td></tr>
+          <tr><td>sf-healthcheck.timer</td><td><code>~/.config/systemd/user/sf-healthcheck.timer</code></td></tr>
+          <tr><td>cloudflared.service</td><td><code>/etc/systemd/system/cloudflared.service</code></td></tr>
+          <tr><td>cloudflared config</td><td><code>/etc/cloudflared/config.yml</code></td></tr>
+          <tr><td>Telegram credentials</td><td><code>~/.config/salaryfree/telegram.conf</code></td></tr>
+        </table>
+      </div>
+
+      <h3>After editing a service file</h3>
+      <div class="cmd" onclick="copyCmd(this)">systemctl --user daemon-reload && systemctl --user restart sup-django</div>
+    </section>
+
+    <!-- ── Deploy ──────────────────────────────────────── -->
+    <section id="deploy">
+      <h2>🚀 Deploy / Update</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Pull latest code</div>
+            <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup && git pull</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Install / update dependencies</div>
+            <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup && .venv/bin/pip install -r requirements.txt</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Run migrations</div>
+            <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py migrate</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Collect static files <span style="font-weight:400;color:var(--muted)">(if templates/CSS changed)</span></div>
+            <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py collectstatic --no-input</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Restart app</div>
+            <div class="cmd" onclick="copyCmd(this)">systemctl --user restart sup-django</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Verify</div>
+            <div class="cmd" onclick="copyCmd(this)">curl -s https://salaryfree.in/health/</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Database ────────────────────────────────────── -->
+    <section id="db">
+      <h2>🗄️ Database</h2>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Detail</th><th>Value</th></tr>
+          <tr><td>Engine</td><td>SQLite3</td></tr>
+          <tr><td>Path</td><td><code>~/apps/sup/sup_backend/db.sqlite3</code></td></tr>
+        </table>
+      </div>
+
+      <h3>Migrations</h3>
+      <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py showmigrations</div>
+      <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py migrate</div>
+
+      <h3>Seed / reference data</h3>
+      <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py load_expense_master</div>
+      <div class="cmd" onclick="copyCmd(this)"># Verify: should show 96 rows (32 items × 3 levels)
+cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py shell -c "from finance.models import ExpenseMaster; print(ExpenseMaster.objects.count())"</div>
+
+      <h3>Backup</h3>
+      <div class="cmd" onclick="copyCmd(this)">cp ~/apps/sup/sup_backend/db.sqlite3 ~/backups/db-$(date +%Y%m%d).sqlite3</div>
+
+      <h3>Django shell</h3>
+      <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py shell</div>
+
+      <h3>Create superuser</h3>
+      <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py createsuperuser</div>
+    </section>
+
+    <!-- ── Fresh Install ───────────────────────────────── -->
+    <section id="install">
+      <h2>📦 Fresh Install</h2>
+
+      <div class="info-box">
+        Full setup from scratch on a new machine (Raspberry Pi or similar).
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Clone repo</div>
+            <div class="cmd" onclick="copyCmd(this)">git clone &lt;repo-url&gt; ~/apps/sup</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Create virtualenv &amp; install deps</div>
+            <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Run migrations</div>
+            <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py migrate</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Seed expense master data</div>
+            <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py load_expense_master</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Create admin user</div>
+            <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py createsuperuser</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Collect static files</div>
+            <div class="cmd" onclick="copyCmd(this)">cd ~/apps/sup/sup_backend && ../.venv/bin/python manage.py collectstatic --no-input</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Install systemd user service</div>
+            <div class="cmd" onclick="copyCmd(this)">cp ~/apps/sup/scripts/sup-django.service ~/.config/systemd/user/
+systemctl --user daemon-reload && systemctl --user enable --now sup-django</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Install Cloudflare tunnel</div>
+            <div class="cmd" onclick="copyCmd(this)">curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb
+sudo dpkg -i cloudflared.deb</div>
+            <div class="step-desc">Then: <code>cloudflared tunnel login</code> → <code>cloudflared tunnel create salaryfree</code> → copy config to <code>/etc/cloudflared/config.yml</code> → <code>sudo cloudflared service install</code></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Set up Telegram alerts</div>
+            <div class="cmd" onclick="copyCmd(this)">mkdir -p ~/.config/salaryfree
+cat > ~/.config/salaryfree/telegram.conf &lt;&lt; 'EOF'
+TELEGRAM_BOT_TOKEN=&lt;token&gt;
+TELEGRAM_CHAT_ID=&lt;chat_id&gt;
+EOF
+chmod 600 ~/.config/salaryfree/telegram.conf</div>
+            <div class="step-desc">Copy healthcheck timer: <code>sf-healthcheck.service</code> + <code>sf-healthcheck.timer</code> to <code>~/.config/systemd/user/</code>, then <code>systemctl --user enable --now sf-healthcheck.timer</code></div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-body">
+            <div class="step-title">Verify everything</div>
+            <div class="cmd" onclick="copyCmd(this)">curl -s https://salaryfree.in/health/ && echo "✅ all good"</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Copy command on click
+  function copyCmd(el) {
+    const text = el.innerText.replace(/\s*copy$/, '').replace(/\s*copied ✓$/, '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      el.classList.add('copied');
+      setTimeout(() => el.classList.remove('copied'), 1800);
+    });
+  }
+
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

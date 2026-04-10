@@ -11,11 +11,95 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 
 from finance.models import (
     FamilyProfile, FamilyMember, Asset, Income, Expense, CashflowProjection
 )
+
+
+@login_required
+def ops_page(request):
+    """Internal ops / runbook page. Login required."""
+    from .models import BehaviourEvent
+    from django.db.models import Count
+    from django.utils import timezone
+    import datetime, subprocess
+
+    since = timezone.now() - datetime.timedelta(days=7)
+    events = BehaviourEvent.objects.filter(ts__gte=since)
+
+    unique_sessions  = events.values('session_key').distinct().count()
+    by_event         = list(events.values('event').annotate(n=Count('id')).order_by('-n'))
+    started          = events.filter(event='flow_started').values('session_key').distinct().count()
+    completed        = events.filter(event='calculation_completed').values('session_key').distinct().count()
+    abandoned        = events.filter(event='flow_abandoned').values('session_key').distinct().count()
+    results_viewed   = events.filter(event='results_viewed').values('session_key').distinct().count()
+
+    features = {}
+    for fe in events.filter(event='feature_used').values('properties'):
+        f = fe['properties'].get('feature', 'unknown')
+        features[f] = features.get(f, 0) + 1
+
+    scenarios = {}
+    for fe in events.filter(event='flow_started').values('properties'):
+        s = fe['properties'].get('scenario', 'unknown')
+        scenarios[s] = scenarios.get(s, 0) + 1
+
+    tinkered = events.filter(event='question_advanced', properties__changed_from_default=True).count()
+    total_qa = events.filter(event='question_advanced').count()
+    tinker_pct = round(tinkered / total_qa * 100) if total_qa else 0
+
+    abandon_details = list(
+        events.filter(event='flow_abandoned')
+        .order_by('-ts')
+        .values('ts', 'properties')[:10]
+    )
+
+    # Recent errors from gunicorn log (skip gunicorn boot lines)
+    try:
+        result = subprocess.run(
+            ['tail', '-80', '/home/uma/apps/sup/logs/gunicorn-error.log'],
+            capture_output=True, text=True, timeout=5
+        )
+        error_lines = [l for l in result.stdout.splitlines()
+                       if any(w in l for w in ['ERROR', 'CRITICAL', 'Exception', 'Traceback', 'Error'])]
+        error_log = '\n'.join(error_lines[-40:]) or '(no errors in recent log)'
+    except Exception as e:
+        error_log = f'(could not read log: {e})'
+
+    return render(request, 'ops.html', {
+        'unique_sessions': unique_sessions,
+        'by_event':        by_event,
+        'started':         started,
+        'completed':       completed,
+        'results_viewed':  results_viewed,
+        'abandoned':       abandoned,
+        'funnel_pct':      round(completed / started * 100) if started else 0,
+        'features':        features,
+        'scenarios':       scenarios,
+        'tinkered':        tinkered,
+        'total_qa':        total_qa,
+        'tinker_pct':      tinker_pct,
+        'abandon_details': abandon_details,
+        'error_log':       error_log,
+    })
+
+
+@require_GET
+def health_check(request):
+    """Lightweight liveness + DB check for uptime monitoring."""
+    from django.db import connection
+    try:
+        connection.ensure_connection()
+        db_ok = True
+    except Exception:
+        db_ok = False
+    ok = db_ok
+    return JsonResponse(
+        {'status': 'ok' if ok else 'error', 'db': 'ok' if db_ok else 'error'},
+        status=200 if ok else 503,
+    )
 
 
 def guest_login(request):
@@ -848,3 +932,32 @@ def monte_carlo(request):
         )
 
     return Response({'success': True, 'mc': mc_results})
+
+
+@require_POST
+def track_event(request):
+    """
+    Anonymous behaviour tracking endpoint.
+    Stores one event per call, keyed on session_key (no PII).
+    Fire-and-forget from the frontend — always returns 204.
+    """
+    from .models import BehaviourEvent
+
+    # Ensure session exists so session_key is stable
+    if not request.session.session_key:
+        request.session.create()
+    session_key = request.session.session_key
+
+    try:
+        body = json.loads(request.body)
+        event = str(body.pop('event', '')).strip()[:64]
+        if event:
+            BehaviourEvent.objects.create(
+                session_key=session_key,
+                event=event,
+                properties=body,
+            )
+    except Exception:
+        pass  # never break the caller
+
+    return JsonResponse({}, status=204)

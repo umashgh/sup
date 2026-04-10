@@ -58,6 +58,26 @@ class UserRatePreferences(models.Model):
         }
 
 
+class BehaviourEvent(models.Model):
+    """
+    Anonymous session-level behaviour tracking.
+    No PII — keyed only on Django's session_key.
+    """
+    session_key = models.CharField(max_length=64, db_index=True)
+    event       = models.CharField(max_length=64, db_index=True)
+    properties  = models.JSONField(default=dict)
+    ts          = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['session_key', 'ts']),
+            models.Index(fields=['event', 'ts']),
+        ]
+
+    def __str__(self):
+        return f"{self.event} [{self.session_key[:8]}] @ {self.ts:%Y-%m-%d %H:%M}"
+
+
 class ScenarioProfile(models.Model):
     """
     Stores scenario-specific data for each user.

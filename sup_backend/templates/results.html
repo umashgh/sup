@@ -683,6 +683,7 @@
       },
 
       async saveAndRecalc() {
+        track('feature_used', { feature: 'rate_editor', scenario: this.scenarioType || '' });
         this.savedMsg = 'Recalculating…';
         const lastAnswersRaw = sessionStorage.getItem('last_answers');
         if (!lastAnswersRaw) {
@@ -887,6 +888,12 @@
 
         this.loading = false;
 
+        track('results_viewed', {
+          tier: (this.results.tier || '').toLowerCase(),
+          scenario: this.scenarioType || '',
+          free_up_year: this.results.free_up_year || null,
+        });
+
         // Initialize chart if we have projection data
         if (this.results.chart_data) {
           this.showChart = true;
@@ -1057,6 +1064,7 @@
       },
 
       async getAdvice() {
+        track('feature_used', { feature: 'advisor', scenario: this.scenarioType || '' });
         this.adviceLoading = true;
         this.adviceError = null;
 
@@ -1090,6 +1098,7 @@
       },
 
       async getMonteCarlo() {
+        track('feature_used', { feature: 'monte_carlo', scenario: this.scenarioType || '' });
         this.mcLoading = true;
         this.mcError   = null;
 

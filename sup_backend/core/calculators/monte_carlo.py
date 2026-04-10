@@ -97,6 +97,22 @@ class MonteCarloEngine:
         self.emergency_months = int(p.get('emergency_fund_months', 6) or 6)
         self.one_time_upfront = float(f.get('one_time_expenses', 0) or 0)
 
+        # one_time_by_year: {year_offset: amount} — applied in projection loop
+        raw_ot = f.get('one_time_by_year') or {}
+        if isinstance(raw_ot, str):
+            import json as _json
+            try: raw_ot = _json.loads(raw_ot)
+            except Exception: raw_ot = {}
+        self.one_time_by_year: dict = {int(k): float(v) for k, v in raw_ot.items()}
+
+        # future_assets_by_year: {year_offset: amount} — injected into corpus
+        raw_fa = f.get('future_assets_by_year') or {}
+        if isinstance(raw_fa, str):
+            import json as _json
+            try: raw_fa = _json.loads(raw_fa)
+            except Exception: raw_fa = {}
+        self.future_assets_by_year: dict = {int(k): float(v) for k, v in raw_fa.items()}
+
         self.emergency_lock = self.monthly_needs * self.emergency_months
         self.total_assets   = self.liq + self.semi + self.grow + self.prop
 
@@ -169,9 +185,12 @@ class MonteCarloEngine:
 
         # ── 3. Blended portfolio return: shape (N, Y) ────────────────────
         #  Weight by initial allocation after deducting locked/deployed capital.
+        #  one_time expenses are applied year-by-year (like base.py) when
+        #  one_time_by_year is available; otherwise deduct upfront as a reserve.
+        upfront_one_time = 0.0 if self.one_time_by_year else self.one_time_upfront
         initial_corpus = max(
             0.0,
-            self.total_assets - self.emergency_lock - self.bootstrap - self.one_time_upfront
+            self.total_assets - self.emergency_lock - self.bootstrap - upfront_one_time
         )
         denom = max(initial_corpus, 0.01)
         w_liq  = max(0.0, self.liq - self.emergency_lock) / denom
@@ -212,7 +231,18 @@ class MonteCarloEngine:
         if self.gratuity > 0 and self.gratuity_year is not None:
             gratuity_arr[min(self.gratuity_year, Y)] = self.gratuity
 
-        # ── 7. Projection loop: shape (N, Y+1) ───────────────────────────
+        # ── 7. One-time expense and future asset arrays: (Y+1,) ─────────
+        one_time_arr = np.zeros(Y + 1)
+        for yr_off, amt in self.one_time_by_year.items():
+            if yr_off <= Y:
+                one_time_arr[yr_off] += amt
+
+        future_asset_arr = np.zeros(Y + 1)
+        for yr_off, amt in self.future_assets_by_year.items():
+            if yr_off <= Y:
+                future_asset_arr[yr_off] += amt
+
+        # ── 8. Projection loop: shape (N, Y+1) ───────────────────────────
         corpus       = np.zeros((N, Y + 1))
         corpus[:, 0] = initial_corpus
 
@@ -220,6 +250,8 @@ class MonteCarloEngine:
             net = (
                 total_income_arr[:, yr]
                 - total_expense_arr[:, yr]
+                - one_time_arr[yr]
+                + future_asset_arr[yr]
                 - shocks[:, yr]
                 + gratuity_arr[yr]
             )

@@ -11,6 +11,7 @@ model data to this module.
 """
 
 import logging
+import os
 import threading
 import time
 
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 AI_REPLY_DELAY = 90  # 1.5 minutes
 
 # Bedrock cross-region inference profile for Claude Haiku
-BEDROCK_MODEL_ID = 'us.anthropic.claude-haiku-4-5-20251001-v1:0'
+BEDROCK_MODEL_ID = os.environ.get('ANTHROPIC_DEFAULT_HAIKU_MODEL', 'us.anthropic.claude-haiku-4-5-20251001-v1:0')
 
 SYSTEM_PROMPT = """\
 You are Asha, a warm and knowledgeable advisor on salaryfree — a platform that helps \

@@ -2,15 +2,23 @@
 Django settings for sup_backend project.
 """
 
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-r63hva7@k_=v!5d%j^n89z+&2n43j5&5+)tqpn6=tx9s2-ar6j'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://salaryfree.in',
+    'https://www.salaryfree.in',
+]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -93,6 +101,51 @@ AUTHENTICATION_BACKENDS = [
     'core.backends.UsernameOnlyBackend',
     'django.contrib.auth.backends.ModelBackend',  # kept for admin access
 ]
+
+_TELEGRAM_TOKEN   = os.environ.get('TELEGRAM_BOT_TOKEN', '')
+_TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '[%(asctime)s] %(levelname)s %(name)s: %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'telegram': {
+            'class': 'sup_backend.telegram_log_handler.TelegramHandler',
+            'level': 'ERROR',
+            'formatter': 'simple',
+            'token':   _TELEGRAM_TOKEN,
+            'chat_id': _TELEGRAM_CHAT_ID,
+        },
+    },
+    'loggers': {
+        # 500 errors
+        'django.request': {
+            'handlers': ['console', 'telegram'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        # Security issues (CSRF failures, bad signatures, etc.)
+        'django.security': {
+            'handlers': ['console', 'telegram'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
