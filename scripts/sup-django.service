@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=notify
 WorkingDirectory=/home/uma/apps/sup
+EnvironmentFile=/home/uma/apps/sup/.prod.env
 Environment="PATH=/home/uma/apps/sup/.venv/bin:/usr/local/bin:/usr/bin:/bin"
 Environment="PYTHONPATH=/home/uma/apps/sup/sup_backend"
 ExecStart=/home/uma/apps/sup/.venv/bin/gunicorn \
