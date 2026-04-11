@@ -12,7 +12,7 @@ class ContentSecurityPolicyMiddleware:
 
     CSP = (
         "default-src 'self'; "
-        "script-src 'self' cdn.jsdelivr.net cdnjs.cloudflare.com; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' cdn.jsdelivr.net cdnjs.cloudflare.com; "
         "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; "
         "font-src 'self' fonts.gstatic.com; "
         "img-src 'self' data:; "
