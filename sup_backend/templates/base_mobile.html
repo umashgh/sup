@@ -1446,14 +1446,54 @@
   </header>
   {% endblock %}
 
+  <!-- Data-locked banner -->
+  {% if user_has_encryption and not data_unlocked %}
+  <div style="background: rgba(26,86,219,0.06); border-bottom: 1px solid rgba(26,86,219,0.15);
+              padding: 12px 20px; text-align: center;">
+    <span style="font-size: 0.8rem; color: var(--ink);">
+      🔒 Your data is encrypted.
+    </span>
+    <button onclick="document.getElementById('encPanel').style.display='block';"
+            style="background: none; border: none; font-size: 0.8rem; color: var(--blue);
+                   font-weight: 600; cursor: pointer; padding: 0; margin-left: 6px;">
+      Enter passphrase to view →
+    </button>
+  </div>
+  {% endif %}
+
   <div class="mobile-container">
     {% block body %}{% endblock %}
   </div>
 
   {% block app_footer %}
   <!-- App Footer -->
-  <footer class="app-footer">
+  <footer class="app-footer" style="flex-wrap: wrap; gap: 4px;">
     <a href="/" class="footer-btn" onclick="sessionStorage.clear();">Start Over</a>
+
+    <!-- Encryption indicator / link (centre slot) -->
+    {% if user.is_authenticated and not user.username|slice:":6" == "guest_" %}
+      {% if user_has_encryption %}
+        <button onclick="document.getElementById('encPanel').style.display='block'; return false;"
+                class="footer-btn"
+                style="background: none; border: none; padding: 6px 10px; cursor: pointer;
+                       font-size: 0.72rem; color: rgba(255,255,255,0.6); font-weight: 500;">
+          🔒 Encrypted
+        </button>
+      {% else %}
+        <button onclick="document.getElementById('encPanel').style.display='block'; return false;"
+                class="footer-btn"
+                style="background: none; border: none; padding: 6px 10px; cursor: pointer;
+                       font-size: 0.72rem; color: rgba(255,255,255,0.5); font-weight: 500;">
+          🔒 Encrypt your data
+        </button>
+      {% endif %}
+    {% else %}
+      <a href="/accounts/login/" class="footer-btn"
+         style="font-size: 0.72rem; color: rgba(255,255,255,0.5); font-weight: 500;">
+        🔒 Encrypt your data
+      </a>
+    {% endif %}
+
     {% if user.is_authenticated and not user.username|slice:":6" == "guest_" %}
     <form method="post" action="/accounts/logout/" style="margin: 0;">
       {% csrf_token %}
@@ -1466,6 +1506,105 @@
     <a href="/accounts/login/" class="footer-btn">Sign in</a>
     {% endif %}
   </footer>
+
+  <!-- ── Encryption management panel (slide-up overlay) ─────────────────── -->
+  {% if user.is_authenticated and not user.username|slice:":6" == "guest_" %}
+  <div id="encPanel" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:200;
+       max-width:480px; margin:0 auto; background:white;
+       border-radius:16px 16px 0 0; box-shadow:0 -4px 24px rgba(0,0,0,0.15);
+       padding:24px; box-sizing:border-box;">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <span style="font-size:1rem; font-weight:700; color:var(--ink);">
+        {% if user_has_encryption %}🔒 Data encrypted{% else %}🔓 Encrypt your data{% endif %}
+      </span>
+      <button onclick="document.getElementById('encPanel').style.display='none';"
+              style="background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--ink-muted);">✕</button>
+    </div>
+
+    {% if user_has_encryption %}
+      <!-- ── Already encrypted: offer unlock (current session) + remove ── -->
+      {% if not data_unlocked %}
+      <div id="encUnlockForm">
+        <p style="font-size:0.85rem; color:var(--ink-muted); margin:0 0 12px; line-height:1.5;">
+          Your data is encrypted. Enter your passphrase to view and edit it for this session.
+        </p>
+        <input type="password" id="panelPassphrase" placeholder="Your passphrase"
+               style="width:100%; padding:13px 15px; border:1.5px solid rgba(0,0,0,0.15);
+                      border-radius:10px; font-size:1rem; background:#fafafa;
+                      color:var(--ink); box-sizing:border-box; margin-bottom:10px;" />
+        <div id="panelUnlockErr" style="display:none; font-size:0.78rem; color:#dc2626; margin-bottom:8px;"></div>
+        <button onclick="doUnlockSession()"
+                style="width:100%; padding:13px; background:var(--blue); color:white; border:none;
+                       border-radius:10px; font-size:0.9rem; font-weight:600; cursor:pointer;">
+          Unlock for this session
+        </button>
+      </div>
+      {% else %}
+      <p style="font-size:0.85rem; color:var(--ink-muted); margin:0 0 16px; line-height:1.5;">
+        Your data is encrypted and currently unlocked for this session.
+        It will be re-encrypted when you sign out.
+      </p>
+      {% endif %}
+
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid rgba(0,0,0,0.08);">
+        <p style="font-size:0.82rem; font-weight:600; color:var(--ink); margin:0 0 8px;">
+          Remove encryption
+        </p>
+        <p style="font-size:0.78rem; color:var(--ink-muted); margin:0 0 10px; line-height:1.5;">
+          Your inputs will be saved as plain text after this.
+        </p>
+        <input type="password" id="removePassphrase" placeholder="Your passphrase to confirm"
+               style="width:100%; padding:12px 14px; border:1.5px solid rgba(0,0,0,0.12);
+                      border-radius:10px; font-size:0.95rem; background:#fafafa;
+                      color:var(--ink); box-sizing:border-box; margin-bottom:8px;" />
+        <div id="removeEncErr" style="display:none; font-size:0.78rem; color:#dc2626; margin-bottom:8px;"></div>
+        <button onclick="doRemoveEncryption()"
+                style="width:100%; padding:12px; background:#fff; color:#dc2626; border:1.5px solid #dc2626;
+                       border-radius:10px; font-size:0.88rem; font-weight:600; cursor:pointer;">
+          Remove encryption &amp; save as plain text
+        </button>
+      </div>
+
+    {% else %}
+      <!-- ── Not encrypted: offer setup ── -->
+      <p style="font-size:0.85rem; color:var(--ink-muted); margin:0 0 16px; line-height:1.5;">
+        Protect your financial inputs with a passphrase known only to you.
+        Encrypted data is unreadable to everyone, including site owners.
+      </p>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <label style="font-size:0.78rem; font-weight:600; color:var(--ink-muted);
+                        display:block; margin-bottom:5px;">Passphrase</label>
+          <input type="password" id="panelSetupPassphrase" placeholder="Choose a passphrase"
+                 autocomplete="new-password"
+                 style="width:100%; padding:13px 15px; border:1.5px solid rgba(0,0,0,0.12);
+                        border-radius:10px; font-size:1rem; background:#fafafa;
+                        color:var(--ink); box-sizing:border-box;" />
+        </div>
+        <p style="font-size:0.75rem; font-weight:700; color:var(--ink); margin:0; line-height:1.5;">
+          We do not save your passphrase. If you forget it, your data cannot be recovered.
+        </p>
+        <div>
+          <label style="font-size:0.78rem; font-weight:600; color:var(--ink-muted);
+                        display:block; margin-bottom:5px;">
+            Hint <span style="font-weight:400;">(optional)</span>
+          </label>
+          <input type="text" id="panelSetupHint" placeholder="e.g. first pet + birth year"
+                 style="width:100%; padding:12px 14px; border:1.5px solid rgba(0,0,0,0.12);
+                        border-radius:10px; font-size:0.95rem; background:#fafafa;
+                        color:var(--ink); box-sizing:border-box;" />
+        </div>
+        <div id="panelSetupErr" style="display:none; font-size:0.78rem; color:#dc2626;"></div>
+        <button onclick="doSetupEncryption()"
+                style="width:100%; padding:13px; background:var(--blue); color:white; border:none;
+                       border-radius:10px; font-size:0.9rem; font-weight:600; cursor:pointer;">
+          Set up encryption →
+        </button>
+      </div>
+    {% endif %}
+  </div>
+  {% endif %}
   {% endblock %}
 
   <!-- Alpine.js + collapse plugin -->
@@ -1487,6 +1626,97 @@
       keepalive: true,
     }).catch(function() {});
   }
+  </script>
+
+  <!-- ── Encryption panel JS ───────────────────────────────────────────── -->
+  <script>
+  function _encCsrf() {
+    return (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] || '';
+  }
+
+  // Setup encryption from panel (authenticated user)
+  function doSetupEncryption() {
+    var pp = (document.getElementById('panelSetupPassphrase') || {}).value || '';
+    var hint = (document.getElementById('panelSetupHint') || {}).value || '';
+    var errEl = document.getElementById('panelSetupErr');
+    if (errEl) errEl.style.display = 'none';
+    if (pp.length < 4) {
+      if (errEl) { errEl.textContent = 'Passphrase must be at least 4 characters.'; errEl.style.display = 'block'; }
+      return;
+    }
+    fetch('/accounts/setup-encryption/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': _encCsrf() },
+      body: JSON.stringify({ passphrase: pp, hint: hint }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.success) { location.reload(); }
+      else if (errEl) { errEl.textContent = d.error || 'Error.'; errEl.style.display = 'block'; }
+    })
+    .catch(function() { if (errEl) { errEl.textContent = 'Network error.'; errEl.style.display = 'block'; } });
+  }
+
+  // Remove encryption from panel
+  function doRemoveEncryption() {
+    var pp = (document.getElementById('removePassphrase') || {}).value || '';
+    var errEl = document.getElementById('removeEncErr');
+    if (errEl) errEl.style.display = 'none';
+    if (!pp) {
+      if (errEl) { errEl.textContent = 'Enter your passphrase.'; errEl.style.display = 'block'; }
+      return;
+    }
+    fetch('/accounts/remove-encryption/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': _encCsrf() },
+      body: JSON.stringify({ passphrase: pp }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.success) { location.reload(); }
+      else if (errEl) { errEl.textContent = d.error || 'Error.'; errEl.style.display = 'block'; }
+    })
+    .catch(function() { if (errEl) { errEl.textContent = 'Network error.'; errEl.style.display = 'block'; } });
+  }
+
+  // Unlock session from panel (user is logged in but data is locked)
+  function doUnlockSession() {
+    var pp = (document.getElementById('panelPassphrase') || {}).value || '';
+    var errEl = document.getElementById('panelUnlockErr');
+    if (errEl) errEl.style.display = 'none';
+    if (!pp) {
+      if (errEl) { errEl.textContent = 'Enter your passphrase.'; errEl.style.display = 'block'; }
+      return;
+    }
+    fetch('/accounts/unlock-session/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': _encCsrf() },
+      body: JSON.stringify({ passphrase: pp }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.success) { location.reload(); }
+      else if (errEl) { errEl.textContent = d.error || 'Incorrect passphrase.'; errEl.style.display = 'block'; }
+    })
+    .catch(function() { if (errEl) { errEl.textContent = 'Network error.'; errEl.style.display = 'block'; } });
+  }
+
+  // Auto-setup encryption if user arrived from login with sessionStorage intent
+  (function() {
+    var pp = sessionStorage.getItem('_sf_setup_enc_passphrase');
+    if (!pp) return;
+    var hint = sessionStorage.getItem('_sf_setup_enc_hint') || '';
+    sessionStorage.removeItem('_sf_setup_enc_passphrase');
+    sessionStorage.removeItem('_sf_setup_enc_hint');
+    fetch('/accounts/setup-encryption/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': _encCsrf() },
+      body: JSON.stringify({ passphrase: pp, hint: hint }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { if (d.success) location.reload(); })
+    .catch(function() {});
+  })();
   </script>
 
   {% block extra_js %}{% endblock %}

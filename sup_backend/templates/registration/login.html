@@ -42,23 +42,54 @@
   </div>
   {% endif %}
 
-  <form method="post" style="display: flex; flex-direction: column; gap: 16px;"
+  {% if passphrase_error %}
+  <div style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+              border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;
+              font-size: 0.82rem; color: #dc2626;">
+    {{ passphrase_error }}
+  </div>
+  {% endif %}
+
+  <!-- ══ Main login form ══════════════════════════════════════════════════ -->
+  <form method="post" id="loginForm" style="display: flex; flex-direction: column; gap: 16px;"
         onsubmit="if(this.elements.username.value) localStorage.setItem('sf_username', this.elements.username.value)">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ request.GET.next }}">
+    <input type="hidden" name="remove_encryption" id="removeEncFlag" value="0">
 
     <div>
       <label style="display: block; font-size: 0.78rem; font-weight: 600;
                     color: var(--ink-muted); margin-bottom: 6px;">Username</label>
-      <input type="text" name="username" id="usernameInput" autocomplete="username" autofocus
+      <input type="text" name="username" id="usernameInput" autocomplete="username"
+        {% if not has_encryption %}autofocus{% endif %}
         placeholder="your-handle"
+        value="{{ username_prefill }}"
         style="width: 100%; padding: 14px 16px; border: 1.5px solid rgba(0,0,0,0.12);
                border-radius: 10px; font-size: 1rem; background: white;
                color: var(--ink); box-sizing: border-box;" />
       <div id="savedUserHint" style="display:none; font-size: 0.72rem; color: var(--ink-muted); margin-top: 6px;">
         Last signed in as: <span id="savedUserLabel" style="font-weight:600;"></span>
-        &nbsp;·&nbsp;<a href="#" onclick="localStorage.removeItem('sf_username'); document.getElementById('savedUserHint').style.display='none'; return false;"
+        &nbsp;·&nbsp;<a href="#" onclick="localStorage.removeItem('sf_username');
+          document.getElementById('savedUserHint').style.display='none'; return false;"
           style="color: var(--ink-muted);">forget</a>
+      </div>
+    </div>
+
+    <!-- Passphrase field — shown when encryption is active (JS-toggled or server-set) -->
+    <div id="passphraseBlock" style="display:{% if has_encryption %}flex{% else %}none{% endif %};
+         flex-direction: column; gap: 6px;">
+      <label style="display: block; font-size: 0.78rem; font-weight: 600;
+                    color: var(--ink-muted);">Passphrase</label>
+      <input type="password" name="passphrase" id="passphraseInput"
+        placeholder="Enter your passphrase"
+        {% if has_encryption %}autofocus{% endif %}
+        autocomplete="current-password"
+        style="width: 100%; padding: 14px 16px; border: 1.5px solid rgba(26,86,219,0.3);
+               border-radius: 10px; font-size: 1rem; background: white;
+               color: var(--ink); box-sizing: border-box;" />
+      <div id="passphraseHintRow" style="display:{% if has_encryption and passphrase_hint %}block{% else %}none{% endif %};
+           font-size: 0.72rem; color: var(--ink-muted);">
+        Hint: <em id="passphraseHintText">{{ passphrase_hint }}</em>
       </div>
     </div>
 
@@ -67,18 +98,65 @@
     </button>
   </form>
 
-  <script>
-    (function() {
-      var saved = localStorage.getItem('sf_username');
-      if (saved) {
-        var input = document.getElementById('usernameInput');
-        if (input && !input.value) { input.value = saved; }
-        var hint = document.getElementById('savedUserHint');
-        var label = document.getElementById('savedUserLabel');
-        if (hint && label) { label.textContent = saved; hint.style.display = 'block'; }
-      }
-    })();
-  </script>
+  <!-- "Remove encryption" link — shown only when user has encryption -->
+  <div id="removeEncLink" style="display:{% if has_encryption %}block{% else %}none{% endif %};
+       margin-top: 14px; text-align: center;">
+    <a href="#" onclick="confirmRemoveEncryption(); return false;"
+       style="font-size: 0.78rem; color: var(--ink-muted); text-decoration: underline;">
+      Remove encryption and save as plain text
+    </a>
+  </div>
+
+  <!-- ══ Encryption setup section (shown when no encryption) ══════════════ -->
+  <div id="encSetupSection" style="display:{% if has_encryption %}none{% else %}block{% endif %};
+       margin-top: 32px; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 24px;">
+    <p style="font-size: 0.9rem; font-weight: 600; color: var(--ink); margin: 0 0 14px;">
+      🔒 Encrypt your inputs using your own passphrase
+    </p>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div>
+        <label style="display: block; font-size: 0.78rem; font-weight: 600;
+                      color: var(--ink-muted); margin-bottom: 6px;">Passphrase</label>
+        <input type="password" id="setupPassphrase" placeholder="Choose a passphrase"
+          autocomplete="new-password"
+          style="width: 100%; padding: 13px 15px; border: 1.5px solid rgba(0,0,0,0.12);
+                 border-radius: 10px; font-size: 1rem; background: white;
+                 color: var(--ink); box-sizing: border-box;" />
+      </div>
+
+      <p style="font-size: 0.78rem; color: var(--ink-muted); margin: 0; line-height: 1.55;">
+        Your passphrase encrypts all your inputs, making them unreadable to everyone —
+        including site owners. Only you can decrypt with your passphrase.
+      </p>
+      <p style="font-size: 0.78rem; font-weight: 700; color: var(--ink); margin: 0; line-height: 1.55;">
+        You must remember your passphrase. We do not save it.
+        If you forget it, your inputs cannot be recovered.
+      </p>
+
+      <div>
+        <label style="display: block; font-size: 0.78rem; font-weight: 600;
+                      color: var(--ink-muted); margin-bottom: 6px;">
+          Passphrase hint <span style="font-weight: 400;">(optional — only you will see this)</span>
+        </label>
+        <input type="text" id="setupHint" placeholder="e.g. name of first pet + birth year"
+          style="width: 100%; padding: 13px 15px; border: 1.5px solid rgba(0,0,0,0.12);
+                 border-radius: 10px; font-size: 0.95rem; background: white;
+                 color: var(--ink); box-sizing: border-box;" />
+      </div>
+
+      <div id="setupEncError" style="display:none; font-size: 0.78rem; color: #dc2626;"></div>
+
+      <button onclick="doLoginSetupEncryption()"
+        style="padding: 13px; background: var(--blue); color: white; border: none;
+               border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+               width: 100%;">
+        Set up encryption →
+      </button>
+      <p style="font-size: 0.72rem; color: var(--ink-muted); margin: 0; line-height: 1.5;">
+        You will be signed in first, then encryption will be applied to your saved data.
+      </p>
+    </div>
+  </div>
 
   <p style="font-size: 0.82rem; color: var(--ink-muted); margin-top: 24px; text-align: center;">
     No account yet?
@@ -92,4 +170,92 @@
   </p>
 
 </div>
+
+<script>
+// ── Pre-fill from localStorage & check encryption state ──────────────────
+(function() {
+  var saved = localStorage.getItem('sf_username');
+  var input = document.getElementById('usernameInput');
+  {% if not username_prefill %}
+  if (saved && input && !input.value) {
+    input.value = saved;
+    var hint = document.getElementById('savedUserHint');
+    var label = document.getElementById('savedUserLabel');
+    if (hint && label) { label.textContent = saved; hint.style.display = 'block'; }
+    checkEncryptionFor(saved);
+  }
+  {% endif %}
+})();
+
+// ── Check encryption state as user types username ─────────────────────────
+var _encTimer = null;
+document.getElementById('usernameInput').addEventListener('input', function() {
+  clearTimeout(_encTimer);
+  var val = this.value.trim();
+  if (val.length >= 3) {
+    _encTimer = setTimeout(function() { checkEncryptionFor(val); }, 450);
+  } else {
+    _setMode('setup');
+  }
+});
+
+function checkEncryptionFor(username) {
+  fetch('/accounts/check-encryption/?u=' + encodeURIComponent(username))
+    .then(function(r) { return r.json(); })
+    .then(function(d) { _setMode(d.has_encryption ? 'unlock' : 'setup', d.hint); })
+    .catch(function() {});
+}
+
+function _setMode(mode, hint) {
+  var pb = document.getElementById('passphraseBlock');
+  var rel = document.getElementById('removeEncLink');
+  var ses = document.getElementById('encSetupSection');
+  if (mode === 'unlock') {
+    pb.style.display = 'flex';
+    rel.style.display = 'block';
+    ses.style.display = 'none';
+    var hintRow = document.getElementById('passphraseHintRow');
+    var hintTxt = document.getElementById('passphraseHintText');
+    if (hint) { hintTxt.textContent = hint; hintRow.style.display = 'block'; }
+    else { hintRow.style.display = 'none'; }
+    document.getElementById('passphraseInput').focus();
+  } else {
+    pb.style.display = 'none';
+    rel.style.display = 'none';
+    ses.style.display = 'block';
+  }
+}
+
+// ── Remove encryption (submits login form with flag) ──────────────────────
+function confirmRemoveEncryption() {
+  var username = document.getElementById('usernameInput').value.trim();
+  var passphrase = document.getElementById('passphraseInput').value;
+  if (!passphrase) {
+    alert('Enter your passphrase above, then click "Remove encryption".');
+    return;
+  }
+  if (!confirm('Remove encryption? Your data will be saved as plain text.')) return;
+  document.getElementById('removeEncFlag').value = '1';
+  document.getElementById('loginForm').submit();
+}
+
+// ── Setup encryption — save intent to sessionStorage, then sign in ────────
+function doLoginSetupEncryption() {
+  var username = document.getElementById('usernameInput').value.trim();
+  var passphrase = document.getElementById('setupPassphrase').value;
+  var hint = document.getElementById('setupHint').value.trim();
+  var errEl = document.getElementById('setupEncError');
+  errEl.style.display = 'none';
+
+  if (!username) { errEl.textContent = 'Enter your username first.'; errEl.style.display = 'block'; return; }
+  if (passphrase.length < 4) { errEl.textContent = 'Passphrase must be at least 4 characters.'; errEl.style.display = 'block'; return; }
+
+  // Store intent; after redirect to app the base template will call the API
+  sessionStorage.setItem('_sf_setup_enc_passphrase', passphrase);
+  sessionStorage.setItem('_sf_setup_enc_hint', hint);
+  // Submit login (no passphrase in the login field — no encryption yet)
+  document.getElementById('loginForm').submit();
+}
+</script>
+
 {% endblock %}

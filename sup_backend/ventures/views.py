@@ -24,8 +24,10 @@ class StartupCostViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(venture__user=self.request.user)
 
     def perform_create(self, serializer):
-        # Note: The venture ID must be passed in the request data or URL
-        # Here we assume it's in the body, validation handles the rest
+        venture_id = serializer.validated_data.get('venture')
+        if venture_id and not Venture.objects.filter(id=venture_id.id, user=self.request.user).exists():
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Venture does not belong to you.")
         serializer.save()
 
 class FounderSalaryViewSet(viewsets.ModelViewSet):
@@ -35,3 +37,10 @@ class FounderSalaryViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(venture__user=self.request.user)
+
+    def perform_create(self, serializer):
+        venture_id = serializer.validated_data.get('venture')
+        if venture_id and not Venture.objects.filter(id=venture_id.id, user=self.request.user).exists():
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Venture does not belong to you.")
+        serializer.save()

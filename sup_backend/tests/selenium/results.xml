@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="30" skipped="2" tests="98" time="156.686" timestamp="2026-04-11T16:38:46.248883+05:30" hostname="Umashankars-MacBook-Pro.local"><testcase classname="tests.selenium.test_accessibility.TestViewportMeta" name="test_no_user_scalable_no" time="5.082" /><testcase classname="tests.selenium.test_accessibility.TestScenarioCardRoles" name="test_cards_have_role_button" time="2.451" /><testcase classname="tests.selenium.test_accessibility.TestScenarioCardRoles" name="test_cards_have_tabindex_zero" time="2.381" /><testcase classname="tests.selenium.test_accessibility.TestScenarioCardRoles" name="test_cards_are_keyboard_activatable" time="2.366" /><testcase classname="tests.selenium.test_accessibility.TestValidationErrorAlertRole" name="test_login_error_has_alert_role" time="2.059"><skipped type="pytest.xfail" message="Templates do not yet add role='alert' to server-side error divs. Track in GitHub issues and update templates to add role='alert'." /></testcase><testcase classname="tests.selenium.test_accessibility.TestValidationErrorAlertRole" name="test_scenario_error_has_alert_role" time="2.490"><skipped type="pytest.xfail" message="The .error-card div does not yet carry role='alert'. Add role='alert' to the Alpine error div in scenario_selector.html." /></testcase><testcase classname="tests.selenium.test_accessibility.TestColorContrast" name="test_coral_on_cream_contrast" time="2.416" /><testcase classname="tests.selenium.test_accessibility.TestColorContrast" name="test_ink_on_cream_contrast" time="2.402" /><testcase classname="tests.selenium.test_accessibility.TestTouchTargets" name="test_login_link_min_height" time="2.526" /><testcase classname="tests.selenium.test_accessibility.TestTouchTargets" name="test_scenario_card_touch_target" time="2.557" /><testcase classname="tests.selenium.test_ask_advisor.TestAdvisorAPI" name="test_advisor_returns_success" time="0.038"><failure message="requests.exceptions.HTTPError: 503 Server Error: Service Unavailable for url: http://localhost:52879/api/scenarios/advise/">tests/selenium/test_ask_advisor.py:163: in test_advisor_returns_success
+    resp = api.advise(user_data, std_result["results"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/selenium/test_ask_advisor.py:73: in advise
+    return self.post("/api/scenarios/advise/", {
+tests/selenium/test_ask_advisor.py:60: in post
+    resp.raise_for_status()
+../.venv/lib/python3.12/site-packages/requests/models.py:1028: in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+E   requests.exceptions.HTTPError: 503 Server Error: Service Unavailable for url: http://localhost:52879/api/scenarios/advise/</failure></testcase><testcase classname="tests.selenium.test_ask_advisor.TestAdvisorAPI" name="test_advisor_returns_non_empty_advice" time="0.032"><failure message="requests.exceptions.HTTPError: 503 Server Error: Service Unavailable for url: http://localhost:52879/api/scenarios/advise/">tests/selenium/test_ask_advisor.py:175: in test_advisor_returns_non_empty_advice
+    resp = api.advise(user_data, std_result["results"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/selenium/test_ask_advisor.py:73: in advise
+    return self.post("/api/scenarios/advise/", {
+tests/selenium/test_ask_advisor.py:60: in post
+    resp.raise_for_status()
+../.venv/lib/python3.12/site-packages/requests/models.py:1028: in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+E   requests.exceptions.HTTPError: 503 Server Error: Service Unavailable for url: http://localhost:52879/api/scenarios/advise/</failure></testcase><testcase classname="tests.selenium.test_ask_advisor.TestAdvisorAPI" name="test_advisor_requires_standard_tier" time="0.033" /><testcase classname="tests.selenium.test_ask_advisor.TestAdvisorAPI" name="test_advisor_returns_advice_key" time="0.029"><failure message="requests.exceptions.HTTPError: 503 Server Error: Service Unavailable for url: http://localhost:52879/api/scenarios/advise/">tests/selenium/test_ask_advisor.py:221: in test_advisor_returns_advice_key
+    resp = api.advise(user_data, std_result["results"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/selenium/test_ask_advisor.py:73: in advise
+    return self.post("/api/scenarios/advise/", {
+tests/selenium/test_ask_advisor.py:60: in post
+    resp.raise_for_status()
+../.venv/lib/python3.12/site-packages/requests/models.py:1028: in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+E   requests.exceptions.HTTPError: 503 Server Error: Service Unavailable for url: http://localhost:52879/api/scenarios/advise/</failure></testcase><testcase classname="tests.selenium.test_ask_advisor.TestAdvisorAPI" name="test_advisor_advice_is_string" time="0.029"><failure message="requests.exceptions.HTTPError: 503 Server Error: Service Unavailable for url: http://localhost:52879/api/scenarios/advise/">tests/selenium/test_ask_advisor.py:234: in test_advisor_advice_is_string
+    resp = api.advise(user_data, std_result["results"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/selenium/test_ask_advisor.py:73: in advise
+    return self.post("/api/scenarios/advise/", {
+tests/selenium/test_ask_advisor.py:60: in post
+    resp.raise_for_status()
+../.venv/lib/python3.12/site-packages/requests/models.py:1028: in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+E   requests.exceptions.HTTPError: 503 Server Error: Service Unavailable for url: http://localhost:52879/api/scenarios/advise/</failure></testcase><testcase classname="tests.selenium.test_ask_advisor.TestAdvisorUI" name="test_analyse_button_visible_on_standard_results" time="2.504" /><testcase classname="tests.selenium.test_ask_advisor.TestAdvisorUI" name="test_advisor_section_header_present" time="2.550" /><testcase classname="tests.selenium.test_ask_advisor.TestAdvisorUI" name="test_clicking_analyse_triggers_loading_or_result" time="3.593"><failure message="selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element is not clickable at point (250, 2836)&#10;  (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception&#10;Stacktrace:&#10;0   chromedriver                        0x00000001009c799c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x00000001009bfa28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000100493904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x00000001004e1494 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 393388&#10;4   chromedriver                        0x00000001004df9bc _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 386516&#10;5   chromedriver                        0x00000001004dd724 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 377660&#10;6   chromedriver                        0x00000001004dcac4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 374492&#10;7   chromedriver                        0x00000001004d2c28 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 333888&#10;8   chromedriver                        0x00000001004d26a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476&#10;9   chromedriver                        0x000000010051a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;10  chromedriver                        0x00000001004d11a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;11  chromedriver                        0x0000000100986220 cxxbridge1$str$ptr + 2891948&#10;12  chromedriver                        0x0000000100989910 cxxbridge1$str$ptr + 2906012&#10;13  chromedriver                        0x000000010096b5d8 cxxbridge1$str$ptr + 2782308&#10;14  chromedriver                        0x000000010098a194 cxxbridge1$str$ptr + 2908192&#10;15  chromedriver                        0x000000010095c090 cxxbridge1$str$ptr + 2719516&#10;16  chromedriver                        0x00000001009aeb30 cxxbridge1$str$ptr + 3058108&#10;17  chromedriver                        0x00000001009aecac cxxbridge1$str$ptr + 3058488&#10;18  chromedriver                        0x00000001009bf680 cxxbridge1$str$ptr + 3126540&#10;19  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;20  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_ask_advisor.py:312: in test_clicking_analyse_triggers_loading_or_result
+    btn.click()
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:114: in click
+    self._execute(Command.CLICK_ELEMENT)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:508: in _execute
+    return self._parent.execute(command, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element is not clickable at point (250, 2836)
+E     (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception
+E   Stacktrace:
+E   0   chromedriver                        0x00000001009c799c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x00000001009bfa28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000100493904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x00000001004e1494 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 393388
+E   4   chromedriver                        0x00000001004df9bc _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 386516
+E   5   chromedriver                        0x00000001004dd724 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 377660
+E   6   chromedriver                        0x00000001004dcac4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 374492
+E   7   chromedriver                        0x00000001004d2c28 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 333888
+E   8   chromedriver                        0x00000001004d26a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476
+E   9   chromedriver                        0x000000010051a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   10  chromedriver                        0x00000001004d11a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   11  chromedriver                        0x0000000100986220 cxxbridge1$str$ptr + 2891948
+E   12  chromedriver                        0x0000000100989910 cxxbridge1$str$ptr + 2906012
+E   13  chromedriver                        0x000000010096b5d8 cxxbridge1$str$ptr + 2782308
+E   14  chromedriver                        0x000000010098a194 cxxbridge1$str$ptr + 2908192
+E   15  chromedriver                        0x000000010095c090 cxxbridge1$str$ptr + 2719516
+E   16  chromedriver                        0x00000001009aeb30 cxxbridge1$str$ptr + 3058108
+E   17  chromedriver                        0x00000001009aecac cxxbridge1$str$ptr + 3058488
+E   18  chromedriver                        0x00000001009bf680 cxxbridge1$str$ptr + 3126540
+E   19  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   20  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_ask_advisor.TestAdvisorUI" name="test_advice_card_renders_after_successful_fetch" time="3.835"><failure message="selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element is not clickable at point (250, 2836)&#10;  (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception&#10;Stacktrace:&#10;0   chromedriver                        0x00000001028c399c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x00000001028bba28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x000000010238f904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x00000001023dd494 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 393388&#10;4   chromedriver                        0x00000001023db9bc _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 386516&#10;5   chromedriver                        0x00000001023d9724 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 377660&#10;6   chromedriver                        0x00000001023d8ac4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 374492&#10;7   chromedriver                        0x00000001023cec28 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 333888&#10;8   chromedriver                        0x00000001023ce6a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476&#10;9   chromedriver                        0x00000001024164d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;10  chromedriver                        0x00000001023cd1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;11  chromedriver                        0x0000000102882220 cxxbridge1$str$ptr + 2891948&#10;12  chromedriver                        0x0000000102885910 cxxbridge1$str$ptr + 2906012&#10;13  chromedriver                        0x00000001028675d8 cxxbridge1$str$ptr + 2782308&#10;14  chromedriver                        0x0000000102886194 cxxbridge1$str$ptr + 2908192&#10;15  chromedriver                        0x0000000102858090 cxxbridge1$str$ptr + 2719516&#10;16  chromedriver                        0x00000001028aab30 cxxbridge1$str$ptr + 3058108&#10;17  chromedriver                        0x00000001028aacac cxxbridge1$str$ptr + 3058488&#10;18  chromedriver                        0x00000001028bb680 cxxbridge1$str$ptr + 3126540&#10;19  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;20  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_ask_advisor.py:349: in test_advice_card_renders_after_successful_fetch
+    btn.click()
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:114: in click
+    self._execute(Command.CLICK_ELEMENT)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:508: in _execute
+    return self._parent.execute(command, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element is not clickable at point (250, 2836)
+E     (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception
+E   Stacktrace:
+E   0   chromedriver                        0x00000001028c399c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x00000001028bba28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x000000010238f904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x00000001023dd494 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 393388
+E   4   chromedriver                        0x00000001023db9bc _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 386516
+E   5   chromedriver                        0x00000001023d9724 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 377660
+E   6   chromedriver                        0x00000001023d8ac4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 374492
+E   7   chromedriver                        0x00000001023cec28 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 333888
+E   8   chromedriver                        0x00000001023ce6a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476
+E   9   chromedriver                        0x00000001024164d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   10  chromedriver                        0x00000001023cd1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   11  chromedriver                        0x0000000102882220 cxxbridge1$str$ptr + 2891948
+E   12  chromedriver                        0x0000000102885910 cxxbridge1$str$ptr + 2906012
+E   13  chromedriver                        0x00000001028675d8 cxxbridge1$str$ptr + 2782308
+E   14  chromedriver                        0x0000000102886194 cxxbridge1$str$ptr + 2908192
+E   15  chromedriver                        0x0000000102858090 cxxbridge1$str$ptr + 2719516
+E   16  chromedriver                        0x00000001028aab30 cxxbridge1$str$ptr + 3058108
+E   17  chromedriver                        0x00000001028aacac cxxbridge1$str$ptr + 3058488
+E   18  chromedriver                        0x00000001028bb680 cxxbridge1$str$ptr + 3126540
+E   19  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   20  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_auth.TestGuestSession" name="test_landing_page_loads_without_login" time="2.460" /><testcase classname="tests.selenium.test_auth.TestGuestSession" name="test_guest_session_created_via_start" time="2.363" /><testcase classname="tests.selenium.test_auth.TestGuestSession" name="test_guest_session_does_not_require_signup" time="2.477" /><testcase classname="tests.selenium.test_auth.TestGuestSession" name="test_multiple_start_calls_reuse_session" time="2.957" /><testcase classname="tests.selenium.test_auth.TestRegisteredUserLogin" name="test_login_page_renders" time="2.434" /><testcase classname="tests.selenium.test_auth.TestRegisteredUserLogin" name="test_registered_user_can_log_in" time="2.536" /><testcase classname="tests.selenium.test_auth.TestRegisteredUserLogin" name="test_unknown_username_shows_not_found" time="2.552"><failure message="selenium.common.exceptions.StaleElementReferenceException: Message: stale element reference: stale element not found&#10;  (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception&#10;Stacktrace:&#10;0   chromedriver                        0x000000010090b99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000100903a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x00000001003d7904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x00000001003e90c8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 146656&#10;4   chromedriver                        0x00000001003e8178 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 142736&#10;5   chromedriver                        0x00000001003de3e8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 102400&#10;6   chromedriver                        0x00000001003dcb70 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 96136&#10;7   chromedriver                        0x00000001003dfdb8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109008&#10;8   chromedriver                        0x00000001003dfe70 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109192&#10;9   chromedriver                        0x000000010041bdc4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 354780&#10;10  chromedriver                        0x00000001004166a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476&#10;11  chromedriver                        0x000000010045e4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;12  chromedriver                        0x00000001004151a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;13  chromedriver                        0x00000001008ca220 cxxbridge1$str$ptr + 2891948&#10;14  chromedriver                        0x00000001008cd910 cxxbridge1$str$ptr + 2906012&#10;15  chromedriver                        0x00000001008af5d8 cxxbridge1$str$ptr + 2782308&#10;16  chromedriver                        0x00000001008ce194 cxxbridge1$str$ptr + 2908192&#10;17  chromedriver                        0x00000001008a0090 cxxbridge1$str$ptr + 2719516&#10;18  chromedriver                        0x00000001008f2b30 cxxbridge1$str$ptr + 3058108&#10;19  chromedriver                        0x00000001008f2cac cxxbridge1$str$ptr + 3058488&#10;20  chromedriver                        0x0000000100903680 cxxbridge1$str$ptr + 3126540&#10;21  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;22  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_auth.py:136: in test_unknown_username_shows_not_found
+    body_text = driver.find_element(By.TAG_NAME, "body").text.lower()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:105: in text
+    return self._execute(Command.GET_ELEMENT_TEXT)["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:508: in _execute
+    return self._parent.execute(command, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.StaleElementReferenceException: Message: stale element reference: stale element not found
+E     (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
+E   Stacktrace:
+E   0   chromedriver                        0x000000010090b99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000100903a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x00000001003d7904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x00000001003e90c8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 146656
+E   4   chromedriver                        0x00000001003e8178 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 142736
+E   5   chromedriver                        0x00000001003de3e8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 102400
+E   6   chromedriver                        0x00000001003dcb70 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 96136
+E   7   chromedriver                        0x00000001003dfdb8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109008
+E   8   chromedriver                        0x00000001003dfe70 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109192
+E   9   chromedriver                        0x000000010041bdc4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 354780
+E   10  chromedriver                        0x00000001004166a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476
+E   11  chromedriver                        0x000000010045e4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   12  chromedriver                        0x00000001004151a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   13  chromedriver                        0x00000001008ca220 cxxbridge1$str$ptr + 2891948
+E   14  chromedriver                        0x00000001008cd910 cxxbridge1$str$ptr + 2906012
+E   15  chromedriver                        0x00000001008af5d8 cxxbridge1$str$ptr + 2782308
+E   16  chromedriver                        0x00000001008ce194 cxxbridge1$str$ptr + 2908192
+E   17  chromedriver                        0x00000001008a0090 cxxbridge1$str$ptr + 2719516
+E   18  chromedriver                        0x00000001008f2b30 cxxbridge1$str$ptr + 3058108
+E   19  chromedriver                        0x00000001008f2cac cxxbridge1$str$ptr + 3058488
+E   20  chromedriver                        0x0000000100903680 cxxbridge1$str$ptr + 3126540
+E   21  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   22  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_auth.TestSessionPersistence" name="test_session_persists_across_reload" time="2.507" /><testcase classname="tests.selenium.test_auth.TestSessionPersistence" name="test_guest_session_persists_across_reload" time="2.495" /><testcase classname="tests.selenium.test_auth.TestLogout" name="test_logout_redirects_to_landing" time="2.681" /><testcase classname="tests.selenium.test_auth.TestLogout" name="test_after_logout_protected_content_not_accessible" time="2.845" /><testcase classname="tests.selenium.test_auth.TestLogout" name="test_sign_out_link_visible_when_logged_in" time="2.601" /><testcase classname="tests.selenium.test_calculations.TestFounderCalculation" name="test_available_cash" time="0.023" /><testcase classname="tests.selenium.test_calculations.TestFounderCalculation" name="test_comfort_runway_within_tolerance" time="0.024" /><testcase classname="tests.selenium.test_calculations.TestFounderCalculation" name="test_bootstrap_capital_in_results_when_bootstrapped" time="0.024" /><testcase classname="tests.selenium.test_calculations.TestFounderCalculation" name="test_bootstrap_zero_when_not_bootstrapped" time="0.025" /><testcase classname="tests.selenium.test_calculations.TestRetirementCalculation" name="test_required_corpus" time="0.024" /><testcase classname="tests.selenium.test_calculations.TestRetirementCalculation" name="test_corpus_gap" time="0.023" /><testcase classname="tests.selenium.test_calculations.TestRetirementCalculation" name="test_available_cash_positive" time="0.023" /><testcase classname="tests.selenium.test_calculations.TestRetirementCalculation" name="test_comfort_runway_within_tolerance" time="0.023" /><testcase classname="tests.selenium.test_calculations.TestTerminationCalculation" name="test_severance_added_to_available_cash" time="0.026" /><testcase classname="tests.selenium.test_calculations.TestTerminationCalculation" name="test_comfort_runway_within_tolerance" time="0.023" /><testcase classname="tests.selenium.test_calculations.TestTerminationCalculation" name="test_severance_key_present_in_results" time="0.023" /><testcase classname="tests.selenium.test_calculations.TestHalfFireCalculation" name="test_parttime_income_extends_runway" time="0.026" /><testcase classname="tests.selenium.test_calculations.TestHalfFireCalculation" name="test_comfort_runway_within_tolerance" time="0.024" /><testcase classname="tests.selenium.test_calculations.TestHalfFireCalculation" name="test_available_cash_positive" time="0.024" /><testcase classname="tests.selenium.test_calculations.TestR2ICalculation" name="test_available_cash_positive" time="0.024" /><testcase classname="tests.selenium.test_calculations.TestR2ICalculation" name="test_comfort_runway_within_tolerance" time="0.024" /><testcase classname="tests.selenium.test_calculations.TestStandardTierChartData" name="test_founder_standard_chart_data_has_21_points" time="0.025" /><testcase classname="tests.selenium.test_calculations.TestStandardTierChartData" name="test_chart_years_labeled_correctly" time="0.025" /><testcase classname="tests.selenium.test_calculations.TestStandardTierChartData" name="test_standard_results_include_sustainability_flag" time="0.024" /><testcase classname="tests.selenium.test_calculations.TestRetirementGratuity" name="test_gratuity_increases_final_corpus" time="0.028"><failure message="AssertionError: Gratuity should increase final_corpus: with=0, without=0&#10;assert 0.0 &gt; 0.0">tests/selenium/test_calculations.py:663: in test_gratuity_increases_final_corpus
+    assert corpus_with &gt; corpus_without, (
+E   AssertionError: Gratuity should increase final_corpus: with=0, without=0
+E   assert 0.0 &gt; 0.0</failure></testcase><testcase classname="tests.selenium.test_encryption.TestEncryptionLoginUI" name="test_encryption_setup_section_visible_for_new_user" time="2.492" /><testcase classname="tests.selenium.test_encryption.TestEncryptionLoginUI" name="test_passphrase_field_hidden_for_new_user" time="2.388" /><testcase classname="tests.selenium.test_encryption.TestEncryptionLoginUI" name="test_passphrase_field_visible_for_encrypted_user" time="2.681" /><testcase classname="tests.selenium.test_encryption.TestEncryptionLoginUI" name="test_encryption_hint_shown_when_set" time="2.821" /><testcase classname="tests.selenium.test_encryption.TestEncryptionSetupAPI" name="test_setup_encryption_creates_db_record" time="0.251" /><testcase classname="tests.selenium.test_encryption.TestEncryptionSetupAPI" name="test_short_passphrase_rejected" time="0.022" /><testcase classname="tests.selenium.test_encryption.TestEncryptionSetupAPI" name="test_encryption_record_has_kdf_salt" time="0.263" /><testcase classname="tests.selenium.test_encryption.TestEncryptionSetupAPI" name="test_encryption_data_not_plain_passphrase" time="0.235" /><testcase classname="tests.selenium.test_encryption.TestEncryptionLogin" name="test_correct_passphrase_logs_in" time="3.160" /><testcase classname="tests.selenium.test_encryption.TestEncryptionLogin" name="test_wrong_passphrase_shows_error" time="2.960"><failure message="selenium.common.exceptions.StaleElementReferenceException: Message: stale element reference: stale element not found&#10;  (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception&#10;Stacktrace:&#10;0   chromedriver                        0x0000000100f9799c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000100f8fa28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000100a63904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000100a750c8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 146656&#10;4   chromedriver                        0x0000000100a74178 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 142736&#10;5   chromedriver                        0x0000000100a6a3e8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 102400&#10;6   chromedriver                        0x0000000100a68b70 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 96136&#10;7   chromedriver                        0x0000000100a6bdb8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109008&#10;8   chromedriver                        0x0000000100a6be70 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109192&#10;9   chromedriver                        0x0000000100aa7dc4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 354780&#10;10  chromedriver                        0x0000000100aa26a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476&#10;11  chromedriver                        0x0000000100aea4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;12  chromedriver                        0x0000000100aa11a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;13  chromedriver                        0x0000000100f56220 cxxbridge1$str$ptr + 2891948&#10;14  chromedriver                        0x0000000100f59910 cxxbridge1$str$ptr + 2906012&#10;15  chromedriver                        0x0000000100f3b5d8 cxxbridge1$str$ptr + 2782308&#10;16  chromedriver                        0x0000000100f5a194 cxxbridge1$str$ptr + 2908192&#10;17  chromedriver                        0x0000000100f2c090 cxxbridge1$str$ptr + 2719516&#10;18  chromedriver                        0x0000000100f7eb30 cxxbridge1$str$ptr + 3058108&#10;19  chromedriver                        0x0000000100f7ecac cxxbridge1$str$ptr + 3058488&#10;20  chromedriver                        0x0000000100f8f680 cxxbridge1$str$ptr + 3126540&#10;21  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;22  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_encryption.py:325: in test_wrong_passphrase_shows_error
+    body_text = driver.find_element(By.TAG_NAME, "body").text.lower()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:105: in text
+    return self._execute(Command.GET_ELEMENT_TEXT)["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:508: in _execute
+    return self._parent.execute(command, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.StaleElementReferenceException: Message: stale element reference: stale element not found
+E     (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
+E   Stacktrace:
+E   0   chromedriver                        0x0000000100f9799c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000100f8fa28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000100a63904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000100a750c8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 146656
+E   4   chromedriver                        0x0000000100a74178 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 142736
+E   5   chromedriver                        0x0000000100a6a3e8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 102400
+E   6   chromedriver                        0x0000000100a68b70 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 96136
+E   7   chromedriver                        0x0000000100a6bdb8 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109008
+E   8   chromedriver                        0x0000000100a6be70 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109192
+E   9   chromedriver                        0x0000000100aa7dc4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 354780
+E   10  chromedriver                        0x0000000100aa26a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476
+E   11  chromedriver                        0x0000000100aea4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   12  chromedriver                        0x0000000100aa11a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   13  chromedriver                        0x0000000100f56220 cxxbridge1$str$ptr + 2891948
+E   14  chromedriver                        0x0000000100f59910 cxxbridge1$str$ptr + 2906012
+E   15  chromedriver                        0x0000000100f3b5d8 cxxbridge1$str$ptr + 2782308
+E   16  chromedriver                        0x0000000100f5a194 cxxbridge1$str$ptr + 2908192
+E   17  chromedriver                        0x0000000100f2c090 cxxbridge1$str$ptr + 2719516
+E   18  chromedriver                        0x0000000100f7eb30 cxxbridge1$str$ptr + 3058108
+E   19  chromedriver                        0x0000000100f7ecac cxxbridge1$str$ptr + 3058488
+E   20  chromedriver                        0x0000000100f8f680 cxxbridge1$str$ptr + 3126540
+E   21  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   22  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_encryption.TestEncryptionLogin" name="test_remove_encryption_api" time="0.457" /><testcase classname="tests.selenium.test_encryption.TestEncryptionLogin" name="test_wrong_passphrase_on_remove_fails" time="0.349" /><testcase classname="tests.selenium.test_encryption.TestCheckEncryptionEndpoint" name="test_check_encryption_false_for_new_user" time="0.011" /><testcase classname="tests.selenium.test_encryption.TestCheckEncryptionEndpoint" name="test_check_encryption_true_after_setup" time="0.236" /><testcase classname="tests.selenium.test_encryption.TestCheckEncryptionEndpoint" name="test_check_encryption_returns_hint" time="0.249" /><testcase classname="tests.selenium.test_monte_carlo.TestMonteCarloAPI" name="test_monte_carlo_returns_success" time="0.114" /><testcase classname="tests.selenium.test_monte_carlo.TestMonteCarloAPI" name="test_monte_carlo_requires_standard_results" time="0.032" /><testcase classname="tests.selenium.test_monte_carlo.TestMonteCarloAPI" name="test_monte_carlo_has_success_rate" time="0.034" /><testcase classname="tests.selenium.test_monte_carlo.TestMonteCarloAPI" name="test_monte_carlo_has_percentile_bands" time="0.034" /><testcase classname="tests.selenium.test_monte_carlo.TestMonteCarloAPI" name="test_monte_carlo_has_fan_chart_with_21_points" time="0.036" /><testcase classname="tests.selenium.test_monte_carlo.TestMonteCarloAPI" name="test_monte_carlo_n_iterations" time="0.032" /><testcase classname="tests.selenium.test_monte_carlo.TestMonteCarloUI" name="test_run_simulation_button_visible_on_standard_results" time="2.586" /><testcase classname="tests.selenium.test_monte_carlo.TestMonteCarloUI" name="test_mc_results_section_rendered_after_click" time="3.626"><failure message="selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element is not clickable at point (250, 1889)&#10;  (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception&#10;Stacktrace:&#10;0   chromedriver                        0x0000000100bf399c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000100beba28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x00000001006bf904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x000000010070d494 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 393388&#10;4   chromedriver                        0x000000010070b9bc _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 386516&#10;5   chromedriver                        0x0000000100709724 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 377660&#10;6   chromedriver                        0x0000000100708ac4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 374492&#10;7   chromedriver                        0x00000001006fec28 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 333888&#10;8   chromedriver                        0x00000001006fe6a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476&#10;9   chromedriver                        0x00000001007464d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;10  chromedriver                        0x00000001006fd1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;11  chromedriver                        0x0000000100bb2220 cxxbridge1$str$ptr + 2891948&#10;12  chromedriver                        0x0000000100bb5910 cxxbridge1$str$ptr + 2906012&#10;13  chromedriver                        0x0000000100b975d8 cxxbridge1$str$ptr + 2782308&#10;14  chromedriver                        0x0000000100bb6194 cxxbridge1$str$ptr + 2908192&#10;15  chromedriver                        0x0000000100b88090 cxxbridge1$str$ptr + 2719516&#10;16  chromedriver                        0x0000000100bdab30 cxxbridge1$str$ptr + 3058108&#10;17  chromedriver                        0x0000000100bdacac cxxbridge1$str$ptr + 3058488&#10;18  chromedriver                        0x0000000100beb680 cxxbridge1$str$ptr + 3126540&#10;19  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;20  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_monte_carlo.py:339: in test_mc_results_section_rendered_after_click
+    run_btn.click()
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:114: in click
+    self._execute(Command.CLICK_ELEMENT)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webelement.py:508: in _execute
+    return self._parent.execute(command, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.ElementClickInterceptedException: Message: element click intercepted: Element is not clickable at point (250, 1889)
+E     (Session info: chrome=146.0.7680.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#elementclickinterceptedexception
+E   Stacktrace:
+E   0   chromedriver                        0x0000000100bf399c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000100beba28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x00000001006bf904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x000000010070d494 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 393388
+E   4   chromedriver                        0x000000010070b9bc _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 386516
+E   5   chromedriver                        0x0000000100709724 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 377660
+E   6   chromedriver                        0x0000000100708ac4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 374492
+E   7   chromedriver                        0x00000001006fec28 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 333888
+E   8   chromedriver                        0x00000001006fe6a4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 332476
+E   9   chromedriver                        0x00000001007464d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   10  chromedriver                        0x00000001006fd1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   11  chromedriver                        0x0000000100bb2220 cxxbridge1$str$ptr + 2891948
+E   12  chromedriver                        0x0000000100bb5910 cxxbridge1$str$ptr + 2906012
+E   13  chromedriver                        0x0000000100b975d8 cxxbridge1$str$ptr + 2782308
+E   14  chromedriver                        0x0000000100bb6194 cxxbridge1$str$ptr + 2908192
+E   15  chromedriver                        0x0000000100b88090 cxxbridge1$str$ptr + 2719516
+E   16  chromedriver                        0x0000000100bdab30 cxxbridge1$str$ptr + 3058108
+E   17  chromedriver                        0x0000000100bdacac cxxbridge1$str$ptr + 3058488
+E   18  chromedriver                        0x0000000100beb680 cxxbridge1$str$ptr + 3126540
+E   19  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   20  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_monte_carlo.TestMonteCarloUI" name="test_mc_canvas_present_in_dom" time="2.484" /><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_scenario_navigates_to_questions_page[FOUNDER]" time="2.571"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x000000010313799c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x000000010312fa28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000102c03904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000102c09b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x0000000102c0c06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000102c8b470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x0000000102c8a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x0000000102c411a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x00000001030f6220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x00000001030f9910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x00000001030db5d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x00000001030fa194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x00000001030cc090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x000000010311eb30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x000000010311ecac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x000000010312f680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:132: in test_scenario_navigates_to_questions_page
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x000000010313799c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x000000010312fa28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000102c03904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000102c09b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x0000000102c0c06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000102c8b470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x0000000102c8a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x0000000102c411a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x00000001030f6220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x00000001030f9910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x00000001030db5d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x00000001030fa194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x00000001030cc090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x000000010311eb30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x000000010311ecac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x000000010312f680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_scenario_navigates_to_questions_page[RETIREMENT]" time="2.384"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x00000001029ef99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x00000001029e7a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x00000001024bb904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x00000001024c1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x00000001024c406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000102543470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001025424d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001024f91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x00000001029ae220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x00000001029b1910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x00000001029935d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x00000001029b2194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000102984090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x00000001029d6b30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x00000001029d6cac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x00000001029e7680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:132: in test_scenario_navigates_to_questions_page
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x00000001029ef99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x00000001029e7a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x00000001024bb904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x00000001024c1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x00000001024c406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000102543470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001025424d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001024f91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x00000001029ae220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x00000001029b1910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x00000001029935d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x00000001029b2194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000102984090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x00000001029d6b30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x00000001029d6cac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x00000001029e7680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_scenario_navigates_to_questions_page[HALF_FIRE]" time="2.421"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x000000010081f99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000100817a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x00000001002eb904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x00000001002f1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x00000001002f406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000100373470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001003724d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001003291a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x00000001007de220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x00000001007e1910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x00000001007c35d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x00000001007e2194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x00000001007b4090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000100806b30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000100806cac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000100817680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:132: in test_scenario_navigates_to_questions_page
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x000000010081f99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000100817a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x00000001002eb904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x00000001002f1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x00000001002f406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000100373470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001003724d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001003291a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x00000001007de220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x00000001007e1910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x00000001007c35d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x00000001007e2194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x00000001007b4090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000100806b30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000100806cac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000100817680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_scenario_navigates_to_questions_page[TERMINATION]" time="2.428"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000102ca399c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000102c9ba28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x000000010276f904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000102775b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x000000010277806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x00000001027f7470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001027f64d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001027ad1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000102c62220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000102c65910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000102c475d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000102c66194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000102c38090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000102c8ab30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000102c8acac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000102c9b680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:132: in test_scenario_navigates_to_questions_page
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000102ca399c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000102c9ba28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x000000010276f904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000102775b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x000000010277806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x00000001027f7470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001027f64d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001027ad1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000102c62220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000102c65910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000102c475d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000102c66194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000102c38090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000102c8ab30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000102c8acac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000102c9b680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_scenario_navigates_to_questions_page[R2I]" time="2.452"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x00000001010f799c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x00000001010efa28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000100bc3904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000100bc9b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x0000000100bcc06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000100c4b470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x0000000100c4a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x0000000100c011a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x00000001010b6220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x00000001010b9910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x000000010109b5d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x00000001010ba194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x000000010108c090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x00000001010deb30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x00000001010decac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x00000001010ef680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:132: in test_scenario_navigates_to_questions_page
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x00000001010f799c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x00000001010efa28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000100bc3904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000100bc9b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x0000000100bcc06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000100c4b470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x0000000100c4a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x0000000100c011a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x00000001010b6220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x00000001010b9910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x000000010109b5d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x00000001010ba194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x000000010108c090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x00000001010deb30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x00000001010decac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x00000001010ef680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_first_question_is_card_select[FOUNDER]" time="2.381"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000104dc399c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000104dbba28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x000000010488f904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000104895b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x000000010489806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000104917470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001049164d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001048cd1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000104d82220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000104d85910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000104d675d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000104d86194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000104d58090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000104daab30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000104daacac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000104dbb680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:145: in test_first_question_is_card_select
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000104dc399c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000104dbba28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x000000010488f904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000104895b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x000000010489806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000104917470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001049164d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001048cd1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000104d82220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000104d85910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000104d675d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000104d86194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000104d58090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000104daab30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000104daacac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000104dbb680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_first_question_is_card_select[RETIREMENT]" time="2.485"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000104b6799c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000104b5fa28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000104633904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000104639b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x000000010463c06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x00000001046bb470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001046ba4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001046711a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000104b26220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000104b29910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000104b0b5d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000104b2a194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000104afc090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000104b4eb30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000104b4ecac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000104b5f680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:145: in test_first_question_is_card_select
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000104b6799c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000104b5fa28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000104633904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000104639b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x000000010463c06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x00000001046bb470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001046ba4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001046711a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000104b26220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000104b29910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000104b0b5d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000104b2a194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000104afc090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000104b4eb30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000104b4ecac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000104b5f680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_first_question_is_card_select[HALF_FIRE]" time="2.468"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000102e3f99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000102e37a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x000000010290b904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000102911b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x000000010291406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000102993470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001029924d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001029491a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000102dfe220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000102e01910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000102de35d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000102e02194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000102dd4090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000102e26b30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000102e26cac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000102e37680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:145: in test_first_question_is_card_select
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000102e3f99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000102e37a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x000000010290b904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000102911b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x000000010291406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000102993470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001029924d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001029491a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000102dfe220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000102e01910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000102de35d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000102e02194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000102dd4090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000102e26b30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000102e26cac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000102e37680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_first_question_is_card_select[TERMINATION]" time="2.523"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x000000010101399c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x000000010100ba28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000100adf904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000100ae5b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x0000000100ae806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000100b67470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x0000000100b664d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x0000000100b1d1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000100fd2220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000100fd5910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000100fb75d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000100fd6194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000100fa8090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000100ffab30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000100ffacac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x000000010100b680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:145: in test_first_question_is_card_select
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x000000010101399c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x000000010100ba28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000100adf904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000100ae5b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x0000000100ae806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000100b67470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x0000000100b664d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x0000000100b1d1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000100fd2220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000100fd5910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000100fb75d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000100fd6194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000100fa8090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000100ffab30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000100ffacac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x000000010100b680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_first_question_is_card_select[R2I]" time="2.516"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x00000001008df99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x00000001008d7a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x00000001003ab904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x00000001003b1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x00000001003b406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000100433470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001004324d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001003e91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x000000010089e220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x00000001008a1910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x00000001008835d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x00000001008a2194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000100874090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x00000001008c6b30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x00000001008c6cac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x00000001008d7680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:145: in test_first_question_is_card_select
+    _select_scenario_and_navigate(driver, live_server, scenario_type)
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x00000001008df99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x00000001008d7a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x00000001003ab904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x00000001003b1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x00000001003b406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000100433470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001004324d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001003e91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x000000010089e220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x00000001008a1910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x00000001008835d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x00000001008a2194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000100874090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x00000001008c6b30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x00000001008c6cac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x00000001008d7680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_founder_scenario_has_correct_first_question_label" time="2.451"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000102ec799c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000102ebfa28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000102993904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000102999b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x000000010299c06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000102a1b470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x0000000102a1a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001029d11a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000102e86220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000102e89910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000102e6b5d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000102e8a194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000102e5c090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000102eaeb30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000102eaecac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000102ebf680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:157: in test_founder_scenario_has_correct_first_question_label
+    _select_scenario_and_navigate(driver, live_server, "FOUNDER")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000102ec799c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000102ebfa28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000102993904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000102999b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x000000010299c06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000102a1b470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x0000000102a1a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001029d11a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000102e86220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000102e89910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000102e6b5d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000102e8a194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000102e5c090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000102eaeb30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000102eaecac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000102ebf680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_progress_bar_starts_at_zero" time="2.410"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000104c1f99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000104c17a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x00000001046eb904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x00000001046f1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x00000001046f406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000104773470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001047724d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001047291a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000104bde220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000104be1910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000104bc35d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000104be2194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000104bb4090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000104c06b30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000104c06cac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000104c17680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:170: in test_progress_bar_starts_at_zero
+    _select_scenario_and_navigate(driver, live_server, "RETIREMENT")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000104c1f99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000104c17a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x00000001046eb904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x00000001046f1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x00000001046f406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000104773470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001047724d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001047291a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000104bde220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000104be1910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000104bc35d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000104be2194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000104bb4090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000104c06b30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000104c06cac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000104c17680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestFirstQuestionPerScenario" name="test_scenario_label_shown_in_top_bar" time="2.596"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000100a3b99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000100a33a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000100507904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x000000010050db34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x000000010051006c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x000000010058f470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x000000010058e4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001005451a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x00000001009fa220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x00000001009fd910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x00000001009df5d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x00000001009fe194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x00000001009d0090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000100a22b30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000100a22cac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000100a33680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:181: in test_scenario_label_shown_in_top_bar
+    _select_scenario_and_navigate(driver, live_server, "FOUNDER")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000100a3b99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000100a33a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000100507904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x000000010050db34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x000000010051006c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x000000010058f470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x000000010058e4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001005451a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x00000001009fa220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x00000001009fd910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x00000001009df5d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x00000001009fe194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x00000001009d0090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000100a22b30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000100a22cac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000100a33680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestConditionalQuestions" name="test_solo_family_type_hides_spouse_question" time="2.473"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000100f3399c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000100f2ba28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x00000001009ff904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000100a05b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x0000000100a0806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000100a87470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x0000000100a864d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x0000000100a3d1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000100ef2220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000100ef5910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000100ed75d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000100ef6194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000100ec8090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000100f1ab30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000100f1acac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000100f2b680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:203: in test_solo_family_type_hides_spouse_question
+    _select_scenario_and_navigate(driver, live_server, "FOUNDER")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000100f3399c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000100f2ba28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x00000001009ff904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000100a05b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x0000000100a0806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000100a87470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x0000000100a864d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x0000000100a3d1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000100ef2220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000100ef5910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000100ed75d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000100ef6194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000100ec8090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000100f1ab30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000100f1acac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000100f2b680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestConditionalQuestions" name="test_partner_family_type_shows_spouse_question" time="2.479"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x00000001025f799c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x00000001025efa28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x00000001020c3904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x00000001020c9b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x00000001020cc06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x000000010214b470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x000000010214a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001021011a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x00000001025b6220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x00000001025b9910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x000000010259b5d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x00000001025ba194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x000000010258c090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x00000001025deb30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x00000001025decac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x00000001025ef680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:221: in test_partner_family_type_shows_spouse_question
+    _select_scenario_and_navigate(driver, live_server, "RETIREMENT")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x00000001025f799c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x00000001025efa28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x00000001020c3904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x00000001020c9b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x00000001020cc06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x000000010214b470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x000000010214a4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001021011a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x00000001025b6220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x00000001025b9910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x000000010259b5d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x00000001025ba194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x000000010258c090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x00000001025deb30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x00000001025decac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x00000001025ef680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestConditionalQuestions" name="test_partner_kids_shows_kids_count_question" time="2.394"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x00000001032df99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x00000001032d7a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000102dab904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000102db1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x0000000102db406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000102e33470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x0000000102e324d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x0000000102de91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x000000010329e220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x00000001032a1910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x00000001032835d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x00000001032a2194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000103274090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x00000001032c6b30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x00000001032c6cac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x00000001032d7680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:239: in test_partner_kids_shows_kids_count_question
+    _select_scenario_and_navigate(driver, live_server, "FOUNDER")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x00000001032df99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x00000001032d7a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000102dab904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000102db1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x0000000102db406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000102e33470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x0000000102e324d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x0000000102de91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x000000010329e220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x00000001032a1910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x00000001032835d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x00000001032a2194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000103274090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x00000001032c6b30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x00000001032c6cac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x00000001032d7680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestConditionalQuestions" name="test_solo_hides_kids_count_question" time="2.457"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000100aef99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000100ae7a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x00000001005bb904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x00000001005c1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x00000001005c406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000100643470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001006424d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001005f91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000100aae220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000100ab1910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000100a935d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000100ab2194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000100a84090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000100ad6b30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000100ad6cac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000100ae7680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:254: in test_solo_hides_kids_count_question
+    _select_scenario_and_navigate(driver, live_server, "FOUNDER")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000100aef99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000100ae7a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x00000001005bb904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x00000001005c1b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x00000001005c406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000100643470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001006424d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001005f91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000100aae220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000100ab1910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000100a935d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000100ab2194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000100a84090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000100ad6b30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000100ad6cac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000100ae7680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestConditionalQuestions" name="test_founder_bootstrap_toggle_shows_amount" time="2.556"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000102faf99c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000102fa7a28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000102a7b904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000102a81b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x0000000102a8406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000102b03470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x0000000102b024d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x0000000102ab91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000102f6e220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000102f71910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000102f535d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000102f72194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000102f44090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000102f96b30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000102f96cac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000102fa7680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:272: in test_founder_bootstrap_toggle_shows_amount
+    _select_scenario_and_navigate(driver, live_server, "FOUNDER")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000102faf99c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000102fa7a28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000102a7b904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000102a81b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x0000000102a8406c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000102b03470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x0000000102b024d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x0000000102ab91a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000102f6e220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000102f71910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000102f535d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000102f72194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000102f44090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000102f96b30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000102f96cac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000102fa7680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestConditionalQuestions" name="test_card_select_answer_updates_alpine_state" time="2.464"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000104bb399c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000104baba28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x000000010467f904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000104685b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x000000010468806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x0000000104707470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001047064d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001046bd1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000104b72220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000104b75910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000104b575d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000104b76194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000104b48090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000104b9ab30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000104b9acac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000104bab680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:290: in test_card_select_answer_updates_alpine_state
+    _select_scenario_and_navigate(driver, live_server, "RETIREMENT")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000104bb399c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000104baba28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x000000010467f904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000104685b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x000000010468806c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x0000000104707470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001047064d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001046bd1a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000104b72220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000104b75910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000104b575d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000104b76194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000104b48090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000104b9ab30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000104b9acac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000104bab680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestQuickTierCompletion" name="test_complete_quick_tier_via_api_and_navigate_to_results" time="2.503"><failure message="selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function&#10;  (Session info: chrome=146.0.7680.178)&#10;Stacktrace:&#10;0   chromedriver                        0x0000000104b7799c cxxbridge1$str$ptr + 3160104&#10;1   chromedriver                        0x0000000104b6fa28 cxxbridge1$str$ptr + 3127476&#10;2   chromedriver                        0x0000000104643904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036&#10;3   chromedriver                        0x0000000104649b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172&#10;4   chromedriver                        0x000000010464c06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700&#10;5   chromedriver                        0x00000001046cb470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920&#10;6   chromedriver                        0x00000001046ca4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924&#10;7   chromedriver                        0x00000001046811a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096&#10;8   chromedriver                        0x0000000104b36220 cxxbridge1$str$ptr + 2891948&#10;9   chromedriver                        0x0000000104b39910 cxxbridge1$str$ptr + 2906012&#10;10  chromedriver                        0x0000000104b1b5d8 cxxbridge1$str$ptr + 2782308&#10;11  chromedriver                        0x0000000104b3a194 cxxbridge1$str$ptr + 2908192&#10;12  chromedriver                        0x0000000104b0c090 cxxbridge1$str$ptr + 2719516&#10;13  chromedriver                        0x0000000104b5eb30 cxxbridge1$str$ptr + 3058108&#10;14  chromedriver                        0x0000000104b5ecac cxxbridge1$str$ptr + 3058488&#10;15  chromedriver                        0x0000000104b6f680 cxxbridge1$str$ptr + 3126540&#10;16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136&#10;17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8">tests/selenium/test_question_flow.py:322: in test_complete_quick_tier_via_api_and_navigate_to_results
+    _select_scenario_and_navigate(driver, live_server, "FOUNDER")
+tests/selenium/test_question_flow.py:106: in _select_scenario_and_navigate
+    driver.execute_script(f"""
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:536: in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/webdriver.py:450: in execute
+    self.error_handler.check_response(response)
+../.venv/lib/python3.12/site-packages/selenium/webdriver/remote/errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.JavascriptException: Message: javascript error: el._x_dataStack[0].selectScenario is not a function
+E     (Session info: chrome=146.0.7680.178)
+E   Stacktrace:
+E   0   chromedriver                        0x0000000104b7799c cxxbridge1$str$ptr + 3160104
+E   1   chromedriver                        0x0000000104b6fa28 cxxbridge1$str$ptr + 3127476
+E   2   chromedriver                        0x0000000104643904 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75036
+E   3   chromedriver                        0x0000000104649b34 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 100172
+E   4   chromedriver                        0x000000010464c06c _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 109700
+E   5   chromedriver                        0x00000001046cb470 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630920
+E   6   chromedriver                        0x00000001046ca4d4 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 626924
+E   7   chromedriver                        0x00000001046811a0 _RNvCskE0kXQ3GIWk_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 327096
+E   8   chromedriver                        0x0000000104b36220 cxxbridge1$str$ptr + 2891948
+E   9   chromedriver                        0x0000000104b39910 cxxbridge1$str$ptr + 2906012
+E   10  chromedriver                        0x0000000104b1b5d8 cxxbridge1$str$ptr + 2782308
+E   11  chromedriver                        0x0000000104b3a194 cxxbridge1$str$ptr + 2908192
+E   12  chromedriver                        0x0000000104b0c090 cxxbridge1$str$ptr + 2719516
+E   13  chromedriver                        0x0000000104b5eb30 cxxbridge1$str$ptr + 3058108
+E   14  chromedriver                        0x0000000104b5ecac cxxbridge1$str$ptr + 3058488
+E   15  chromedriver                        0x0000000104b6f680 cxxbridge1$str$ptr + 3126540
+E   16  libsystem_pthread.dylib             0x0000000189117c08 _pthread_start + 136
+E   17  libsystem_pthread.dylib             0x0000000189112ba8 thread_start + 8</failure></testcase><testcase classname="tests.selenium.test_question_flow.TestQuickTierCompletion" name="test_results_page_shows_comfort_runway" time="2.622" /><testcase classname="tests.selenium.test_question_flow.TestTierAdvancement" name="test_advance_tier_button_present_on_quick_results" time="2.534" /><testcase classname="tests.selenium.test_question_flow.TestTierAdvancement" name="test_standard_results_show_20yr_section" time="2.877" /></testsuite></testsuites>

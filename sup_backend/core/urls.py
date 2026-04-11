@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/track/', views.track_event, name='track_event'),
     path('health/', views.health_check, name='health_check'),
     path('ops/', views.ops_page, name='ops_page'),
+    path('robots.txt', views.robots_txt, name='robots_txt'),
 ]

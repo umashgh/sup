@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
 from finance.models import FamilyProfile
+from core.models import UserEncryption
 
 BACKEND = 'core.backends.UsernameOnlyBackend'
 
@@ -54,6 +55,8 @@ def signup(request):
 def signin(request):
     """
     Sign in with just a username — no password check.
+    If the user has encryption set up, an optional passphrase can be submitted
+    to decrypt and restore their data for the session.
     """
     error = None
 
@@ -81,15 +84,76 @@ def signin(request):
                 if guest_user:
                     _transfer_guest_data(guest_user, user)
 
-                login(request, user, backend=BACKEND)
+                # Handle encryption unlock / removal before completing login
+                passphrase = request.POST.get('passphrase', '').strip()
+                remove_enc = request.POST.get('remove_encryption') == '1'
+                try:
+                    ue = UserEncryption.objects.get(user=user)
+                    if passphrase and remove_enc:
+                        from core import encryption as enc
+                        ok = enc.remove_encryption(user, passphrase)
+                        if not ok:
+                            return render(request, 'registration/login.html', {
+                                'passphrase_error': 'Incorrect passphrase. Encryption not removed.',
+                                'username_prefill': username,
+                                'has_encryption': True,
+                                'passphrase_hint': ue.passphrase_hint or None,
+                            })
+                        login(request, user, backend=BACKEND)
+                        request.session['data_unlocked'] = True
+                        next_url = request.POST.get('next') or _get_smart_redirect_for_user(user)
+                        return redirect(next_url)
+                    elif passphrase:
+                        from core import encryption as enc
+                        ok = enc.unlock_and_restore(user, passphrase)
+                        if not ok:
+                            return render(request, 'registration/login.html', {
+                                'passphrase_error': 'Incorrect passphrase. Your data remains encrypted.',
+                                'username_prefill': username,
+                                'has_encryption': True,
+                                'passphrase_hint': ue.passphrase_hint or None,
+                            })
+                        login(request, user, backend=BACKEND)
+                        key_b64 = enc.derive_key(passphrase, ue.kdf_salt).decode('utf-8')
+                        request.session['enc_key_b64'] = key_b64
+                        request.session['data_unlocked'] = True
+                        next_url = request.POST.get('next') or _get_smart_redirect_for_user(user)
+                        return redirect(next_url)
+                    else:
+                        login(request, user, backend=BACKEND)
+                        request.session['data_unlocked'] = False
+                except UserEncryption.DoesNotExist:
+                    login(request, user, backend=BACKEND)
+                    request.session['data_unlocked'] = True
+
                 next_url = request.POST.get('next') or _get_smart_redirect_for_user(user)
                 return redirect(next_url)
 
-    return render(request, 'registration/login.html', {})
+    # GET — check if we should pre-show encryption UI based on username in query params
+    prefill_username = request.GET.get('u', '')
+    ctx = {'username_prefill': prefill_username}
+    if prefill_username:
+        try:
+            u = User.objects.get(username=prefill_username)
+            ue = UserEncryption.objects.get(user=u)
+            ctx['has_encryption'] = True
+            ctx['passphrase_hint'] = ue.passphrase_hint or None
+        except (User.DoesNotExist, UserEncryption.DoesNotExist):
+            pass
+    return render(request, 'registration/login.html', ctx)
 
 
 def signout(request):
-    """Accept both POST and GET for mobile compatibility."""
+    """Accept both POST and GET for mobile compatibility.
+    Re-encrypts user data before clearing the session if encryption is active."""
+    enc_key = request.session.get('enc_key_b64')
+    user = request.user
+    if enc_key and user.is_authenticated and not user.username.startswith('guest_'):
+        try:
+            from core import encryption as enc_module
+            enc_module.reencrypt_user_data(user, enc_key)
+        except Exception:
+            pass  # Never block logout on encryption errors
     logout(request)
     return redirect('/')
 

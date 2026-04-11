@@ -13,9 +13,40 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST, require_GET
 
+from django.http import HttpResponse, HttpResponseForbidden
+
 from finance.models import (
     FamilyProfile, FamilyMember, Asset, Income, Expense, CashflowProjection
 )
+
+
+# ---------------------------------------------------------------------------
+# Error handlers — minimal pages, no stack traces, no Django branding
+# ---------------------------------------------------------------------------
+
+def handler404(request, exception=None):
+    return render(request, 'errors/404.html', status=404)
+
+def handler500(request):
+    return render(request, 'errors/500.html', status=500)
+
+def axes_lockout_response(request, credentials=None, *args, **kwargs):
+    """Called by django-axes when an IP is locked out."""
+    return HttpResponseForbidden(
+        "Too many failed login attempts. Please try again later.",
+        content_type="text/plain",
+    )
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /mgmt-/",
+        "Disallow: /accounts/",
+        "Disallow: /api/",
+        "Disallow: /ops/",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
 @login_required

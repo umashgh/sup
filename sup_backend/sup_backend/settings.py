@@ -7,19 +7,54 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-r63hva7@k_=v!5d%j^n89z+&2n43j5&5+)tqpn6=tx9s2-ar6j'
+# ---------------------------------------------------------------------------
+# Core secrets — read from environment; never hardcode in source
+# ---------------------------------------------------------------------------
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-only-change-in-production')
 
-DEBUG = False
+# Debug defaults to True locally so developers don't need to set env vars.
+# Production deploy MUST set DEBUG=False in the environment.
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS',
+    'localhost,127.0.0.1'
+).split(',')
+
+# ---------------------------------------------------------------------------
+# Security headers (safe to set unconditionally; SSL redirect gated on DEBUG)
+# ---------------------------------------------------------------------------
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Only redirect to HTTPS and send HSTS in production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000          # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+else:
+    SECURE_SSL_REDIRECT = False
+
+SESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_HTTPONLY = True
+
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True           # legacy IE header, harmless on modern browsers
+SECURE_REFERRER_POLICY = 'same-origin'
 
 CSRF_TRUSTED_ORIGINS = [
     'https://salaryfree.in',
     'https://www.salaryfree.in',
 ]
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
+# ---------------------------------------------------------------------------
+# Applications
+# ---------------------------------------------------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,6 +66,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'rest_framework',
     'rest_framework.authtoken',
+    'axes',
     'finance',
     'ventures',
     'core',
@@ -44,9 +80,12 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # axes must come after AuthenticationMiddleware
+    'axes.middleware.AxesMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'sup_backend.middleware.ContentSecurityPolicyMiddleware',
 ]
 
 ROOT_URLCONF = 'sup_backend.urls'
@@ -61,6 +100,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.encryption_status',
             ],
         },
     },
@@ -98,10 +138,25 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 AUTHENTICATION_BACKENDS = [
+    # axes must be first so it can block before the real auth runs
+    'axes.backends.AxesStandaloneBackend',
     'core.backends.UsernameOnlyBackend',
-    'django.contrib.auth.backends.ModelBackend',  # kept for admin access
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
+# ---------------------------------------------------------------------------
+# django-axes — brute-force login protection
+# Lock out an IP after 5 failed attempts within 15 minutes.
+# ---------------------------------------------------------------------------
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = 0.25           # hours (= 15 minutes)
+AXES_LOCKOUT_PARAMETERS = ['ip_address']
+AXES_RESET_ON_SUCCESS = True       # clear failure count on successful login
+AXES_LOCKOUT_CALLABLE = 'core.views.axes_lockout_response'
+
+# ---------------------------------------------------------------------------
+# Logging
+# ---------------------------------------------------------------------------
 _TELEGRAM_TOKEN   = os.environ.get('TELEGRAM_BOT_TOKEN', '')
 _TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '')
 
@@ -128,13 +183,11 @@ LOGGING = {
         },
     },
     'loggers': {
-        # 500 errors
         'django.request': {
             'handlers': ['console', 'telegram'],
             'level': 'ERROR',
             'propagate': False,
         },
-        # Security issues (CSRF failures, bad signatures, etc.)
         'django.security': {
             'handlers': ['console', 'telegram'],
             'level': 'ERROR',

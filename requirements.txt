@@ -8,3 +8,6 @@ django-bootstrap5
 djangorestframework
 anthropic[bedrock]
 gunicorn
+cryptography
+django-axes
+urllib3>=2.6.3

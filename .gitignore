@@ -76,6 +76,13 @@ htmlcov/
 *.tmp
 server.log
 
+# Ad recording scripts and output
+record_ad.py
+record_ad_v2.py
+capture_server.py
+screenshot_on_p.py
+ad_clips/
+
 # Claude / AI-generated artifacts
 .claude/
 COMPREHENSIVE_SUMMARY.md

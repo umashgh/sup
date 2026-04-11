@@ -78,6 +78,27 @@ class BehaviourEvent(models.Model):
         return f"{self.event} [{self.session_key[:8]}] @ {self.ts:%Y-%m-%d %H:%M}"
 
 
+class UserEncryption(models.Model):
+    """
+    Tracks per-user passphrase-based encryption.
+    The passphrase is NEVER stored — only a salt and a verification token derived from it.
+    All user data is stored as an encrypted JSON payload; original model fields are cleared.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='encryption')
+    kdf_salt = models.CharField(max_length=64)          # hex-encoded 32-byte PBKDF2 salt
+    passphrase_hint = models.CharField(max_length=200, blank=True, default='')
+    verification_token = models.TextField()             # Fernet-encrypted b'SALARYFREE_VERIFIED'
+    encrypted_payload = models.TextField()              # Fernet-encrypted JSON of all user data
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "User Encryption"
+
+    def __str__(self):
+        return f"{self.user.username} — encrypted"
+
+
 class ScenarioProfile(models.Model):
     """
     Stores scenario-specific data for each user.
