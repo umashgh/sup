@@ -198,6 +198,15 @@ def _transfer_guest_data(guest_user, target_user):
         guest_fp.delete()
     except Exception:
         pass
+    # UserFlowState
+    try:
+        from core.models import UserFlowState
+        guest_fs = UserFlowState.objects.get(user=guest_user)
+        UserFlowState.objects.filter(user=target_user).delete()
+        guest_fs.user = target_user
+        guest_fs.save()
+    except Exception:
+        pass
     try:
         guest_user.delete()
     except Exception:

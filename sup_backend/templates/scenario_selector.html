@@ -7,13 +7,14 @@
 
 {% block body %}
 <script type="application/json" id="django-data">
-  {"isAuthenticated": {% if request.user.is_authenticated %}true{% else %}false{% endif %}, "csrfToken": "{{ csrf_token }}"}
+  {"isAuthenticated": {% if request.user.is_authenticated %}true{% else %}false{% endif %}, "csrfToken": "{{ csrf_token }}", "priorScenario": "{{ prior_scenario }}"}
 </script>
 <script>
   // Read Django-provided values from JSON block (formatter-safe)
   var _djangoData=JSON.parse(document.getElementById('django-data').textContent);
   var _isAuthenticated=_djangoData.isAuthenticated;
   var _csrfToken=_djangoData.csrfToken;
+  var _priorScenario=_djangoData.priorScenario;
 
 
   function scenarioSelector() {
@@ -21,6 +22,7 @@
       loading: false,
       error: null,
       isUserAuthenticated: _isAuthenticated,
+      priorScenario: _priorScenario,
 
       async selectScenario(scenarioType) {
         this.loading=true;
@@ -155,7 +157,7 @@
   <!-- ===== SCENARIOS AS STORIES ===== -->
   <section class="stories fi" id="stories">
 
-    <div class="story" role="button" tabindex="0" @click="selectScenario('FOUNDER')" @keydown.enter.prevent="selectScenario('FOUNDER')" @keydown.space.prevent="selectScenario('FOUNDER')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('FOUNDER')" @keydown.enter.prevent="selectScenario('FOUNDER')" @keydown.space.prevent="selectScenario('FOUNDER')" :class="{'opacity-50': loading, 'story-prior': priorScenario==='FOUNDER'}">
       <div class="story-color c1"></div>
       <div class="story-body">
         <h3>The Founder Leap</h3>
@@ -165,7 +167,7 @@
       <div style="display:flex;align-items:center;padding-right:14px;color:rgba(0,0,0,0.2);font-size:1rem;">›</div>
     </div>
 
-    <div class="story" role="button" tabindex="0" @click="selectScenario('RETIREMENT')" @keydown.enter.prevent="selectScenario('RETIREMENT')" @keydown.space.prevent="selectScenario('RETIREMENT')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('RETIREMENT')" @keydown.enter.prevent="selectScenario('RETIREMENT')" @keydown.space.prevent="selectScenario('RETIREMENT')" :class="{'opacity-50': loading, 'story-prior': priorScenario==='RETIREMENT'}">
       <div class="story-color c2"></div>
       <div class="story-body">
         <h3>The Retirement Question</h3>
@@ -175,7 +177,7 @@
       <div style="display:flex;align-items:center;padding-right:14px;color:rgba(0,0,0,0.2);font-size:1rem;">›</div>
     </div>
 
-    <div class="story" role="button" tabindex="0" @click="selectScenario('R2I')" @keydown.enter.prevent="selectScenario('R2I')" @keydown.space.prevent="selectScenario('R2I')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('R2I')" @keydown.enter.prevent="selectScenario('R2I')" @keydown.space.prevent="selectScenario('R2I')" :class="{'opacity-50': loading, 'story-prior': priorScenario==='R2I'}">
       <div class="story-color c3"></div>
       <div class="story-body">
         <h3>The R2I Move</h3>
@@ -185,7 +187,7 @@
       <div style="display:flex;align-items:center;padding-right:14px;color:rgba(0,0,0,0.2);font-size:1rem;">›</div>
     </div>
 
-    <div class="story" role="button" tabindex="0" @click="selectScenario('HALF_FIRE')" @keydown.enter.prevent="selectScenario('HALF_FIRE')" @keydown.space.prevent="selectScenario('HALF_FIRE')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('HALF_FIRE')" @keydown.enter.prevent="selectScenario('HALF_FIRE')" @keydown.space.prevent="selectScenario('HALF_FIRE')" :class="{'opacity-50': loading, 'story-prior': priorScenario==='HALF_FIRE'}">
       <div class="story-color c4"></div>
       <div class="story-body">
         <h3>The Half-FIRE Life</h3>
@@ -195,7 +197,7 @@
       <div style="display:flex;align-items:center;padding-right:14px;color:rgba(0,0,0,0.2);font-size:1rem;">›</div>
     </div>
 
-    <div class="story" role="button" tabindex="0" @click="selectScenario('TERMINATION')" @keydown.enter.prevent="selectScenario('TERMINATION')" @keydown.space.prevent="selectScenario('TERMINATION')" :class="{'opacity-50': loading}">
+    <div class="story" role="button" tabindex="0" @click="selectScenario('TERMINATION')" @keydown.enter.prevent="selectScenario('TERMINATION')" @keydown.space.prevent="selectScenario('TERMINATION')" :class="{'opacity-50': loading, 'story-prior': priorScenario==='TERMINATION'}">
       <div class="story-color c5"></div>
       <div class="story-body">
         <h3>The Layoff Buffer</h3>
@@ -354,6 +356,14 @@
       <div class="depth-text">
         <h4>Monte Carlo + tax</h4>
         <p>Probability analysis + tax optimization. <span class="soon-tag">Coming soon</span></p>
+      </div>
+    </div>
+
+    <div class="depth-item">
+      <div class="depth-badge" style="background: var(--plum); color: white;">AI</div>
+      <div class="depth-text">
+        <h4>AI Advisor · Asha</h4>
+        <p>Ask Asha about your specific numbers. Not generic advice — your plan, your tradeoffs.</p>
       </div>
     </div>
   </section>

@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/scenarios/rates/', views.rate_preferences, name='rate_preferences'),
     path('api/scenarios/advise/', views.advise, name='advise'),
     path('api/scenarios/monte-carlo/', views.monte_carlo, name='monte_carlo'),
+    path('api/scenarios/restore/', views.restore_flow_state, name='restore_flow_state'),
     path('api/track/', views.track_event, name='track_event'),
     path('health/', views.health_check, name='health_check'),
     path('ops/', views.ops_page, name='ops_page'),

@@ -199,6 +199,23 @@ def serialize_user_data(user) -> dict:
     except UserRatePreferences.DoesNotExist:
         data['rate_preferences'] = None
 
+    # UserFlowState — contains answers and cached calculation results
+    try:
+        from core.models import UserFlowState
+        fs = UserFlowState.objects.get(user=user)
+        data['flow_state'] = {
+            'scenario_type':  fs.scenario_type,
+            'answers_flat':   fs.answers_flat,
+            'answers_nested': fs.answers_nested,
+            'answers_hash':   fs.answers_hash,
+            'tier1_results':  fs.tier1_results,
+            'tier2_results':  fs.tier2_results,
+            'mc_results':     fs.mc_results,
+            'asha_advice':    fs.asha_advice,
+        }
+    except Exception:
+        data['flow_state'] = None
+
     return data
 
 
@@ -206,7 +223,7 @@ def serialize_user_data(user) -> dict:
 
 def clear_user_data(user):
     """Erase all sensitive fields / records. Called after encryption is set up."""
-    from core.models import ScenarioProfile, UserRatePreferences
+    from core.models import ScenarioProfile, UserRatePreferences, UserFlowState
     from finance.models import FamilyProfile, FamilyMember, Asset, Income, Expense
 
     FamilyMember.objects.filter(user=user).delete()
@@ -214,6 +231,7 @@ def clear_user_data(user):
     Income.objects.filter(user=user).delete()
     Expense.objects.filter(user=user).delete()
     UserRatePreferences.objects.filter(user=user).delete()
+    UserFlowState.objects.filter(user=user).delete()
 
     try:
         sp = ScenarioProfile.objects.get(user=user)
@@ -406,6 +424,21 @@ def restore_user_data(user, data: dict):
         rp.passive_growth_pct = Decimal(rp_d['passive_growth_pct'])
         rp.swr_rate_pct = Decimal(rp_d['swr_rate_pct'])
         rp.save()
+
+    # UserFlowState
+    if data.get('flow_state'):
+        fs_d = data['flow_state']
+        from core.models import UserFlowState
+        fs, _ = UserFlowState.objects.get_or_create(user=user)
+        fs.scenario_type  = fs_d.get('scenario_type', '')
+        fs.answers_flat   = fs_d.get('answers_flat') or {}
+        fs.answers_nested = fs_d.get('answers_nested') or {}
+        fs.answers_hash   = fs_d.get('answers_hash', '')
+        fs.tier1_results  = fs_d.get('tier1_results')
+        fs.tier2_results  = fs_d.get('tier2_results')
+        fs.mc_results     = fs_d.get('mc_results')
+        fs.asha_advice    = fs_d.get('asha_advice') or ''
+        fs.save()
 
 
 # ── High-level operations ─────────────────────────────────────────────────────

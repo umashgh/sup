@@ -151,3 +151,35 @@ class ScenarioProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.get_scenario_type_display()}"
+
+
+class UserFlowState(models.Model):
+    """
+    Stores the user's last submitted answers and cached calculation results
+    so the full flow can be restored after logout / restart without recomputing.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='flow_state')
+
+    # Which scenario these results belong to
+    scenario_type = models.CharField(max_length=20, blank=True, default='')
+
+    # Flat answers dict as submitted by the frontend (field_path → value)
+    answers_flat = models.JSONField(default=dict)
+    # Nested answers dict as sent to calculate_tier (for recalculation)
+    answers_nested = models.JSONField(default=dict)
+    # SHA-256 hash of answers_nested (used to detect unchanged inputs)
+    answers_hash = models.CharField(max_length=64, blank=True, default='')
+
+    # Cached calculation outputs — null means not yet computed / stale
+    tier1_results = models.JSONField(null=True, blank=True)
+    tier2_results = models.JSONField(null=True, blank=True)
+    mc_results    = models.JSONField(null=True, blank=True)
+    asha_advice   = models.TextField(blank=True, default='')
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "User Flow State"
+
+    def __str__(self):
+        return f"{self.user.username} — flow state ({self.scenario_type})"

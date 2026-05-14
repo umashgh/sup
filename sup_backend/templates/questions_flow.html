@@ -981,6 +981,8 @@
               && parseInt(answers['kids_count'] || 0) > 0;
           case 'family_has_partner':
             return ['partner', 'partner_kids', 'joint'].includes(answers['family_type']);
+          case 'family_is_joint':
+            return answers['family_type'] === 'joint';
           case 'venture_bootstrapped':
             return answers['scenario.venture_bootstrapped'] === true;
           case 'pension_has_amount':
@@ -1052,9 +1054,43 @@
 
           this.serverTier = data.tier || 1;
 
+          // -----------------------------------------------------------------
+          // Restore from DB if no in-session state (handles login / start-over)
+          // -----------------------------------------------------------------
+          const hasTier1Answers = !!sessionStorage.getItem('tier_1_answers');
+          const hasFlowAnswers  = !!sessionStorage.getItem('flow_answers');
+          const isAdvancing     = advancingToTier2 === 'true';
+
+          if (!hasTier1Answers && !hasFlowAnswers && !isAdvancing) {
+            try {
+              const restoreResp = await fetch('/api/scenarios/restore/', {
+                headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+              });
+              if (restoreResp.ok) {
+                const rd = await restoreResp.json();
+                if (rd.has_state && rd.answers_flat && Object.keys(rd.answers_flat).length > 0) {
+                  // Seed answers with saved values (override defaults, will be refined below)
+                  Object.keys(rd.answers_flat).forEach(k => {
+                    this.answers[k] = rd.answers_flat[k];
+                  });
+                  // Seed sessionStorage so tier-2 pre-population logic works
+                  sessionStorage.setItem('tier_1_answers', JSON.stringify(rd.answers_flat));
+                  if (rd.answers_nested) {
+                    sessionStorage.setItem('last_answers', JSON.stringify(rd.answers_nested));
+                  }
+                  console.log('📥 Restored answers from DB (scenario:', rd.scenario_type, ')');
+                }
+              }
+            } catch(e) {
+              console.log('DB restore skipped:', e.message);
+            }
+          }
+
           // If at tier 2+, always load tier 1 answers (handles both normal flow and page refresh)
-          if (data.tier >= 2 && tier1Answers) {
-            const previousAnswers = JSON.parse(tier1Answers);
+          // After DB restore above, tier_1_answers is already seeded if needed.
+          const tier1AnswersStr = sessionStorage.getItem('tier_1_answers');
+          if (data.tier >= 2 && tier1AnswersStr) {
+            const previousAnswers = JSON.parse(tier1AnswersStr);
             console.log('📥 Loading tier 1 answers for tier ' + data.tier + ':', previousAnswers);
 
             Object.keys(previousAnswers).forEach(fieldPath => {
@@ -1099,12 +1135,12 @@
             if (q.id === 'kids_count') {
               q._hasCondition = true;
               q._conditionType = 'family_has_kids';
-            } else if (q.id === 'kids_average_age') {
+            } else if (q.id === 'kids_age_range') {
               q._hasCondition = true;
               q._conditionType = 'family_has_kids_nonzero';
             } else if (q.id === 'dependent_adults_count') {
               q._hasCondition = true;
-              q._conditionType = 'family_has_partner';
+              q._conditionType = 'family_is_joint';
             } else if (q.id === 'pension_start_age') {
               q._hasCondition = true;
               q._conditionType = 'pension_has_amount';
@@ -1303,7 +1339,14 @@
        * Initialize one-time expense items from the already-fetched expenseItems.
        */
       initOneTimeItems() {
-        // Only init if not already populated (user may have customized)
+        // Restore saved items (from prior session or login/start-over)
+        const saved = this.answers['family.one_time_items'];
+        if (saved && Array.isArray(saved) && saved.length > 0) {
+          this.oneTimeItems = JSON.parse(JSON.stringify(saved));
+          this.recomputeOneTimeTotals();
+          return;
+        }
+        // Only init defaults if not already populated (user may have customized)
         if (this.oneTimeItems.length > 0) return;
 
         const currentYear = new Date().getFullYear();
@@ -1371,6 +1414,8 @@
         // Store in answers for calculators
         this.answers['family.one_time_expenses'] = this.oneTimeTotal;
         this.answers['family.one_time_by_year'] = byYear;
+        // Save full items so they can be restored after login/start-over
+        this.answers['family.one_time_items'] = JSON.parse(JSON.stringify(this.oneTimeItems));
       },
 
       /**
@@ -1386,6 +1431,8 @@
         this.futureAssetTotal = Object.values(byYear).reduce((s, v) => s + v, 0);
         this.answers['family.future_assets'] = this.futureAssetTotal;
         this.answers['family.future_assets_by_year'] = byYear;
+        // Save full items so they can be restored after login/start-over
+        this.answers['family.future_asset_items'] = JSON.parse(JSON.stringify(this.futureAssetItems));
       },
 
       /**
@@ -1520,6 +1567,15 @@
             this.initOneTimeItems();
           }
 
+          // Restore future asset items from saved answers if available
+          if (nextQ && nextQ.input_type === 'future_asset_itemized') {
+            const saved = this.answers['family.future_asset_items'];
+            if (saved && Array.isArray(saved) && saved.length > 0 && this.futureAssetItems.length === 0) {
+              this.futureAssetItems = JSON.parse(JSON.stringify(saved));
+              this.recomputeFutureAssetTotals();
+            }
+          }
+
           // Pre-fill asset defaults based on expense level (only if user hasn't changed them)
           if (nextQ && nextQ.id === 'assets_for_living') {
             const level = this.answers['family.expense_level'];
@@ -1635,7 +1691,7 @@
               'Content-Type': 'application/json',
               'X-CSRFToken': '{{ csrf_token }}',
             },
-            body: JSON.stringify({ data })
+            body: JSON.stringify({ data, answers_flat: this.answers })
           });
 
           if (!response.ok) {

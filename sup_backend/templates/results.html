@@ -220,22 +220,36 @@
   <!-- ===== TIER 2 SPECIFIC SECTION ===== -->
   <section style="padding: 0 24px 8px;" x-show="!loading && results.tier === 'STANDARD'">
 
-    <!-- Financial freedom year -->
+    <!-- Financial freedom year — corpus-based (SWR) -->
     <div class="result-card" style="background: var(--forest-light); border-color: var(--forest); margin-bottom: 8px;">
       <div class="result-card-label" style="color: var(--forest);">Financial freedom year</div>
       <template x-if="results.free_up_year !== null && results.free_up_year !== undefined">
         <div>
           <div class="result-card-value forest">Year <span x-text="results.free_up_year"></span></div>
-          <div class="result-card-sub">Passive income permanently covers all expenses — no asset drawdown needed</div>
+          <div class="result-card-sub">Passive income alone covers all expenses — no drawdown needed</div>
         </div>
       </template>
-      <template x-if="results.free_up_year === null || results.free_up_year === undefined">
+      <template x-if="(results.free_up_year === null || results.free_up_year === undefined) && (results.corpus_fi_year !== null && results.corpus_fi_year !== undefined)">
+        <div>
+          <div class="result-card-value forest">Year <span x-text="results.corpus_fi_year"></span></div>
+          <div class="result-card-sub">Your portfolio at <span x-text="((results.swr_rate || 0.04) * 100).toFixed(1)"></span>% SWR covers inflation-adjusted expenses — asset drawdown covers the gap</div>
+        </div>
+      </template>
+      <template x-if="(results.free_up_year === null || results.free_up_year === undefined) && (results.corpus_fi_year === null || results.corpus_fi_year === undefined)">
         <div>
           <div class="result-card-value" style="color: var(--coral); font-family: var(--serif); font-size: 1.6rem;">Not within 20 yrs</div>
-          <div class="result-card-sub">Passive income alone doesn't cover expenses in the projection window</div>
+          <div class="result-card-sub">Neither passive income nor portfolio SWR covers expenses within the projection window</div>
         </div>
       </template>
     </div>
+
+    <!-- Passive-only FI note (shown when corpus FI is the one displayed) -->
+    <template x-if="(results.free_up_year === null || results.free_up_year === undefined) && (results.corpus_fi_year !== null && results.corpus_fi_year !== undefined)">
+      <div style="font-size: 0.75rem; color: var(--ink-muted); margin-bottom: 8px; padding: 0 4px; line-height: 1.5;">
+        Passive income alone doesn't fully cover expenses within 20 yrs — but your growing portfolio bridges the gap.
+        To improve this, add planned monthly withdrawals (e.g. mutual fund SWP) as passive income in your answers.
+      </div>
+    </template>
 
     <!-- Portfolio after 20 years -->
     <div class="result-card" style="margin-bottom: 8px;">
@@ -861,8 +875,31 @@
               }
             } catch(e) {}
           }
+
           if (!stored) {
-            // No results and no saved answers — go back to questions
+            // Try restoring full state from DB (handles login / start-over with same scenario)
+            try {
+              const restoreRes = await fetch('/api/scenarios/restore/', {
+                headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+              });
+              if (restoreRes.ok) {
+                const rd = await restoreRes.json();
+                if (rd.has_state && rd.calculation_result) {
+                  stored = JSON.stringify(rd.calculation_result);
+                  sessionStorage.setItem('calculation_results', stored);
+                  if (rd.answers_flat)   sessionStorage.setItem('tier_1_answers', JSON.stringify(rd.answers_flat));
+                  if (rd.answers_nested) sessionStorage.setItem('last_answers',   JSON.stringify(rd.answers_nested));
+                  // Pre-load MC and Asha if available
+                  if (rd.mc_results)  this.mcResults = rd.mc_results;
+                  if (rd.asha_advice) this.advice    = rd.asha_advice;
+                  console.log('📥 Results restored from DB');
+                }
+              }
+            } catch(e) {}
+          }
+
+          if (!stored) {
+            // No results, no saved answers, no DB state — go back to questions
             window.location.href = '/questions/';
             return;
           }
@@ -898,6 +935,11 @@
         if (this.results.chart_data) {
           this.showChart = true;
           this.$nextTick(() => this.initChart());
+        }
+
+        // Initialize MC fan chart if results were restored from DB
+        if (this.mcResults) {
+          this.$nextTick(() => this.initMcChart());
         }
       },
 

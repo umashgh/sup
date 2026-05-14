@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="csrf-token" content="{{ csrf_token }}">
   <title>{% block title %}salaryfree — You might be more free than you think{% endblock %}</title>
 
   <!-- Fonts: DM Serif Display (editorial headlines) + Space Grotesk (clean sans) -->
@@ -339,6 +340,12 @@
     .story:hover {
       border-color: rgba(0, 0, 0, 0.16);
       box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .story-prior {
+      border-color: var(--forest) !important;
+      border-width: 2px !important;
+      box-shadow: 0 0 0 3px rgba(45, 90, 61, 0.1);
     }
 
     .story-color {
@@ -1425,6 +1432,77 @@
 
 <body>
 
+  {% if user_has_encryption and not data_unlocked %}
+  <script>sessionStorage.clear();</script>
+
+  <!-- ── Full-page lock screen — blocks all interaction until passphrase is entered ── -->
+  <div id="lockScreen" style="position:fixed; inset:0; z-index:9999; background:var(--cream);
+       display:flex; flex-direction:column; justify-content:center; align-items:center;
+       padding:32px 24px; box-sizing:border-box;">
+
+    <div style="max-width:360px; width:100%; text-align:center;">
+      <div style="font-size:2.5rem; margin-bottom:16px;">🔒</div>
+      <h2 style="font-family:var(--serif); font-size:1.5rem; font-weight:400;
+                 color:var(--ink); margin-bottom:8px;">Your data is encrypted.</h2>
+      <p style="font-size:0.85rem; color:var(--ink-muted); margin-bottom:28px; line-height:1.55;">
+        Enter your passphrase to unlock your inputs and results,
+        or sign out to start fresh.
+      </p>
+
+      <div style="display:flex; flex-direction:column; gap:12px; text-align:left;">
+        <div>
+          <label style="display:block; font-size:0.78rem; font-weight:600;
+                        color:var(--ink-muted); margin-bottom:6px;">Passphrase</label>
+          <input type="password" id="lockPassphrase" autofocus
+            placeholder="Enter your passphrase"
+            autocomplete="current-password"
+            style="width:100%; padding:14px 16px; border:1.5px solid rgba(26,86,219,0.3);
+                   border-radius:10px; font-size:1rem; background:white;
+                   color:var(--ink); box-sizing:border-box;" />
+        </div>
+        <div id="lockErr" style="display:none; font-size:0.78rem; color:#dc2626;"></div>
+        <button onclick="doLockUnlock()"
+          style="padding:14px; background:var(--forest); color:white; border:none;
+                 border-radius:10px; font-size:1rem; font-weight:600; cursor:pointer; width:100%;">
+          Unlock →
+        </button>
+        <form method="post" action="/accounts/logout/" style="margin:0;">
+          {% csrf_token %}
+          <button type="submit"
+            style="width:100%; padding:12px; background:none; border:1.5px solid rgba(0,0,0,0.12);
+                   border-radius:10px; font-size:0.9rem; color:var(--ink-muted); cursor:pointer;">
+            Sign out instead
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function doLockUnlock() {
+    var pp = document.getElementById('lockPassphrase').value;
+    var errEl = document.getElementById('lockErr');
+    errEl.style.display = 'none';
+    if (!pp) { errEl.textContent = 'Enter your passphrase.'; errEl.style.display = 'block'; return; }
+    var csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    fetch('/accounts/unlock-session/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrf },
+      body: JSON.stringify({ passphrase: pp }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.success) { location.reload(); }
+      else { errEl.textContent = d.error || 'Incorrect passphrase.'; errEl.style.display = 'block'; }
+    })
+    .catch(function() { errEl.textContent = 'Network error. Try again.'; errEl.style.display = 'block'; });
+  }
+  document.getElementById('lockPassphrase').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLockUnlock();
+  });
+  </script>
+  {% endif %}
+
   {% block app_header %}
   <!-- App Header -->
   <header class="app-header">
@@ -1469,6 +1547,9 @@
   <!-- App Footer -->
   <footer class="app-footer" style="flex-wrap: wrap; gap: 4px;">
     <a href="/" class="footer-btn" onclick="sessionStorage.clear();">Start Over</a>
+    {% if user_has_results %}
+    <a href="/results/" class="footer-btn" style="font-weight: 600;">Results</a>
+    {% endif %}
 
     <!-- Encryption indicator / link (centre slot) -->
     {% if user.is_authenticated and not user.username|slice:":6" == "guest_" %}
@@ -1631,7 +1712,8 @@
   <!-- ── Encryption panel JS ───────────────────────────────────────────── -->
   <script>
   function _encCsrf() {
-    return (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] || '';
+    var el = document.querySelector('meta[name="csrf-token"]');
+    return el ? el.getAttribute('content') : '';
   }
 
   // Setup encryption from panel (authenticated user)

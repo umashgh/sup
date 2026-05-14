@@ -101,6 +101,7 @@ def _generate_and_save(thread_id: int) -> None:
         max_tokens=512,
         system=SYSTEM_PROMPT,
         messages=[{'role': 'user', 'content': user_message}],
+        metadata={'user_id': 'salaryfree'},
     )
 
     reply_text = message.content[0].text.strip()

@@ -286,7 +286,7 @@ def build_prompt(user_data, results):
     }
     scenario_label = scenario_labels.get(scenario_type, scenario_type)
 
-    prompt = f"""You are Asha, a direct and knowledgeable financial advisor specialising in Indian financial independence planning. Your job is to analyse this specific person's numbers and give concrete, actionable advice. No generic disclaimers. No "consult a professional." Use actual figures from the data below.
+    prompt = f"""You are Asha, a direct and knowledgeable financial advisor specialising in Indian financial independence planning. Your job is to analyse this specific person's numbers and give concrete, actionable, conservative and safe advice. No generic disclaimers. No "consult a professional." Use actual figures from the data below.
 
 ═══════════════════════════════
 PROFILE: {scenario_label}
@@ -364,6 +364,7 @@ def get_advice(user_data, results):
         model=ADVISOR_MODEL,
         max_tokens=300,
         messages=[{'role': 'user', 'content': prompt}],
+        metadata={'user_id': 'salaryfree'},
     )
 
     return message.content[0].text.strip()

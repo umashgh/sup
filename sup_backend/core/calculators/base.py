@@ -249,26 +249,28 @@ class StandardBaseCalculator(BaseCalculator):
     # ================================================================
     def _compute_available_cash(self):
         """
-        available_cash (for display & runway) = total_assets - emergency_lock.
-        This is consistent with the Quick-tier formula and what the display
-        template implies (total_assets − emergency_lock = available).
+        available_cash (for display & runway) = total_assets - emergency_lock - all_one_time.
+        This matches the results template breakdown: total − emergency − one_time = available.
 
-        For the 20-year projection we also pre-compute proj_liquid / proj_semi
-        by deducting the emergency lock from liquid first, then semi_liquid,
-        so the projection does not double-count semi_liquid.
+        For the 20-year projection, proj_liquid / proj_semi only deduct year-0
+        one-time expenses from the starting state; future-year ones are handled
+        in the projection loop to avoid double-counting.
         """
-        upfront_one_time = 0 if self.one_time_by_year else self.one_time_expenses
-
-        # ── display / runway figure ──────────────────────────────────
+        # Display / runway: always deduct ALL one-time expenses so the template
+        # breakdown (total − emergency − one_time = available) is consistent.
         self.available_cash = max(
             0,
-            self.total_assets_initial - self.emergency_lock - upfront_one_time
+            self.total_assets_initial - self.emergency_lock - self.one_time_expenses
         )
 
-        # ── projection starting buckets ─────────────────────────────
-        # Deduct emergency lock + upfront one-time from liquid first,
-        # then overflow into semi_liquid (never negative).
-        to_deduct = self.emergency_lock + upfront_one_time
+        # Projection starting state: only deduct year-0 one-time expenses
+        # (future years are handled in _run_projection via one_time_by_year).
+        if self.one_time_by_year:
+            proj_one_time = self.one_time_by_year.get(0, 0.0)
+        else:
+            proj_one_time = self.one_time_expenses
+
+        to_deduct = self.emergency_lock + proj_one_time
         liquid_deducted = min(self.liquid_savings, to_deduct)
         self.proj_liquid = self.liquid_savings - liquid_deducted
         semi_deducted = min(self.semi_liquid, to_deduct - liquid_deducted)
@@ -318,6 +320,7 @@ class StandardBaseCalculator(BaseCalculator):
         self._init_projection_state(self.st)
 
         self.free_up_year: Optional[int] = None
+        self.corpus_fi_year: Optional[int] = None   # corpus × SWR covers expenses
         self.depletion_year: Optional[int] = None
 
         for year in range(self.PROJECTION_YEARS):
@@ -357,6 +360,12 @@ class StandardBaseCalculator(BaseCalculator):
             if self.free_up_year is None and total_income >= total_expenses:
                 self.free_up_year = year
 
+            # corpus_fi_year: SWR from corpus alone covers inflation-adjusted expenses
+            # (portfolio is self-sustaining even without passive income streams)
+            swr_annual = total_assets * self.SWR_RATE
+            if self.corpus_fi_year is None and swr_annual >= total_expenses:
+                self.corpus_fi_year = year
+
             if self.depletion_year is None and total_assets <= 0:
                 self.depletion_year = year
 
@@ -392,6 +401,8 @@ class StandardBaseCalculator(BaseCalculator):
     def _build_results(self) -> Dict:
         base = {
             'free_up_year': self.free_up_year,
+            'corpus_fi_year': self.corpus_fi_year,
+            'swr_rate': self.SWR_RATE,
             'depletion_year': self.depletion_year,
             'emergency_lock': round(self.emergency_lock, 2),
             'emergency_fund_lock': round(self.emergency_lock, 2),

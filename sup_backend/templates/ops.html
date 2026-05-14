@@ -179,7 +179,13 @@
 
     <!-- ── Analytics ─────────────────────────────────── -->
     <section id="analytics">
-      <h2>📊 Analytics <span style="font-size:13px;color:var(--muted);font-weight:400;">last 7 days</span></h2>
+      <h2>📊 Analytics <span style="font-size:13px;color:var(--muted);font-weight:400;">last {{ days }} days</span>
+        <span style="margin-left:auto;display:flex;gap:6px;font-size:12px;font-weight:400;">
+          {% for d in days_options %}
+          <a href="?days={{ d }}" style="padding:3px 8px;border-radius:4px;text-decoration:none;{% if days == d %}background:var(--blue);color:#0f172a;{% else %}background:var(--surface);border:1px solid var(--border);color:var(--muted);{% endif %}">{{ d }}d</a>
+          {% endfor %}
+        </span>
+      </h2>
 
       <div class="stats">
         <div class="stat">

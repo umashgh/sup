@@ -4,6 +4,10 @@ Django settings for sup_backend project.
 
 import os
 from pathlib import Path
+import dotenv
+import socket
+
+dotenv.load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,8 +22,21 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get(
     'ALLOWED_HOSTS',
-    'localhost,127.0.0.1'
+    'localhost,127.0.0.1,salaryfree.in,www.salaryfree.in'
 ).split(',')
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://salaryfree.in',
+    'https://www.salaryfree.in',
+]
+
+try:
+    fqdn = socket.getfqdn()
+    ALLOWED_HOSTS.append(fqdn)
+    CSRF_TRUSTED_ORIGINS.append(f'https://{fqdn}')
+    print(CSRF_TRUSTED_ORIGINS)
+except:
+    pass
 
 # ---------------------------------------------------------------------------
 # Security headers (safe to set unconditionally; SSL redirect gated on DEBUG)
@@ -40,17 +57,14 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 
 CSRF_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False  # must be False so JS can read csrftoken for fetch() calls
 
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True           # legacy IE header, harmless on modern browsers
 SECURE_REFERRER_POLICY = 'same-origin'
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://salaryfree.in',
-    'https://www.salaryfree.in',
-]
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
 
 # ---------------------------------------------------------------------------
 # Applications

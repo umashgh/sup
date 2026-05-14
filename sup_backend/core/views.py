@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 
 from django.http import HttpResponse, HttpResponseForbidden
@@ -57,7 +58,11 @@ def ops_page(request):
     from django.utils import timezone
     import datetime, subprocess
 
-    since = timezone.now() - datetime.timedelta(days=7)
+    try:
+        days = max(1, min(365, int(request.GET.get('days', 30))))
+    except (ValueError, TypeError):
+        days = 30
+    since = timezone.now() - datetime.timedelta(days=days)
     events = BehaviourEvent.objects.filter(ts__gte=since)
 
     unique_sessions  = events.values('session_key').distinct().count()
@@ -114,6 +119,8 @@ def ops_page(request):
         'tinker_pct':      tinker_pct,
         'abandon_details': abandon_details,
         'error_log':       error_log,
+        'days':            days,
+        'days_options':    [7, 30, 90, 365],
     })
 
 
@@ -178,7 +185,18 @@ def scenario_selector_page(request):
         ticker_items = [t.title[:80] + ('…' if len(t.title) > 80 else '') for t in threads]
     else:
         ticker_items = _TICKER_ITEMS
-    return render(request, 'scenario_selector.html', {'ticker_items': ticker_items})
+
+    prior_scenario = ''
+    if request.user.is_authenticated:
+        try:
+            prior_scenario = ScenarioProfile.objects.get(user=request.user).scenario_type
+        except ScenarioProfile.DoesNotExist:
+            pass
+
+    return render(request, 'scenario_selector.html', {
+        'ticker_items': ticker_items,
+        'prior_scenario': prior_scenario,
+    })
 
 
 @login_required
@@ -496,10 +514,25 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import ScenarioProfile
+from .models import ScenarioProfile, UserFlowState
 from .serializers import ScenarioProfileSerializer, QuestionSerializer
 from .question_resolver import get_questions_for_scenario
 from .calculators import get_calculator
+
+
+def _compute_answers_hash(user_data: dict) -> str:
+    """Compute a stable SHA-256 hash of user answers for cache invalidation."""
+    import hashlib
+
+    def _sort(obj):
+        if isinstance(obj, dict):
+            return {k: _sort(v) for k, v in sorted(obj.items())}
+        if isinstance(obj, list):
+            return [_sort(i) for i in obj]
+        return obj
+
+    canonical = json.dumps(_sort(user_data))
+    return hashlib.sha256(canonical.encode()).hexdigest()[:32]
 
 
 @api_view(['POST'])
@@ -508,6 +541,10 @@ def select_scenario(request):
     """
     User selects their scenario type at app entry.
     Creates ScenarioProfile and returns initial questions.
+
+    Always resets to tier 1 so the user walks the full question flow with prior
+    answers pre-populated. Same-scenario: saved answers/results kept for cache
+    hits. Different-scenario: saved state cleared.
     """
     scenario_type = request.data.get('scenario_type')
 
@@ -517,30 +554,55 @@ def select_scenario(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Detect whether the user is re-selecting the same scenario
+    try:
+        existing_scenario = ScenarioProfile.objects.get(user=request.user)
+        is_same_scenario = (existing_scenario.scenario_type == scenario_type)
+    except ScenarioProfile.DoesNotExist:
+        is_same_scenario = False
+
     # Create or update scenario profile
-    scenario, created = ScenarioProfile.objects.update_or_create(
+    scenario, _ = ScenarioProfile.objects.update_or_create(
         user=request.user,
         defaults={'scenario_type': scenario_type}
     )
 
-    # Get or create family profile — ALWAYS reset to tier 1 on fresh scenario selection
     profile, _ = FamilyProfile.objects.get_or_create(
         user=request.user,
         defaults={'current_tier': 1}
     )
     profile.scenario = scenario
-    profile.current_tier = 1  # Reset tier on new scenario
+
+    # Always start from tier 1 so the user walks the full flow with prior answers
+    # pre-populated (gives them a chance to review/edit anything before results).
+    # For a different scenario, also discard stale saved state.
+    profile.current_tier = 1
+    if not is_same_scenario:
+        UserFlowState.objects.filter(user=request.user).delete()
+
     profile.save()
 
-    # Return initial questions for tier 1 (QUICK)
+    # Determine whether saved results exist so the frontend can skip questions
+    has_saved_results = False
+    try:
+        flow_state = UserFlowState.objects.get(user=request.user)
+        if (flow_state.scenario_type == scenario_type
+                and flow_state.tier1_results is not None):
+            has_saved_results = True
+    except UserFlowState.DoesNotExist:
+        pass
+
     tier_names = {1: 'QUICK', 2: 'STANDARD', 3: 'ADVANCED'}
-    questions = get_questions_for_scenario(scenario_type, tier_names[profile.current_tier], skip_conditions=True)
+    questions = get_questions_for_scenario(
+        scenario_type, tier_names[profile.current_tier], skip_conditions=True
+    )
 
     return Response({
         'scenario': ScenarioProfileSerializer(scenario).data,
         'current_tier': profile.current_tier,
         'tier_name': tier_names[profile.current_tier],
         'questions': [QuestionSerializer(q).to_representation(q) for q in questions],
+        'has_saved_results': has_saved_results,
     })
 
 
@@ -632,6 +694,9 @@ def calculate_tier(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Extract flat answers for persistence (optional field sent by frontend)
+    answers_flat = request.data.get('answers_flat', {})
+
     # Apply any rate overrides submitted with this calculation, then inject
     from .models import UserRatePreferences
     rate_prefs, _ = UserRatePreferences.objects.get_or_create(user=request.user)
@@ -655,6 +720,29 @@ def calculate_tier(request):
 
     tier_names = {1: 'QUICK', 2: 'STANDARD', 3: 'ADVANCED'}
     current_tier_name = tier_names[profile.current_tier]
+
+    # -----------------------------------------------------------------
+    # Cache check: if answers unchanged, return stored results instantly
+    # -----------------------------------------------------------------
+    current_hash = _compute_answers_hash(user_data)
+    flow_state = UserFlowState.objects.filter(user=request.user).first()
+    if (flow_state
+            and flow_state.scenario_type == scenario.scenario_type
+            and flow_state.answers_hash == current_hash):
+        cached = None
+        if profile.current_tier == 1 and flow_state.tier1_results:
+            cached = flow_state.tier1_results
+        elif profile.current_tier == 2 and flow_state.tier2_results:
+            cached = flow_state.tier2_results
+        if cached is not None:
+            return Response({
+                'results': cached,
+                'tier': profile.current_tier,
+                'tier_name': current_tier_name,
+                'can_advance': profile.current_tier < 2,
+                'username': request.user.username,
+                'from_cache': True,
+            })
 
     # Get appropriate calculator
     try:
@@ -803,6 +891,25 @@ def calculate_tier(request):
                     uncertainty_level=config['uncertainty_level']
                 )
 
+    # Persist answers + results so they survive logout/restart
+    flow_state, _ = UserFlowState.objects.get_or_create(user=request.user)
+    flow_state.scenario_type = scenario.scenario_type
+    flow_state.answers_flat   = answers_flat
+    flow_state.answers_nested = user_data
+    flow_state.answers_hash   = current_hash
+    if profile.current_tier == 1:
+        flow_state.tier1_results = results
+        # Tier 1 recomputed fresh → downstream results are stale
+        flow_state.tier2_results = None
+        flow_state.mc_results    = None
+        flow_state.asha_advice   = ''
+    elif profile.current_tier == 2:
+        flow_state.tier2_results = results
+        # Tier 2 recomputed fresh → MC/Asha are stale
+        flow_state.mc_results  = None
+        flow_state.asha_advice = ''
+    flow_state.save()
+
     return Response({
         'results': results,
         'tier': profile.current_tier,
@@ -908,6 +1015,14 @@ def advise(request):
             status=status.HTTP_503_SERVICE_UNAVAILABLE
         )
 
+    # Persist advice so it survives logout/restart
+    try:
+        flow_state, _ = UserFlowState.objects.get_or_create(user=request.user)
+        flow_state.asha_advice = advice_text
+        flow_state.save(update_fields=['asha_advice', 'updated_at'])
+    except Exception:
+        pass
+
     return Response({'success': True, 'advice': advice_text})
 
 
@@ -962,9 +1077,77 @@ def monte_carlo(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
+    # Persist MC results so they survive logout/restart
+    try:
+        flow_state, _ = UserFlowState.objects.get_or_create(user=request.user)
+        flow_state.mc_results = mc_results
+        flow_state.save(update_fields=['mc_results', 'updated_at'])
+    except Exception:
+        pass
+
     return Response({'success': True, 'mc': mc_results})
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def restore_flow_state(request):
+    """
+    Returns the user's last saved flow state: answers + cached calculation
+    results (tier 1, tier 2, Monte Carlo, Asha advice).
+
+    The frontend calls this on load when sessionStorage is empty so the full
+    results page — including MC / Asha — can be reconstructed without any
+    recomputation as long as inputs haven't changed.
+
+    Returns has_state: False if the user has encryption and the session is
+    locked (passphrase not yet entered this session).
+    """
+    # Refuse to serve plaintext answers/results when session is data-locked
+    if not request.session.get('data_unlocked', True):
+        return Response({'has_state': False})
+
+    try:
+        scenario   = ScenarioProfile.objects.get(user=request.user)
+        flow_state = UserFlowState.objects.get(user=request.user)
+        profile    = FamilyProfile.objects.get(user=request.user)
+    except (ScenarioProfile.DoesNotExist, UserFlowState.DoesNotExist,
+            FamilyProfile.DoesNotExist):
+        return Response({'has_state': False})
+
+    if not flow_state.tier1_results:
+        return Response({'has_state': False})
+
+    tier_names = {1: 'QUICK', 2: 'STANDARD', 3: 'ADVANCED'}
+
+    # Use the most advanced results available
+    if flow_state.tier2_results:
+        active_results = flow_state.tier2_results
+        active_tier    = 2
+    else:
+        active_results = flow_state.tier1_results
+        active_tier    = 1
+
+    calculation_result = {
+        'results':   active_results,
+        'tier':      active_tier,
+        'tier_name': tier_names[active_tier],
+        'can_advance': active_tier < 2,
+        'username':  request.user.username,
+    }
+
+    return Response({
+        'has_state':          True,
+        'scenario_type':      scenario.scenario_type,
+        'current_tier':       profile.current_tier,
+        'calculation_result': calculation_result,
+        'answers_flat':       flow_state.answers_flat,
+        'answers_nested':     flow_state.answers_nested,
+        'mc_results':         flow_state.mc_results,
+        'asha_advice':        flow_state.asha_advice or None,
+    })
+
+
+@csrf_exempt
 @require_POST
 def track_event(request):
     """

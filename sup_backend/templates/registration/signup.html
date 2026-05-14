@@ -83,6 +83,39 @@
     </button>
   </form>
 
+  <!-- ══ Optional encryption setup ══════════════════════════════════════ -->
+  <div style="margin-top: 32px; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 24px;">
+    <p style="font-size: 0.9rem; font-weight: 600; color: var(--ink); margin: 0 0 14px;">
+      🔒 Encrypt your inputs <span style="font-weight:400; font-size:0.8rem; color:var(--ink-muted);">(optional)</span>
+    </p>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div>
+        <label style="display: block; font-size: 0.78rem; font-weight: 600;
+                      color: var(--ink-muted); margin-bottom: 6px;">Passphrase</label>
+        <input type="password" id="setupPassphrase" placeholder="Choose a passphrase"
+          autocomplete="new-password"
+          style="width: 100%; padding: 13px 15px; border: 1.5px solid rgba(0,0,0,0.12);
+                 border-radius: 10px; font-size: 1rem; background: white;
+                 color: var(--ink); box-sizing: border-box;" />
+      </div>
+      <div>
+        <label style="display: block; font-size: 0.78rem; font-weight: 600;
+                      color: var(--ink-muted); margin-bottom: 6px;">
+          Hint <span style="font-weight: 400;">(optional)</span>
+        </label>
+        <input type="text" id="setupHint" placeholder="e.g. name of first pet + birth year"
+          style="width: 100%; padding: 13px 15px; border: 1.5px solid rgba(0,0,0,0.12);
+                 border-radius: 10px; font-size: 0.95rem; background: white;
+                 color: var(--ink); box-sizing: border-box;" />
+      </div>
+      <p style="font-size: 0.75rem; color: var(--ink-muted); margin: 0; line-height: 1.55;">
+        Your passphrase encrypts all inputs — unreadable to everyone including site owners.
+        <strong style="color: var(--ink);">We do not save it. If you forget it, your inputs cannot be recovered.</strong>
+      </p>
+      <div id="setupEncError" style="display:none; font-size: 0.78rem; color: #dc2626;"></div>
+    </div>
+  </div>
+
   <p style="font-size: 0.82rem; color: var(--ink-muted); margin-top: 24px; text-align: center;">
     Already have an account?
     <a href="/accounts/login/" style="color: var(--blue); text-decoration: none; font-weight: 600;">
@@ -95,4 +128,22 @@
   </p>
 
 </div>
+
+<script>
+// If a passphrase is entered, save to sessionStorage before form submits
+// so base_mobile.html picks it up and calls /accounts/setup-encryption/ after login
+document.querySelector('form').addEventListener('submit', function() {
+  var pp = document.getElementById('setupPassphrase').value;
+  if (pp.length >= 4) {
+    var hint = document.getElementById('setupHint').value.trim();
+    sessionStorage.setItem('_sf_setup_enc_passphrase', pp);
+    sessionStorage.setItem('_sf_setup_enc_hint', hint);
+  } else if (pp.length > 0 && pp.length < 4) {
+    var err = document.getElementById('setupEncError');
+    err.textContent = 'Passphrase must be at least 4 characters, or leave blank to skip.';
+    err.style.display = 'block';
+    event.preventDefault();
+  }
+});
+</script>
 {% endblock %}
